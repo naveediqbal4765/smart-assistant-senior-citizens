@@ -25,6 +25,25 @@ const AppLogo = ({ size = 80 }) => (
   </svg>
 );
 
+// Medical conditions dropdown options
+const MEDICAL_CONDITIONS = [
+  "Diabetes",
+  "Hypertension",
+  "Heart Disease",
+  "Arthritis",
+  "Asthma",
+  "COPD",
+  "Parkinson's",
+  "Alzheimer's",
+  "Osteoporosis",
+  "Thyroid",
+  "Kidney Disease",
+  "Liver Disease",
+  "Cancer",
+  "Stroke History",
+  "Other",
+];
+
 // ============================================================
 // SignupPage Component - Full Signup with Role-Specific Fields
 // ============================================================
@@ -32,11 +51,13 @@ const SignupPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [currentStep, setCurrentStep] = useState(1); // Step 1: Role, Step 2: General, Step 3: Role-specific
+  const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [shakeForm, setShakeForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [gpsModalOpen, setGpsModalOpen] = useState(false);
+  const [gpsModalType, setGpsModalType] = useState(null); // "elder" or "volunteer"
 
   // General form data
   const [formData, setFormData] = useState({
@@ -57,7 +78,7 @@ const SignupPage = () => {
     emergencyContacts: [],
     medicalConditions: [],
     hasMedicalIssues: null,
-    locationPermission: false,
+    locationPermission: null,
 
     // Caregiver-specific
     relationshipToElder: "",
@@ -73,7 +94,7 @@ const SignupPage = () => {
     skills: [],
     availabilityDays: [],
     availabilityTimeSlots: [],
-    volunteerLocationPermission: false,
+    volunteerLocationPermission: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -134,6 +155,15 @@ const SignupPage = () => {
     });
   };
 
+  const handleMedicalConditionToggle = (condition) => {
+    setFormData((prev) => ({
+      ...prev,
+      medicalConditions: prev.medicalConditions.includes(condition)
+        ? prev.medicalConditions.filter((c) => c !== condition)
+        : [...prev.medicalConditions, condition],
+    }));
+  };
+
   const handleSkillToggle = (skill) => {
     setFormData((prev) => ({
       ...prev,
@@ -159,6 +189,15 @@ const SignupPage = () => {
         ? prev.availabilityTimeSlots.filter((s) => s !== slot)
         : [...prev.availabilityTimeSlots, slot],
     }));
+  };
+
+  const handleGpsPermission = (allowed, type) => {
+    if (type === "elder") {
+      setFormData((prev) => ({ ...prev, locationPermission: allowed }));
+    } else if (type === "volunteer") {
+      setFormData((prev) => ({ ...prev, volunteerLocationPermission: allowed }));
+    }
+    setGpsModalOpen(false);
   };
 
   const validateGeneral = () => {
@@ -298,6 +337,80 @@ const SignupPage = () => {
       setIsLoading(false);
     }
   };
+
+  // GPS Permission Modal
+  const GPSModal = ({ type }) => (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#FFFFFF",
+          borderRadius: "16px",
+          padding: "40px",
+          maxWidth: "400px",
+          textAlign: "center",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+        }}
+      >
+        <h3 style={{ fontFamily: "Montserrat, sans-serif", fontSize: "20px", color: "#1C382A", marginBottom: "16px" }}>
+          📍 Location Permission
+        </h3>
+        <p style={{ fontFamily: "Montserrat, sans-serif", fontSize: "14px", color: "#1C382A", marginBottom: "24px", lineHeight: "1.6" }}>
+          {type === "elder"
+            ? "We need your location to enable SOS and Fall Detection features. This helps us send help quickly in emergencies."
+            : "We need your location to match you with seniors who need help nearby. This improves our volunteer matching algorithm."}
+        </p>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button
+            onClick={() => handleGpsPermission(false, type)}
+            style={{
+              flex: 1,
+              padding: "12px",
+              backgroundColor: "#e63946",
+              color: "#FFFFFF",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: 700,
+              fontFamily: "Montserrat, sans-serif",
+              fontSize: "14px",
+            }}
+          >
+            Disallow
+          </button>
+          <button
+            onClick={() => handleGpsPermission(true, type)}
+            style={{
+              flex: 1,
+              padding: "12px",
+              backgroundColor: "#1C382A",
+              color: "#FFFFFF",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: 700,
+              fontFamily: "Montserrat, sans-serif",
+              fontSize: "14px",
+            }}
+          >
+            Allow
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   // ============================================================
   // RENDER - STEP 1: ROLE SELECTION
@@ -732,6 +845,32 @@ const SignupPage = () => {
               )}
 
               <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }} noValidate>
+                {/* Profile Picture */}
+                <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
+                  Profile Picture (optional, max 50KB)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFormData((prev) => ({ ...prev, profilePicture: e.target.files?.[0] || null }))}
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    fontSize: "13px",
+                    backgroundColor: "#FFFFFF",
+                    color: "#1C382A",
+                    borderRadius: "8px",
+                    boxSizing: "border-box",
+                    fontFamily: "Montserrat, sans-serif",
+                    outline: "none",
+                    border: "none",
+                    transition: "all 0.3s ease",
+                    marginBottom: "12px",
+                    minHeight: "40px",
+                  }}
+                  disabled={isLoading}
+                />
+
                 {/* Full Name */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
                   Full Name *
@@ -857,7 +996,7 @@ const SignupPage = () => {
 
                 {/* Address */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
-                  Address *
+                  Address (Google Maps Autocomplete) *
                 </label>
                 <input
                   name="address"
@@ -1059,6 +1198,7 @@ const SignupPage = () => {
   // ============================================================
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {gpsModalOpen && <GPSModal type={gpsModalType} />}
       <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
       <div
         style={{
@@ -1385,42 +1525,98 @@ const SignupPage = () => {
                   </div>
                   {errors.hasMedicalIssues && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.hasMedicalIssues}</p>}
 
-                  {/* Medical Conditions (if yes) */}
+                  {/* Medical Conditions Dropdown (if yes) */}
                   {formData.hasMedicalIssues === true && (
                     <>
                       <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
-                        Medical Conditions (comma-separated)
+                        Medical Conditions (Searchable Dropdown)
                       </label>
-                      <textarea
-                        placeholder="e.g., Diabetes, Hypertension, Arthritis"
-                        value={formData.medicalConditions.join(", ")}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, medicalConditions: e.target.value.split(",").map((c) => c.trim()) }))}
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          marginBottom: "16px",
-                          borderRadius: "8px",
-                          border: "1px solid #ddd",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          minHeight: "80px",
-                          boxSizing: "border-box",
-                        }}
-                      />
+                      <div style={{ marginBottom: "16px", maxHeight: "200px", overflowY: "auto", border: "1px solid #ddd", borderRadius: "8px", padding: "8px", backgroundColor: "#FFFFFF" }}>
+                        {MEDICAL_CONDITIONS.map((condition) => (
+                          <label key={condition} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "8px", padding: "6px" }}>
+                            <input
+                              type="checkbox"
+                              checked={formData.medicalConditions.includes(condition)}
+                              onChange={() => handleMedicalConditionToggle(condition)}
+                              style={{ cursor: "pointer", width: "16px", height: "16px" }}
+                            />
+                            <span style={{ fontSize: "13px", color: "#1C382A" }}>{condition}</span>
+                          </label>
+                        ))}
+                      </div>
                     </>
                   )}
 
                   {/* Location Permission */}
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "20px" }}>
-                    <input
-                      type="checkbox"
-                      name="locationPermission"
-                      checked={formData.locationPermission}
-                      onChange={handleChange}
-                      style={{ cursor: "pointer", width: "18px", height: "18px" }}
-                    />
-                    <span style={{ fontSize: "14px", color: "#1C382A", fontWeight: 600 }}>Allow location access for SOS & Fall Detection *</span>
+                  <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
+                    Location Permission for SOS & Fall Detection *
                   </label>
+                  <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGpsModalOpen(true);
+                        setGpsModalType("elder");
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: "12px",
+                        backgroundColor: formData.locationPermission === true ? "#52b788" : "#FFFFFF",
+                        color: formData.locationPermission === true ? "#FFFFFF" : "#1C382A",
+                        border: "2px solid #1C382A",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 700,
+                        fontFamily: "Montserrat, sans-serif",
+                        fontSize: "14px",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (formData.locationPermission !== true) {
+                          e.target.style.backgroundColor = "#1C382A15";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (formData.locationPermission !== true) {
+                          e.target.style.backgroundColor = "#FFFFFF";
+                        }
+                      }}
+                    >
+                      ✓ Allow
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGpsModalOpen(true);
+                        setGpsModalType("elder");
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: "12px",
+                        backgroundColor: formData.locationPermission === false ? "#e63946" : "#FFFFFF",
+                        color: formData.locationPermission === false ? "#FFFFFF" : "#1C382A",
+                        border: "2px solid #1C382A",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 700,
+                        fontFamily: "Montserrat, sans-serif",
+                        fontSize: "14px",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (formData.locationPermission !== false) {
+                          e.target.style.backgroundColor = "#1C382A15";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (formData.locationPermission !== false) {
+                          e.target.style.backgroundColor = "#FFFFFF";
+                        }
+                      }}
+                    >
+                      ✗ Disallow
+                    </button>
+                  </div>
                   {errors.locationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.locationPermission}</p>}
                 </>
               )}
@@ -1680,16 +1876,75 @@ const SignupPage = () => {
                   {errors.availabilityTimeSlots && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.availabilityTimeSlots}</p>}
 
                   {/* Location Permission */}
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "20px" }}>
-                    <input
-                      type="checkbox"
-                      name="volunteerLocationPermission"
-                      checked={formData.volunteerLocationPermission}
-                      onChange={handleChange}
-                      style={{ cursor: "pointer", width: "18px", height: "18px" }}
-                    />
-                    <span style={{ fontSize: "14px", color: "#1C382A", fontWeight: 600 }}>Allow location access for volunteer matching *</span>
+                  <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
+                    Location Permission for Volunteer Matching *
                   </label>
+                  <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGpsModalOpen(true);
+                        setGpsModalType("volunteer");
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: "12px",
+                        backgroundColor: formData.volunteerLocationPermission === true ? "#52b788" : "#FFFFFF",
+                        color: formData.volunteerLocationPermission === true ? "#FFFFFF" : "#1C382A",
+                        border: "2px solid #1C382A",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 700,
+                        fontFamily: "Montserrat, sans-serif",
+                        fontSize: "14px",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (formData.volunteerLocationPermission !== true) {
+                          e.target.style.backgroundColor = "#1C382A15";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (formData.volunteerLocationPermission !== true) {
+                          e.target.style.backgroundColor = "#FFFFFF";
+                        }
+                      }}
+                    >
+                      ✓ Allow
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGpsModalOpen(true);
+                        setGpsModalType("volunteer");
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: "12px",
+                        backgroundColor: formData.volunteerLocationPermission === false ? "#e63946" : "#FFFFFF",
+                        color: formData.volunteerLocationPermission === false ? "#FFFFFF" : "#1C382A",
+                        border: "2px solid #1C382A",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 700,
+                        fontFamily: "Montserrat, sans-serif",
+                        fontSize: "14px",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (formData.volunteerLocationPermission !== false) {
+                          e.target.style.backgroundColor = "#1C382A15";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (formData.volunteerLocationPermission !== false) {
+                          e.target.style.backgroundColor = "#FFFFFF";
+                        }
+                      }}
+                    >
+                      ✗ Disallow
+                    </button>
+                  </div>
                   {errors.volunteerLocationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.volunteerLocationPermission}</p>}
                 </>
               )}
