@@ -1,10 +1,10 @@
 // ============================================================
 // pages/SignupPage.js - Signup Page
-// Horizontal layout with images on left side
+// Horizontal layout with live image carousel on left side
 // Same color scheme as LoginPage with drop shadow
 // ============================================================
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
@@ -25,24 +25,16 @@ const AppLogo = ({ size = 80 }) => (
   </svg>
 );
 
-// Placeholder images - will be replaced with actual images
-const placeholderImages = [
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect fill='%23A9C6B2' width='500' height='350'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%231C382A' text-anchor='middle' dominant-baseline='middle'%3EImage 1%3C/text%3E%3C/svg%3E",
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect fill='%23A9C6B2' width='500' height='350'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%231C382A' text-anchor='middle' dominant-baseline='middle'%3EImage 2%3C/text%3E%3C/svg%3E",
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect fill='%23A9C6B2' width='500' height='350'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%231C382A' text-anchor='middle' dominant-baseline='middle'%3EImage 3%3C/text%3E%3C/svg%3E",
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect fill='%23A9C6B2' width='500' height='350'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%231C382A' text-anchor='middle' dominant-baseline='middle'%3EImage 4%3C/text%3E%3C/svg%3E",
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect fill='%23A9C6B2' width='500' height='350'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%231C382A' text-anchor='middle' dominant-baseline='middle'%3EImage 5%3C/text%3E%3C/svg%3E",
-];
-
 // ============================================================
-// SignupPage Component - Horizontal Layout with Images
+// SignupPage Component - Horizontal Layout with Live Carousel
 // ============================================================
 const SignupPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [currentStep, setCurrentStep] = useState(1); // Step 1: Role selection, Step 2: Form
+  const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -50,21 +42,27 @@ const SignupPage = () => {
     password: "",
     confirmPassword: "",
     role: "",
-    dateOfBirth: "",
-    nationalId: "",
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [shakeForm, setShakeForm] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Image URLs from public folder
+  const images = [
+    require("../assets/images/signup-1.jpeg"),
+    require("../assets/images/signup-2.jpeg"),
+    require("../assets/images/signup-3.jpeg"),
+    require("../assets/images/signup-4.jpeg"),
+    require("../assets/images/signup-5.jpeg"),
+  ];
 
   // Auto-rotate images every 5 seconds
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % placeholderImages.length);
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
@@ -128,8 +126,6 @@ const SignupPage = () => {
         phone: formData.phone.trim(),
         password: formData.password,
         role: formData.role,
-        dateOfBirth: formData.dateOfBirth || null,
-        nationalId: formData.nationalId || null,
       });
 
       toast.success("Account created! Please verify your email.");
@@ -169,7 +165,7 @@ const SignupPage = () => {
             flexWrap: "wrap",
           }}
         >
-          {/* LEFT SIDE - Images Carousel */}
+          {/* LEFT SIDE - Live Image Carousel */}
           <div
             style={{
               flex: "0 1 45%",
@@ -182,7 +178,7 @@ const SignupPage = () => {
               gap: "20px",
             }}
           >
-            {/* Image Container */}
+            {/* Image Container with Live Carousel */}
             <div
               style={{
                 width: "100%",
@@ -190,23 +186,29 @@ const SignupPage = () => {
                 borderRadius: "16px",
                 overflow: "hidden",
                 boxShadow: "9px 10px 20px 2px #00000040",
+                position: "relative",
               }}
             >
-              <img
-                src={placeholderImages[currentImageIndex]}
-                alt="Senior citizens"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  transition: "opacity 0.5s ease-in-out",
-                }}
-              />
+              {images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Senior citizens ${index + 1}`}
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    opacity: index === currentImageIndex ? 1 : 0,
+                    transition: "opacity 0.8s ease-in-out",
+                  }}
+                />
+              ))}
             </div>
 
             {/* Image Indicators */}
             <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-              {placeholderImages.map((_, index) => (
+              {images.map((_, index) => (
                 <div
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
@@ -447,7 +449,7 @@ const SignupPage = () => {
           flexWrap: "wrap",
         }}
       >
-        {/* LEFT SIDE - Images Carousel */}
+        {/* LEFT SIDE - Live Image Carousel */}
         <div
           style={{
             flex: "0 1 45%",
@@ -460,7 +462,7 @@ const SignupPage = () => {
             gap: "20px",
           }}
         >
-          {/* Image Container */}
+          {/* Image Container with Live Carousel */}
           <div
             style={{
               width: "100%",
@@ -468,23 +470,29 @@ const SignupPage = () => {
               borderRadius: "16px",
               overflow: "hidden",
               boxShadow: "9px 10px 20px 2px #00000040",
+              position: "relative",
             }}
           >
-            <img
-              src={placeholderImages[currentImageIndex]}
-              alt="Senior citizens"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                transition: "opacity 0.5s ease-in-out",
-              }}
-            />
+            {images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Senior citizens ${index + 1}`}
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  opacity: index === currentImageIndex ? 1 : 0,
+                  transition: "opacity 0.8s ease-in-out",
+                }}
+              />
+            ))}
           </div>
 
           {/* Image Indicators */}
           <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-            {placeholderImages.map((_, index) => (
+            {images.map((_, index) => (
               <div
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
@@ -606,6 +614,7 @@ const SignupPage = () => {
                 type="text"
                 value={formData.fullName}
                 onChange={handleChange}
+                placeholder="Enter your full name"
                 style={{
                   width: "100%",
                   padding: "10px 12px",
@@ -636,6 +645,7 @@ const SignupPage = () => {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
+                placeholder="Enter your email"
                 style={{
                   width: "100%",
                   padding: "10px 12px",
@@ -666,6 +676,7 @@ const SignupPage = () => {
                 type="tel"
                 value={formData.phone}
                 onChange={handleChange}
+                placeholder="Enter your phone number"
                 style={{
                   width: "100%",
                   padding: "10px 12px",
@@ -696,6 +707,7 @@ const SignupPage = () => {
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
+                placeholder="Enter your password"
                 style={{
                   width: "100%",
                   padding: "10px 12px",
@@ -726,6 +738,7 @@ const SignupPage = () => {
                 type="password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                placeholder="Confirm your password"
                 style={{
                   width: "100%",
                   padding: "10px 12px",
