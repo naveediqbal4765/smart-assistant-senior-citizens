@@ -1,6 +1,7 @@
 // ============================================================
 // pages/LoginPage.js - Login Page
 // Horizontal layout: Left (logo + title + description) | Divider | Right (form)
+// Top and bottom borders with correct color scheme
 // ============================================================
 
 import React, { useState } from "react";
@@ -145,19 +146,23 @@ const LoginPage = () => {
   };
 
   // ============================================================
-  // RENDER - HORIZONTAL LAYOUT
+  // RENDER - HORIZONTAL LAYOUT WITH BORDERS
   // ============================================================
   return (
-    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
-      {/* Main Container - Horizontal Layout */}
+    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* TOP BORDER - 48px height, #1C382A */}
+      <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
+
+      {/* MAIN CONTENT - Horizontal Layout */}
       <div
         style={{
+          flex: 1,
           display: "flex",
-          minHeight: "100vh",
           alignItems: "center",
           justifyContent: "center",
-          padding: "20px",
+          padding: "40px 20px",
           gap: "40px",
+          backgroundColor: "#A9C6B2",
           flexWrap: "wrap",
         }}
       >
@@ -186,7 +191,7 @@ const LoginPage = () => {
               fontWeight: 700,
               fontSize: "clamp(28px, 5vw, 48px)",
               lineHeight: "1.2",
-              color: "#1b4332",
+              color: "#1C382A",
               margin: "0 0 20px 0",
             }}
           >
@@ -199,12 +204,12 @@ const LoginPage = () => {
               fontFamily: "Montserrat, sans-serif",
               fontSize: "clamp(14px, 2vw, 18px)",
               lineHeight: "1.6",
-              color: "#4a4a4a",
+              color: "#1C382A",
               margin: "0",
               maxWidth: "400px",
             }}
           >
-            <span style={{ color: "#2d6a4f", fontWeight: 700 }}>Lorem Ipsum</span>
+            <span style={{ color: "#1C382A", fontWeight: 700 }}>Lorem Ipsum</span>
             <span style={{ fontWeight: 400 }}> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</span>
           </p>
         </div>
@@ -218,7 +223,7 @@ const LoginPage = () => {
             },
             width: "1px",
             height: "400px",
-            backgroundColor: "#d0d0d0",
+            backgroundColor: "#1C382A4D",
             flexShrink: 0,
           }}
         />
@@ -234,10 +239,10 @@ const LoginPage = () => {
         >
           <div
             style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "16px",
+              backgroundColor: "#BAE4C7",
+              borderRadius: "48px",
               padding: "clamp(30px, 5vw, 40px)",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+              boxShadow: "9px 10px 20px 2px #00000040",
               animation: shakeForm ? "shake 0.5s ease-in-out" : "none",
             }}
           >
@@ -277,7 +282,7 @@ const LoginPage = () => {
                   fontFamily: "Montserrat, sans-serif",
                   fontWeight: 600,
                   fontSize: "clamp(14px, 2vw, 16px)",
-                  color: "#1b4332",
+                  color: "#1C382A",
                   marginBottom: "8px",
                 }}
               >
@@ -296,13 +301,13 @@ const LoginPage = () => {
                   width: "100%",
                   padding: "12px 14px",
                   fontSize: "14px",
-                  backgroundColor: "#f9f9f9",
-                  color: "#1b4332",
+                  backgroundColor: "#FFFFFF",
+                  color: "#1C382A",
                   borderRadius: "8px",
                   boxSizing: "border-box",
                   fontFamily: "Montserrat, sans-serif",
                   outline: "none",
-                  border: "1px solid #e0e0e0",
+                  border: "none",
                   transition: "all 0.3s ease",
                   marginBottom: "16px",
                   minHeight: "44px",
@@ -310,11 +315,9 @@ const LoginPage = () => {
                 placeholder=""
                 disabled={isLoading}
                 onFocus={(e) => {
-                  e.target.style.borderColor = "#2d6a4f";
-                  e.target.style.boxShadow = "0 0 0 3px rgba(45, 106, 79, 0.1)";
+                  e.target.style.boxShadow = "0 0 0 3px #1C382A40";
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = "#e0e0e0";
                   e.target.style.boxShadow = "none";
                 }}
               />
@@ -331,7 +334,7 @@ const LoginPage = () => {
                   fontFamily: "Montserrat, sans-serif",
                   fontWeight: 600,
                   fontSize: "clamp(14px, 2vw, 16px)",
-                  color: "#1b4332",
+                  color: "#1C382A",
                   marginBottom: "8px",
                 }}
               >
@@ -350,13 +353,13 @@ const LoginPage = () => {
                   width: "100%",
                   padding: "12px 14px",
                   fontSize: "14px",
-                  backgroundColor: "#f9f9f9",
-                  color: "#1b4332",
+                  backgroundColor: "#FFFFFF",
+                  color: "#1C382A",
                   borderRadius: "8px",
                   boxSizing: "border-box",
                   fontFamily: "Montserrat, sans-serif",
                   outline: "none",
-                  border: "1px solid #e0e0e0",
+                  border: "none",
                   transition: "all 0.3s ease",
                   marginBottom: "16px",
                   minHeight: "44px",
@@ -364,11 +367,9 @@ const LoginPage = () => {
                 placeholder=""
                 disabled={isLoading}
                 onFocus={(e) => {
-                  e.target.style.borderColor = "#2d6a4f";
-                  e.target.style.boxShadow = "0 0 0 3px rgba(45, 106, 79, 0.1)";
+                  e.target.style.boxShadow = "0 0 0 3px #1C382A40";
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = "#e0e0e0";
                   e.target.style.boxShadow = "none";
                 }}
               />
@@ -388,8 +389,8 @@ const LoginPage = () => {
                     padding: "12px 20px",
                     fontSize: "clamp(14px, 2vw, 16px)",
                     fontWeight: 700,
-                    color: "#ffffff",
-                    backgroundColor: "#2d6a4f",
+                    color: "#FFFFFF",
+                    backgroundColor: "#1C382A",
                     borderRadius: "8px",
                     cursor: isLoading ? "not-allowed" : "pointer",
                     transition: "all 0.3s ease",
@@ -400,12 +401,12 @@ const LoginPage = () => {
                   }}
                   onMouseEnter={(e) => {
                     if (!isLoading) {
-                      e.target.style.backgroundColor = "#1b4332";
+                      e.target.style.backgroundColor = "#0F1F1A";
                       e.target.style.transform = "translateY(-2px)";
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "#2d6a4f";
+                    e.target.style.backgroundColor = "#1C382A";
                     e.target.style.transform = "translateY(0)";
                   }}
                 >
@@ -421,18 +422,18 @@ const LoginPage = () => {
                     padding: "12px 20px",
                     fontSize: "clamp(14px, 2vw, 16px)",
                     fontWeight: 700,
-                    color: "#2d6a4f",
+                    color: "#1C382A",
                     backgroundColor: "transparent",
                     borderRadius: "8px",
                     cursor: isLoading ? "not-allowed" : "pointer",
                     transition: "all 0.3s ease",
                     fontFamily: "Montserrat, sans-serif",
-                    border: "2px solid #2d6a4f",
+                    border: "none",
                     minHeight: "44px",
                   }}
                   onMouseEnter={(e) => {
                     if (!isLoading) {
-                      e.target.style.backgroundColor = "#f0f0f0";
+                      e.target.style.backgroundColor = "#1C382A15";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -462,7 +463,7 @@ const LoginPage = () => {
                     cursor: "pointer",
                     fontSize: "clamp(12px, 2vw, 14px)",
                     fontWeight: 500,
-                    color: "#2d6a4f",
+                    color: "#1C382A",
                     userSelect: "none",
                     fontFamily: "Montserrat, sans-serif",
                   }}
@@ -476,7 +477,7 @@ const LoginPage = () => {
                       width: "18px",
                       height: "18px",
                       cursor: "pointer",
-                      accentColor: "#2d6a4f",
+                      accentColor: "#1C382A",
                       border: "none",
                       borderRadius: "3px",
                       minWidth: "18px",
@@ -491,7 +492,7 @@ const LoginPage = () => {
                   style={{
                     background: "none",
                     border: "none",
-                    color: "#2d6a4f",
+                    color: "#1C382A",
                     fontSize: "clamp(12px, 2vw, 14px)",
                     fontWeight: 600,
                     cursor: "pointer",
@@ -506,9 +507,9 @@ const LoginPage = () => {
 
               {/* OR Divider */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                <div style={{ flex: 1, height: "1px", backgroundColor: "#d0d0d0" }} />
-                <span style={{ color: "#999", fontSize: "12px", fontWeight: 500, fontFamily: "Montserrat, sans-serif" }}>OR</span>
-                <div style={{ flex: 1, height: "1px", backgroundColor: "#d0d0d0" }} />
+                <div style={{ flex: 1, height: "1px", backgroundColor: "#1C382A" }} />
+                <span style={{ color: "#1C382A", fontSize: "12px", fontWeight: 400, fontFamily: "Montserrat, sans-serif" }}>OR</span>
+                <div style={{ flex: 1, height: "1px", backgroundColor: "#1C382A" }} />
               </div>
 
               {/* OAuth Buttons */}
@@ -526,12 +527,12 @@ const LoginPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     transition: "all 0.3s ease",
-                    border: "1px solid #e0e0e0",
+                    border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#f9f9f9";
+                    e.target.style.backgroundColor = "#1C382A15";
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.backgroundColor = "transparent";
@@ -553,12 +554,12 @@ const LoginPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     transition: "all 0.3s ease",
-                    border: "1px solid #e0e0e0",
+                    border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#f9f9f9";
+                    e.target.style.backgroundColor = "#1C382A15";
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.backgroundColor = "transparent";
@@ -580,12 +581,12 @@ const LoginPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     transition: "all 0.3s ease",
-                    border: "1px solid #e0e0e0",
+                    border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#f9f9f9";
+                    e.target.style.backgroundColor = "#1C382A15";
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.backgroundColor = "transparent";
@@ -598,6 +599,9 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+
+      {/* BOTTOM BORDER - 48px height, #1C382A */}
+      <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
 
       {/* Shake Animation */}
       <style>{`
