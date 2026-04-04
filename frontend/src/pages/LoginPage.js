@@ -1,23 +1,29 @@
 // ============================================================
 // pages/LoginPage.js - Login Page
-// Responsive design with left side (logo + title) and right side (form)
-// Vertical divider in the middle
+// Exact match to UserInterface1.png:
+//   Left: Logo + title + description text (sideways layout)
+//   Middle: Vertical divider line
+//   Right: Rounded card with login form, OAuth buttons
 // ============================================================
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
 import toast from "react-hot-toast";
 
-// ---- SVG Logo: Green cross with red heart ----
+// ---- SVG Logo: Green cross with red heart (from UI) ----
 const AppLogo = ({ size = 80 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Cross shape */}
     <rect x="30" y="10" width="40" height="80" rx="8" fill="#52b788" />
     <rect x="10" y="30" width="80" height="40" rx="8" fill="#52b788" />
+    {/* Inner lighter cross */}
     <rect x="34" y="14" width="32" height="72" rx="6" fill="#74c69d" />
     <rect x="14" y="34" width="72" height="32" rx="6" fill="#74c69d" />
+    {/* White circle center */}
     <circle cx="50" cy="50" r="18" fill="white" />
+    {/* Red heart */}
     <path
       d="M50 58 C50 58 38 50 38 43 C38 39 41 36 44.5 36 C46.5 36 48.5 37.2 50 39 C51.5 37.2 53.5 36 55.5 36 C59 36 62 39 62 43 C62 50 50 58 50 58Z"
       fill="#e63946"
@@ -51,12 +57,13 @@ const AppleIcon = () => (
 );
 
 // ============================================================
-// LoginPage Component - Fully Responsive
+// LoginPage Component
 // ============================================================
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // ---- Form State ----
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -66,17 +73,20 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shakeForm, setShakeForm] = useState(false);
 
+  // ---- Handle input changes ----
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
+  // ---- Client-side validation ----
   const validate = () => {
     const newErrors = {};
     if (!formData.email.trim()) {
@@ -90,9 +100,11 @@ const LoginPage = () => {
     return newErrors;
   };
 
+  // ---- Handle Login Submit ----
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Validate inputs
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -112,9 +124,13 @@ const LoginPage = () => {
       });
 
       const { accessToken, user } = response.data;
+
+      // Store token and user in context
       login(accessToken, user, formData.rememberMe);
+
       toast.success(`Welcome back, ${user.fullName.split(" ")[0]}! 👋`);
 
+      // Redirect to role-specific dashboard
       const dashboardRoutes = {
         elder: "/dashboard/elder",
         caregiver: "/dashboard/caregiver",
@@ -124,9 +140,11 @@ const LoginPage = () => {
     } catch (error) {
       const message = error.response?.data?.message || "Login failed. Please try again.";
 
+      // Show error inside the form (as per requirements)
       if (message.toLowerCase().includes("wrong") || message.toLowerCase().includes("password") || message.toLowerCase().includes("email")) {
         setErrors({ general: message });
       } else if (error.response?.data?.requiresVerification) {
+        // Redirect to OTP verification
         toast.error("Please verify your email first.");
         navigate("/verify-otp", { state: { email: formData.email } });
         return;
@@ -134,6 +152,7 @@ const LoginPage = () => {
         setErrors({ general: message });
       }
 
+      // Shake the form on error
       setShakeForm(true);
       setTimeout(() => setShakeForm(false), 500);
     } finally {
@@ -141,157 +160,66 @@ const LoginPage = () => {
     }
   };
 
+  // ---- Handle OAuth Login ----
   const handleOAuth = (provider) => {
+    // TODO: Integrate actual OAuth SDK (Google, Facebook, Apple)
+    // For now, show a toast indicating the feature
     toast(`${provider} login coming soon! Use email/password for now.`, { icon: "ℹ️" });
   };
 
   // ============================================================
-  // RENDER - Fully Responsive Layout
+  // RENDER - SIDEWAYS LAYOUT (Left Content | Divider | Right Form)
   // ============================================================
   return (
-    <div style={{ fontFamily: "Montserrat, sans-serif" }}>
-      {/* Top Border Rectangle */}
-      <div
-        style={{
-          width: "100%",
-          height: "48px",
-          backgroundColor: "#1C382A",
-        }}
-      />
+    <div className="page-bg flex items-center justify-center min-h-screen p-4">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-0 md:gap-0 animate-fade-in">
 
-      {/* Main Page Container - Responsive */}
-      <div
-        style={{
-          width: "100%",
-          minHeight: "calc(100vh - 96px)",
-          backgroundColor: "#A9C6B2",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "40px 20px",
-          gap: "40px",
-          flexWrap: "wrap",
-        }}
-      >
-        {/* LEFT SIDE - Logo and Content */}
-        <div
-          style={{
-            flex: "1 1 300px",
-            minWidth: "300px",
-            maxWidth: "550px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-        >
-          {/* App Logo */}
-          <div
-            style={{
-              marginBottom: "30px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+        {/* ============================================================
+            LEFT SIDE — Logo + Title + Description (SIDEWAYS)
+            ============================================================ */}
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left px-4 md:px-8">
+          {/* Large Logo */}
+          <div className="mb-6">
             <AppLogo size={120} />
           </div>
 
-          {/* Title */}
+          {/* App Title */}
           <h1
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 700,
-              fontSize: "clamp(32px, 5vw, 53px)",
-              lineHeight: "1.2",
-              letterSpacing: "0%",
-              textAlign: "center",
-              color: "#1C382A",
-              margin: "0 0 20px 0",
-            }}
+            style={{ fontWeight: 800, fontSize: "2.4rem", color: "#1b4332", lineHeight: 1.2, marginBottom: "1rem" }}
           >
             Smart Assistant for<br />Senior Citizens
           </h1>
 
-          {/* Description Text */}
-          <p
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontSize: "clamp(18px, 3vw, 32px)",
-              lineHeight: "1.4",
-              letterSpacing: "0%",
-              textAlign: "center",
-              color: "#1C382A",
-              margin: "0",
-            }}
-          >
-            <span style={{ fontWeight: 700 }}>Lorem Ipsum</span>
-            <span style={{ fontWeight: 400 }}> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</span>
+          {/* Description (Lorem Ipsum placeholder as in UI) */}
+          <p style={{ fontSize: "1rem", color: "#4a4a4a", lineHeight: 1.7, maxWidth: "380px" }}>
+            <span style={{ color: "#2d6a4f", fontWeight: 700 }}>Lorem Ipsum</span> is simply dummy text of
+            the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
           </p>
         </div>
 
-        {/* VERTICAL DIVIDER - Hidden on mobile */}
+        {/* ---- VERTICAL DIVIDER (visible on desktop) ---- */}
         <div
-          style={{
-            display: "none",
-            "@media (min-width: 1024px)": {
-              display: "block",
-            },
-            width: "1px",
-            height: "340px",
-            backgroundColor: "#1C382A4D",
-            flexShrink: 0,
-          }}
+          className="hidden md:block"
+          style={{ width: "1px", height: "340px", backgroundColor: "#a8d5b5", flexShrink: 0 }}
         />
 
-        {/* Divider for mobile - horizontal line */}
-        <div
-          style={{
-            display: "block",
-            "@media (min-width: 1024px)": {
-              display: "none",
-            },
-            width: "80%",
-            height: "1px",
-            backgroundColor: "#1C382A4D",
-            margin: "20px 0",
-          }}
-        />
-
-        {/* RIGHT SIDE - Login Form Container */}
-        <div
-          style={{
-            flex: "1 1 300px",
-            minWidth: "300px",
-            maxWidth: "542px",
-            width: "100%",
-          }}
-        >
+        {/* ============================================================
+            RIGHT SIDE — Login Card (FORM)
+            ============================================================ */}
+        <div className="flex-1 flex justify-center w-full px-4 md:px-8">
           <div
-            style={{
-              backgroundColor: "#BAE4C7",
-              borderRadius: "48px",
-              padding: "clamp(30px, 5vw, 40px)",
-              width: "100%",
-              boxShadow: "9px 10px 20px 2px #00000040",
-              animation: shakeForm ? "shake 0.5s ease-in-out" : "none",
-            }}
+            className={`auth-card w-full max-w-sm ${shakeForm ? "animate-shake" : ""}`}
+            style={{ minWidth: "300px" }}
           >
-            {/* Form Logo */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <AppLogo size={80} />
+            {/* Card Logo (small, centered) */}
+            <div className="flex justify-center mb-6">
+              <AppLogo size={56} />
             </div>
 
-            {/* Error Message */}
+            {/* ---- General Error Message (shown inside form) ---- */}
             {errors.general && (
               <div
+                className="animate-fade-in"
                 style={{
                   backgroundColor: "#fde8ea",
                   border: "1.5px solid #e63946",
@@ -304,7 +232,6 @@ const LoginPage = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
-                  fontFamily: "Montserrat, sans-serif",
                 }}
               >
                 <span>⚠️</span>
@@ -312,201 +239,87 @@ const LoginPage = () => {
               </div>
             )}
 
-            {/* Form */}
+            {/* ---- Login Form ---- */}
             <form onSubmit={handleLogin} noValidate>
-              {/* Email Label */}
-              <label
-                style={{
-                  display: "block",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "clamp(16px, 2vw, 20px)",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  color: "#1C382A",
-                  marginBottom: "8px",
-                }}
-              >
-                Username / Email
-              </label>
 
-              {/* Email Input */}
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={formData.email}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                  padding: "clamp(10px, 2vw, 12px) 14px",
-                  fontSize: "clamp(14px, 2vw, 16px)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#1C382A",
-                  borderRadius: "6px",
-                  boxSizing: "border-box",
-                  fontFamily: "Montserrat, sans-serif",
-                  outline: "none",
-                  border: "none",
-                  transition: "all 0.3s ease",
-                  marginBottom: "16px",
-                  minHeight: "44px",
-                }}
-                placeholder=""
-                disabled={isLoading}
-                onFocus={(e) => {
-                  e.target.style.boxShadow = "0 0 0 3px #1C382A40";
-                }}
-                onBlur={(e) => {
-                  e.target.style.boxShadow = "none";
-                }}
-              />
-              {errors.email && (
-                <p style={{ color: "#e63946", fontSize: "0.85rem", fontWeight: 600, marginTop: "-12px", marginBottom: "8px", fontFamily: "Montserrat, sans-serif" }}>
-                  ⚠️ {errors.email}
-                </p>
-              )}
+              {/* Username / Email Field */}
+              <div style={{ marginBottom: "16px" }}>
+                <label className="form-label" htmlFor="email">
+                  Username / Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`form-input ${errors.email ? "error" : ""}`}
+                  placeholder=""
+                  disabled={isLoading}
+                />
+                {errors.email && (
+                  <p className="error-msg">⚠️ {errors.email}</p>
+                )}
+              </div>
 
-              {/* Password Label */}
-              <label
-                style={{
-                  display: "block",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "clamp(16px, 2vw, 20px)",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  color: "#1C382A",
-                  marginBottom: "8px",
-                }}
-              >
-                Password
-              </label>
+              {/* Password Field */}
+              <div style={{ marginBottom: "20px" }}>
+                <label className="form-label" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`form-input ${errors.password ? "error" : ""}`}
+                  placeholder=""
+                  disabled={isLoading}
+                />
+                {errors.password && (
+                  <p className="error-msg">⚠️ {errors.password}</p>
+                )}
+              </div>
 
-              {/* Password Input */}
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={formData.password}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                  padding: "clamp(10px, 2vw, 12px) 14px",
-                  fontSize: "clamp(14px, 2vw, 16px)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#1C382A",
-                  borderRadius: "6px",
-                  boxSizing: "border-box",
-                  fontFamily: "Montserrat, sans-serif",
-                  outline: "none",
-                  border: "none",
-                  transition: "all 0.3s ease",
-                  marginBottom: "16px",
-                  minHeight: "44px",
-                }}
-                placeholder=""
-                disabled={isLoading}
-                onFocus={(e) => {
-                  e.target.style.boxShadow = "0 0 0 3px #1C382A40";
-                }}
-                onBlur={(e) => {
-                  e.target.style.boxShadow = "none";
-                }}
-              />
-              {errors.password && (
-                <p style={{ color: "#e63946", fontSize: "0.85rem", fontWeight: 600, marginTop: "-12px", marginBottom: "8px", fontFamily: "Montserrat, sans-serif" }}>
-                  ⚠️ {errors.password}
-                </p>
-              )}
-
-              {/* Login and Sign Up Buttons */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  marginBottom: "16px",
-                  flexWrap: "wrap",
-                }}
-              >
-                {/* Login Button */}
+              {/* ---- Login + Sign Up Buttons (side by side as in UI1) ---- */}
+              <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
                 <button
                   type="submit"
+                  className="btn-primary"
                   disabled={isLoading}
-                  style={{
-                    flex: "1 1 100px",
-                    minWidth: "100px",
-                    padding: "clamp(10px, 2vw, 12px) 20px",
-                    fontSize: "clamp(16px, 2vw, 24px)",
-                    fontWeight: 700,
-                    color: "#FFFFFF",
-                    backgroundColor: "#1C382A",
-                    borderRadius: "6px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    transition: "all 0.3s ease",
-                    opacity: isLoading ? 0.7 : 1,
-                    fontFamily: "Montserrat, sans-serif",
-                    border: "none",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isLoading) {
-                      e.target.style.backgroundColor = "#0F1F1A";
-                      e.target.style.transform = "translateY(-2px)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "#1C382A";
-                    e.target.style.transform = "translateY(0)";
-                  }}
+                  style={{ flex: 1 }}
                 >
-                  {isLoading ? "..." : "Login"}
+                  {isLoading ? (
+                    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                      <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="3" strokeDasharray="30 70" />
+                      </svg>
+                      Logging in...
+                    </span>
+                  ) : "Login"}
                 </button>
 
-                {/* Sign Up Button */}
                 <button
                   type="button"
+                  className="btn-secondary"
                   onClick={() => navigate("/signup")}
                   disabled={isLoading}
-                  style={{
-                    flex: "1 1 100px",
-                    minWidth: "100px",
-                    padding: "clamp(10px, 2vw, 12px) 20px",
-                    fontSize: "clamp(16px, 2vw, 24px)",
-                    fontWeight: 700,
-                    color: "#1C382A",
-                    backgroundColor: "transparent",
-                    borderRadius: "6px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    transition: "all 0.3s ease",
-                    fontFamily: "Montserrat, sans-serif",
-                    border: "none",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isLoading) {
-                      e.target.style.backgroundColor = "#1C382A15";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
+                  style={{ flex: 1 }}
                 >
                   Sign Up
                 </button>
               </div>
 
-              {/* Remember Me and Reset Password */}
+              {/* ---- Remember Me + Reset Password (same row as UI1) ---- */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   marginBottom: "16px",
-                  flexWrap: "wrap",
-                  gap: "10px",
                 }}
               >
                 {/* Remember Me Checkbox */}
@@ -516,11 +329,10 @@ const LoginPage = () => {
                     alignItems: "center",
                     gap: "8px",
                     cursor: "pointer",
-                    fontSize: "clamp(13px, 2vw, 15px)",
+                    fontSize: "0.9rem",
                     fontWeight: 500,
-                    color: "#1C382A",
+                    color: "#2d6a4f",
                     userSelect: "none",
-                    fontFamily: "Montserrat, sans-serif",
                   }}
                 >
                   <input
@@ -528,110 +340,50 @@ const LoginPage = () => {
                     name="rememberMe"
                     checked={formData.rememberMe}
                     onChange={handleChange}
-                    style={{
-                      width: "21px",
-                      height: "19px",
-                      cursor: "pointer",
-                      accentColor: "#1C382A",
-                      border: "none",
-                      borderRadius: "3px",
-                      minWidth: "21px",
-                    }}
+                    className="custom-checkbox"
+                    style={{ width: "18px", height: "18px" }}
                   />
                   Remember me
                 </label>
 
-                {/* Reset Password */}
+                {/* Reset Password Link */}
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
                   style={{
                     background: "none",
                     border: "none",
-                    color: "#1C382A",
-                    fontSize: "clamp(13px, 2vw, 15px)",
-                    fontWeight: 500,
+                    color: "#2d6a4f",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
                     cursor: "pointer",
                     textDecoration: "underline",
-                    padding: "0",
-                    fontFamily: "Montserrat, sans-serif",
+                    padding: 0,
                   }}
                 >
-                  Reset Password?
+                  Reset password?
                 </button>
               </div>
 
-              {/* OR Divider */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  marginBottom: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    flex: 1,
-                    height: "1px",
-                    backgroundColor: "#1C382A",
-                  }}
-                />
-                <span
-                  style={{
-                    color: "#1C382A",
-                    fontSize: "clamp(12px, 2vw, 14px)",
-                    fontWeight: 400,
-                    fontFamily: "Montserrat, sans-serif",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  OR
-                </span>
-                <div
-                  style={{
-                    flex: 1,
-                    height: "1px",
-                    backgroundColor: "#1C382A",
-                  }}
-                />
-              </div>
+              {/* ---- OR Divider ---- */}
+              <div className="or-divider">OR</div>
 
-              {/* OAuth Buttons */}
+              {/* ---- OAuth Buttons (Google, Facebook, Apple) ---- */}
               <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   gap: "16px",
                   marginTop: "4px",
-                  flexWrap: "wrap",
                 }}
               >
                 {/* Google */}
                 <button
                   type="button"
+                  className="btn-oauth"
                   onClick={() => handleOAuth("Google")}
                   title="Continue with Google"
                   aria-label="Continue with Google"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
                 >
                   <GoogleIcon />
                 </button>
@@ -639,28 +391,10 @@ const LoginPage = () => {
                 {/* Facebook */}
                 <button
                   type="button"
+                  className="btn-oauth"
                   onClick={() => handleOAuth("Facebook")}
                   title="Continue with Facebook"
                   aria-label="Continue with Facebook"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
                 >
                   <FacebookIcon />
                 </button>
@@ -668,54 +402,20 @@ const LoginPage = () => {
                 {/* Apple */}
                 <button
                   type="button"
+                  className="btn-oauth"
                   onClick={() => handleOAuth("Apple")}
                   title="Continue with Apple"
                   aria-label="Continue with Apple"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
                 >
                   <AppleIcon />
                 </button>
               </div>
+
             </form>
           </div>
         </div>
+
       </div>
-
-      {/* Bottom Border Rectangle */}
-      <div
-        style={{
-          width: "100%",
-          height: "48px",
-          backgroundColor: "#1C382A",
-        }}
-      />
-
-      {/* Shake Animation */}
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-10px); }
-          75% { transform: translateX(10px); }
-        }
-      `}</style>
     </div>
   );
 };
