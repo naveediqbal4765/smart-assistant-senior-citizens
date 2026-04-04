@@ -1,126 +1,328 @@
 /* ============================================================
    index.css - Global Styles for Smart Assistant
-   Imports Tailwind CSS and defines global base styles
+   Green theme matching UserInterface1.png & UserInterface2.png
    ============================================================ */
 
-/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---- Global Base Styles ---- */
+/* ---- Google Fonts ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---- Base Reset ---- */
 @layer base {
-  /* Set default font and background for senior-friendly reading */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-neutral-100 text-neutral-900 font-sans;
-    font-size: 18px; /* Base font size larger for seniors */
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
     line-height: 1.6;
+    background-color: #d4edda;
+    color: #1a1a1a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
   }
 
-  /* Ensure all interactive elements have minimum touch target size */
-  button, a, input, select, textarea {
-    min-height: 44px; /* Apple's recommended minimum touch target */
+  /* Minimum touch targets for seniors */
+  button, a, input[type="checkbox"], input[type="radio"] {
+    min-height: 44px;
   }
 
-  /* High contrast focus ring for accessibility */
+  /* High-contrast focus ring */
   *:focus-visible {
-    @apply outline-none ring-4 ring-accent ring-offset-2;
+    outline: 3px solid #52b788;
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    @apply bg-neutral-200;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-400 rounded-full;
+  /* Remove default input appearance */
+  input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
   }
 }
 
 /* ---- Reusable Component Classes ---- */
 @layer components {
-  /* Primary button - large and bold for seniors */
-  .btn-primary {
-    @apply bg-accent text-white font-bold text-senior-base px-8 py-4 rounded-senior
-           hover:bg-accent-dark active:scale-95 transition-all duration-200
-           disabled:opacity-50 disabled:cursor-not-allowed w-full;
-    min-height: 56px; /* Extra large touch target */
+
+  /* ---- Page Background ---- */
+  .page-bg {
+    background-color: #d4edda;
+    min-height: 100vh;
+    width: 100%;
   }
 
-  /* Secondary button */
-  .btn-secondary {
-    @apply bg-transparent text-primary border-2 border-primary font-bold text-senior-base
-           px-8 py-4 rounded-senior hover:bg-primary hover:text-white
-           transition-all duration-200 w-full;
-    min-height: 56px;
+  /* ---- Auth Card (the rounded green card from UI1) ---- */
+  .auth-card {
+    background-color: #b8dfc4;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    padding: 2rem;
   }
 
-  /* Input field - large and clear for seniors */
-  .input-field {
-    @apply w-full bg-white border-2 border-neutral-300 rounded-senior px-5 py-4
-           text-senior-base text-neutral-900 placeholder-neutral-400
-           focus:border-accent focus:ring-0 transition-colors duration-200;
-    min-height: 56px;
+  /* ---- Form Input Field ---- */
+  .form-input {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1.5px solid #a8d5b5;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 48px;
   }
 
-  /* Error state for input fields */
-  .input-error {
-    @apply border-danger focus:border-danger;
+  .form-input:focus {
+    outline: none;
+    border-color: #52b788;
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.20);
   }
 
-  /* Card container */
-  .card {
-    @apply bg-white rounded-senior shadow-senior p-6;
+  .form-input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
   }
 
-  /* Error message text */
-  .error-text {
-    @apply text-danger text-sm font-medium mt-1;
+  .form-input.error {
+    border-color: #e63946;
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
   }
 
-  /* Label for form fields */
+  /* ---- Form Label ---- */
   .form-label {
-    @apply block text-senior-base font-semibold text-neutral-700 mb-2;
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2d6a4f;
+    margin-bottom: 6px;
   }
 
-  /* Dashboard sidebar item */
-  .sidebar-item {
-    @apply flex items-center gap-4 px-5 py-4 rounded-senior text-senior-base font-semibold
-           text-neutral-600 hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer;
+  /* ---- Primary Button (dark, like "Login" in UI1) ---- */
+  .btn-primary {
+    background-color: #1b4332;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 13px 32px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    min-height: 52px;
+    letter-spacing: 0.3px;
   }
 
-  /* Active sidebar item */
-  .sidebar-item-active {
-    @apply bg-primary text-white;
+  .btn-primary:hover {
+    background-color: #2d6a4f;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ---- Secondary Button (text style, like "Sign Up" in UI1) ---- */
+  .btn-secondary {
+    background-color: transparent;
+    color: #1b4332;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 13px 24px;
+    border-radius: 10px;
+    border: 2px solid #1b4332;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 52px;
+  }
+
+  .btn-secondary:hover {
+    background-color: #1b4332;
+    color: #ffffff;
+  }
+
+  /* ---- Ghost Button (text link style) ---- */
+  .btn-ghost {
+    background: none;
+    border: none;
+    color: #2d6a4f;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .btn-ghost:hover {
+    color: #1b4332;
+  }
+
+  /* ---- OAuth Button (Google/Facebook/Apple circles) ---- */
+  .btn-oauth {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #a8d5b5;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.4rem;
+  }
+
+  .btn-oauth:hover {
+    border-color: #52b788;
+    box-shadow: 0 2px 8px rgba(82, 183, 136, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Error Message ---- */
+  .error-msg {
+    color: #e63946;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ---- OR Divider ---- */
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 16px 0;
+  }
+
+  .or-divider::before,
+  .or-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #a8d5b5;
+  }
+
+  /* ---- Navbar (dark green, from UI2) ---- */
+  .app-navbar {
+    background-color: #1b4332;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* ---- Role Tab Bar (from UI2) ---- */
+  .role-tab {
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #a8d5b5;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    min-height: 44px;
+  }
+
+  .role-tab.active {
+    color: #ffffff;
+    border-bottom: 3px solid #52b788;
+    background-color: rgba(255,255,255,0.08);
+  }
+
+  .role-tab:hover:not(.active) {
+    color: #d4edda;
+  }
+
+  /* ---- Profile Picture Upload Circle ---- */
+  .profile-upload-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 3px solid #a8d5b5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    margin: 0 auto;
+  }
+
+  .profile-upload-circle:hover {
+    border-color: #52b788;
+  }
+
+  /* ---- Checkbox (custom styled) ---- */
+  .custom-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #2d6a4f;
+    cursor: pointer;
+  }
+
+  /* ---- Scrollbar ---- */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #d4edda;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #a8d5b5;
+    border-radius: 3px;
   }
 }
 
-/* ---- Utility Classes ---- */
+/* ---- Utility ---- */
 @layer utilities {
-  /* Gradient background for auth pages */
-  .bg-auth {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.35s ease-out;
+  }
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
   }
 
-  /* Text gradient */
-  .text-gradient {
-    background: linear-gradient(135deg, #e94560, #ff6b6b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-
-  /* SOS button pulse animation */
-  .sos-pulse {
-    animation: sosPulse 1.5s ease-in-out infinite;
+  @keyframes slideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
-
-  @keyframes sosPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.7); }
-    50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(233, 69, 96, 0); }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
   }
 }

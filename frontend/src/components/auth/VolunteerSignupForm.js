@@ -1,216 +1,223 @@
 // ============================================================
-// components/auth/VolunteerSignupForm.js - Volunteer Signup Fields
-// Handles: Availability, affiliation, skills, service radius, location
+// components/auth/VolunteerSignupForm.js
+// Volunteer-specific signup fields
 // ============================================================
 
-import React from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import React, { useState } from "react";
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const TIME_SLOTS = ["Morning", "Afternoon", "Evening", "Night"];
-const SKILLS = ["Medical", "Errands", "Physical Help"];
-const NGOS = ["Edhi Foundation", "Al-Khidmat Foundation", "Chhipa Welfare", "AKDN", "UN Volunteers", "Other", "None"];
+const VolunteerSignupForm = ({ data, onChange, errors }) => {
+  const [showAvailability, setShowAvailability] = useState(false);
 
-const VolunteerSignupForm = ({ roleData, setRoleData, errors }) => {
-  const updateRoleData = (updates) => {
-    setRoleData((prev) => ({ ...prev, ...updates }));
+  const sectionStyle = {
+    backgroundColor: "rgba(255,255,255,0.35)",
+    borderRadius: "12px",
+    padding: "16px",
+    marginBottom: "20px",
+    border: "1px solid #a8d5b5",
   };
 
-  // ---- Toggle day selection ----
+  const labelStyle = {
+    fontSize: "0.95rem",
+    fontWeight: 600,
+    color: "#2d6a4f",
+    marginBottom: "6px",
+    display: "block",
+  };
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const timeSlots = ["Morning", "Afternoon", "Evening", "Night"];
+
+  const selectedDays = data.availability?.days || [];
+  const selectedSlots = data.availability?.timeSlots || [];
+
   const toggleDay = (day) => {
-    const current = roleData.availability?.days || [];
-    const updated = current.includes(day)
-      ? current.filter((d) => d !== day)
-      : [...current, day];
-    updateRoleData({ availability: { ...roleData.availability, days: updated } });
+    const updated = selectedDays.includes(day)
+      ? selectedDays.filter((d) => d !== day)
+      : [...selectedDays, day];
+    onChange({ target: { name: "availability", value: { ...data.availability, days: updated } } });
   };
 
-  // ---- Toggle time slot selection ----
-  const toggleTimeSlot = (slot) => {
-    const current = roleData.availability?.timeSlots || [];
-    const updated = current.includes(slot)
-      ? current.filter((s) => s !== slot)
-      : [...current, slot];
-    updateRoleData({ availability: { ...roleData.availability, timeSlots: updated } });
-  };
-
-  // ---- Toggle skill selection ----
-  const toggleSkill = (skill) => {
-    const current = roleData.skills || [];
-    const updated = current.includes(skill)
-      ? current.filter((s) => s !== skill)
-      : [...current, skill];
-    updateRoleData({ skills: updated });
-  };
-
-  // ---- Request location ----
-  const requestLocation = () => {
-    const confirmed = window.confirm(
-      "📍 Location Permission Required\n\n" +
-      "Smart Assistant needs your location to:\n" +
-      "• Match you with nearby seniors who need help\n" +
-      "• Calculate your service radius\n" +
-      "• Send you proximity-based task alerts\n\n" +
-      "Allow location access?"
-    );
-
-    if (!confirmed) {
-      updateRoleData({ locationPermission: false });
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        updateRoleData({
-          locationPermission: true,
-          location: { lat: position.coords.latitude, lng: position.coords.longitude },
-        });
-      },
-      () => updateRoleData({ locationPermission: false })
-    );
+  const toggleSlot = (slot) => {
+    const updated = selectedSlots.includes(slot)
+      ? selectedSlots.filter((s) => s !== slot)
+      : [...selectedSlots, slot];
+    onChange({ target: { name: "availability", value: { ...data.availability, timeSlots: updated } } });
   };
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-bold text-primary">Volunteer Information</h3>
-
-      {/* ---- Availability: Days of Week ---- */}
-      <div className="bg-green-50 rounded-senior p-5 border border-green-200">
-        <h4 className="text-lg font-bold text-neutral-800 mb-3">📅 Available Days *</h4>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {DAYS.map((day) => (
-            <button
-              key={day}
-              type="button"
-              onClick={() => toggleDay(day)}
-              className={`py-3 px-4 rounded-senior font-semibold text-sm transition-all border-2
-                ${(roleData.availability?.days || []).includes(day)
-                  ? "bg-primary text-white border-primary"
-                  : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
-                }`}
-            >
-              {day.slice(0, 3)} {/* Show abbreviated day name */}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ---- Availability: Time Slots ---- */}
-      <div>
-        <h4 className="text-lg font-bold text-neutral-800 mb-3">⏰ Preferred Time Slots *</h4>
-        <div className="grid grid-cols-2 gap-3">
-          {TIME_SLOTS.map((slot) => (
-            <button
-              key={slot}
-              type="button"
-              onClick={() => toggleTimeSlot(slot)}
-              className={`py-3 px-4 rounded-senior font-semibold transition-all border-2
-                ${(roleData.availability?.timeSlots || []).includes(slot)
-                  ? "bg-accent text-white border-accent"
-                  : "bg-white text-neutral-600 border-neutral-200 hover:border-accent"
-                }`}
-            >
-              {slot === "Morning" && "🌅 Morning"}
-              {slot === "Afternoon" && "☀️ Afternoon"}
-              {slot === "Evening" && "🌆 Evening"}
-              {slot === "Night" && "🌙 Night"}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ---- NGO Affiliation ---- */}
-      <div>
-        <label className="form-label">NGO Affiliation (if any)</label>
+    <div>
+      {/* NGO Affiliation */}
+      <div style={sectionStyle}>
+        <label style={labelStyle}>NGO Affiliation (optional)</label>
         <select
-          value={roleData.affiliation || ""}
-          onChange={(e) => updateRoleData({ affiliation: e.target.value })}
-          className="input-field"
+          name="affiliation"
+          value={data.affiliation || ""}
+          onChange={onChange}
+          className="form-input"
         >
-          <option value="">Select NGO</option>
-          {NGOS.map((ngo) => (
-            <option key={ngo} value={ngo}>{ngo}</option>
-          ))}
+          <option value="">Not affiliated</option>
+          <option>Edhi Foundation</option>
+          <option>Al-Khidmat Foundation</option>
+          <option>Chhipa Welfare Association</option>
+          <option>AKDN (Aga Khan Development Network)</option>
+          <option>UN Agencies</option>
+          <option>Other</option>
         </select>
       </div>
 
-      {/* NGO ID (if affiliated) */}
-      {roleData.affiliation && roleData.affiliation !== "None" && (
-        <div>
-          <label className="form-label">NGO ID Number (if applicable)</label>
+      {/* NGO ID */}
+      {data.affiliation && data.affiliation !== "Not affiliated" && (
+        <div style={sectionStyle}>
+          <label style={labelStyle}>NGO ID Number (if applicable)</label>
           <input
             type="text"
-            value={roleData.ngoId || ""}
-            onChange={(e) => updateRoleData({ ngoId: e.target.value })}
-            placeholder="Enter your NGO ID"
-            className="input-field"
+            name="ngoId"
+            value={data.ngoId || ""}
+            onChange={onChange}
+            className="form-input"
+            placeholder="e.g. NGO-12345"
           />
         </div>
       )}
 
-      {/* ---- Service Radius Slider ---- */}
-      <div>
-        <label className="form-label">
-          Service Radius: <span className="text-accent font-bold">{roleData.serviceRadius || 5} km</span>
-        </label>
+      {/* Service Radius */}
+      <div style={sectionStyle}>
+        <label style={labelStyle}>Service Radius: {data.serviceRadius || 5} km</label>
         <input
           type="range"
-          min={1}
-          max={10}
-          value={roleData.serviceRadius || 5}
-          onChange={(e) => updateRoleData({ serviceRadius: parseInt(e.target.value) })}
-          className="w-full h-3 accent-accent cursor-pointer"
+          name="serviceRadius"
+          min="1"
+          max="10"
+          value={data.serviceRadius || 5}
+          onChange={onChange}
+          style={{ width: "100%", height: "6px", borderRadius: "3px", accentColor: "#2d6a4f" }}
         />
-        <div className="flex justify-between text-sm text-neutral-500 mt-1">
-          <span>1 km</span>
-          <span>5 km</span>
-          <span>10 km</span>
-        </div>
+        <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "6px" }}>
+          How far are you willing to travel to help seniors?
+        </p>
       </div>
 
-      {/* ---- Skills Multi-Select ---- */}
-      <div>
-        <h4 className="text-lg font-bold text-neutral-800 mb-3">🛠️ Your Skills *</h4>
-        <div className="grid grid-cols-3 gap-3">
-          {SKILLS.map((skill) => (
-            <button
-              key={skill}
-              type="button"
-              onClick={() => toggleSkill(skill)}
-              className={`py-3 px-4 rounded-senior font-semibold text-sm transition-all border-2
-                ${(roleData.skills || []).includes(skill)
-                  ? "bg-primary text-white border-primary"
-                  : "bg-white text-neutral-600 border-neutral-200 hover:border-primary"
-                }`}
-            >
-              {skill === "Medical" && "🏥 Medical"}
-              {skill === "Errands" && "🛒 Errands"}
-              {skill === "Physical Help" && "💪 Physical Help"}
-            </button>
+      {/* Skills */}
+      <div style={sectionStyle}>
+        <label style={labelStyle}>Skills *</label>
+        <p style={{ fontSize: "0.85rem", color: "#6b7280", marginBottom: "10px" }}>
+          Select all skills you can offer:
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          {["Medical", "Errands", "Physical Help"].map((skill) => (
+            <label key={skill} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "0.95rem", fontWeight: 600, color: "#2d6a4f" }}>
+              <input
+                type="checkbox"
+                checked={(data.skills || []).includes(skill)}
+                onChange={(e) => {
+                  const updated = e.target.checked
+                    ? [...(data.skills || []), skill]
+                    : (data.skills || []).filter((s) => s !== skill);
+                  onChange({ target: { name: "skills", value: updated } });
+                }}
+                className="custom-checkbox"
+                style={{ width: "18px", height: "18px" }}
+              />
+              {skill}
+            </label>
           ))}
         </div>
+        {errors?.skills && <p className="error-msg">⚠️ {errors.skills}</p>}
       </div>
 
-      {/* ---- Location Permission ---- */}
-      <div className="bg-green-50 rounded-senior p-5 border border-green-200">
-        <p className="text-senior-base font-semibold text-neutral-800 mb-2">
-          📍 Location Permission *
-        </p>
-        <p className="text-neutral-600 mb-4">
-          Required to match you with nearby seniors who need help.
-        </p>
+      {/* Availability Schedule */}
+      <div style={sectionStyle}>
         <button
           type="button"
-          onClick={requestLocation}
-          className={`flex items-center gap-3 px-6 py-3 rounded-senior font-bold text-senior-base transition-all
-            ${roleData.locationPermission
-              ? "bg-success text-white"
-              : "bg-primary text-white hover:bg-primary-dark"
-            }`}
+          onClick={() => setShowAvailability(!showAvailability)}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "#2d6a4f",
+            fontSize: "0.95rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            padding: 0,
+            marginBottom: "10px",
+          }}
         >
-          <FaMapMarkerAlt />
-          {roleData.locationPermission ? "✅ Location Granted" : "Allow Location Access"}
+          {showAvailability ? "▼" : "▶"} Set Your Availability Schedule
         </button>
+
+        {showAvailability && (
+          <div>
+            {/* Days */}
+            <div style={{ marginBottom: "16px" }}>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1b4332", marginBottom: "8px" }}>
+                Available Days:
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: "8px" }}>
+                {days.map((day) => (
+                  <label key={day} style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600, color: "#2d6a4f" }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedDays.includes(day)}
+                      onChange={() => toggleDay(day)}
+                      className="custom-checkbox"
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    {day.slice(0, 3)}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Time Slots */}
+            <div>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#1b4332", marginBottom: "8px" }}>
+                Preferred Time Slots:
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
+                {timeSlots.map((slot) => (
+                  <label key={slot} style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600, color: "#2d6a4f" }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedSlots.includes(slot)}
+                      onChange={() => toggleSlot(slot)}
+                      className="custom-checkbox"
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    {slot}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Location Permission */}
+      <div style={sectionStyle}>
+        <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
+          <input
+            type="checkbox"
+            name="locationPermission"
+            checked={data.locationPermission || false}
+            onChange={(e) => {
+              onChange({ target: { name: "locationPermission", value: e.target.checked } });
+              if (e.target.checked && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  (pos) => {
+                    onChange({ target: { name: "lat", value: pos.coords.latitude } });
+                    onChange({ target: { name: "lng", value: pos.coords.longitude } });
+                  },
+                  () => {}
+                );
+              }
+            }}
+            className="custom-checkbox"
+            style={{ width: "20px", height: "20px" }}
+          />
+          Allow location access for task matching
+        </label>
+        <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "6px" }}>
+          This helps us match you with nearby seniors who need help
+        </p>
       </div>
     </div>
   );

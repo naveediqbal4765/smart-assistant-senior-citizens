@@ -1,11 +1,62 @@
-# Smart Assistant for Senior Citizens
-## DOCUMENTATION.md - Step-by-Step Developer Guide
+# 📚 Smart Assistant for Senior Citizens - Complete Documentation
 
-> **Project:** Smart Assistant for Senior Citizens  
-> **University:** SZABIST University, Islamabad  
-> **Team:** Manahil Chaudhary (2212470), Sartaj Riaz (2212498), Naveed Iqbal (2212474)  
-> **Supervisor:** Mr. Ghaffar Ahmed  
-> **Semester:** Spring 2026
+**SZABIST University, Islamabad | Spring 2026 Final Year Project**
+
+---
+
+## 📋 Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Tech Stack](#tech-stack)
+3. [Project Structure](#project-structure)
+4. [Installation & Setup](#installation--setup)
+5. [Environment Variables](#environment-variables)
+6. [Running the Application](#running-the-application)
+7. [API Documentation](#api-documentation)
+8. [Frontend Components](#frontend-components)
+9. [Database Schema](#database-schema)
+10. [Features Implemented](#features-implemented)
+11. [Testing](#testing)
+12. [Deployment](#deployment)
+13. [Troubleshooting](#troubleshooting)
+14. [Contributing](#contributing)
+
+---
+
+## 🏥 Project Overview
+
+**Smart Assistant for Senior Citizens** is a comprehensive MERN stack web application designed to support elderly independence through AI, IoT, and community-driven care.
+
+### Key Features:
+- **User Authentication** - Email/password, OTP verification, OAuth (Google/Facebook/Apple)
+- **Three User Roles** - Elder, Caregiver, Volunteer
+- **Real-time Communication** - Socket.io for SOS alerts, live chat, location sharing
+- **Health Monitoring** - Track vital signs, medications, wellness activities
+- **Emergency Response** - SOS button, fall detection, emergency contacts
+- **Volunteer Matching** - Task-based volunteer system with rewards
+- **Senior-Friendly UI** - Large fonts, high contrast, simple navigation
+
+### Team Members:
+- Manahil Chaudhary (2212470)
+- Sartaj Riaz (2212498)
+- Naveed Iqbal (2212474)
+- **Supervisor:** Mr. Ghaffar Ahmed
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| **Frontend** | React.js | 18.2.0 |
+| **Styling** | Tailwind CSS | 3.4.0 |
+| **Backend** | Node.js + Express.js | 18.x / 4.18.2 |
+| **Database** | MongoDB Atlas | Cloud |
+| **Real-time** | Socket.io | 4.6.1 |
+| **Authentication** | JWT + bcryptjs | 9.0.2 / 2.4.3 |
+| **Email** | Nodemailer | 6.9.7 |
+| **Validation** | express-validator | 7.0.1 |
+| **Security** | Helmet, CORS, Rate Limiting | Latest |
 
 ---
 
@@ -13,486 +64,864 @@
 
 ```
 smart-assistant-senior-citizens/
-│
-├── backend/                          # Node.js + Express API Server
+├── backend/
 │   ├── config/
-│   │   └── db.js                     # MongoDB Atlas connection
+│   │   └── db.js                    # MongoDB connection
 │   ├── controllers/
 │   │   └── auth/
-│   │       └── authController.js     # All auth logic (login, signup, OTP, OAuth)
+│   │       └── authController.js    # Auth logic (login, signup, OTP, etc.)
 │   ├── middleware/
-│   │   ├── authMiddleware.js         # JWT verification + role-based access
-│   │   └── validateMiddleware.js     # Input validation rules (express-validator)
+│   │   ├── authMiddleware.js        # JWT verification & role-based access
+│   │   └── validateMiddleware.js    # Input validation rules
 │   ├── models/
-│   │   └── User.js                   # Mongoose User schema (all 3 roles)
+│   │   └── User.js                  # User schema (Elder/Caregiver/Volunteer)
 │   ├── routes/
-│   │   └── authRoutes.js             # Auth API route definitions
+│   │   └── authRoutes.js            # Auth endpoints
 │   ├── sockets/
-│   │   └── socketHandler.js          # Socket.io real-time event handlers
+│   │   └── socketHandler.js         # Real-time events (SOS, chat, location)
 │   ├── utils/
-│   │   ├── emailUtils.js             # Nodemailer OTP email sender
-│   │   └── jwtUtils.js               # JWT token generation helpers
-│   ├── .env.example                  # Environment variable template
-│   ├── package.json                  # Backend dependencies
-│   └── server.js                     # Main entry point
+│   │   ├── jwtUtils.js              # Token generation
+│   │   └── emailUtils.js            # OTP email sending
+│   ├── .env.example                 # Environment variables template
+│   ├── package.json
+│   └── server.js                    # Express app entry point
 │
-├── frontend/                         # React.js + Tailwind CSS
+├── frontend/
 │   ├── public/
-│   │   └── index.html                # HTML template
+│   │   └── index.html               # HTML entry point
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── auth/
-│   │   │   │   ├── ElderSignupForm.js      # Elder-specific signup fields
-│   │   │   │   ├── CaregiverSignupForm.js  # Caregiver-specific signup fields
-│   │   │   │   └── VolunteerSignupForm.js  # Volunteer-specific signup fields
+│   │   │   │   ├── ElderSignupForm.js
+│   │   │   │   ├── CaregiverSignupForm.js
+│   │   │   │   └── VolunteerSignupForm.js
 │   │   │   └── common/
-│   │   │       └── ProtectedRoute.js       # Route guard (auth + role check)
+│   │   │       └── ProtectedRoute.js    # Auth guard + role check
 │   │   ├── context/
-│   │   │   └── AuthContext.js        # Global auth state (React Context)
+│   │   │   └── AuthContext.js       # Global auth state
 │   │   ├── pages/
-│   │   │   ├── LoginPage.js          # Login page (matches UserInterface1.png)
-│   │   │   ├── SignupPage.js         # Signup with role selection
-│   │   │   ├── VerifyOTPPage.js      # OTP verification (6-digit boxes)
-│   │   │   ├── ForgotPasswordPage.js # Request password reset OTP
-│   │   │   ├── ResetPasswordPage.js  # Set new password
-│   │   │   ├── ElderDashboard.js     # Elder's main dashboard
-│   │   │   ├── CaregiverDashboard.js # Caregiver's monitoring dashboard
-│   │   │   ├── VolunteerDashboard.js # Volunteer's task dashboard
-│   │   │   └── NotFoundPage.js       # 404 page
+│   │   │   ├── LoginPage.js         # Login (UserInterface1.png)
+│   │   │   ├── SignupPage.js        # Signup (UserInterface2.png)
+│   │   │   ├── VerifyOTPPage.js     # OTP verification
+│   │   │   ├── ForgotPasswordPage.js
+│   │   │   ├── ResetPasswordPage.js
+│   │   │   ├── ElderDashboard.js
+│   │   │   ├── CaregiverDashboard.js
+│   │   │   ├── VolunteerDashboard.js
+│   │   │   └── NotFoundPage.js
 │   │   ├── services/
-│   │   │   └── api.js                # Axios HTTP client + interceptors
-│   │   ├── App.js                    # Root component + routing
-│   │   ├── index.js                  # React entry point
-│   │   └── index.css                 # Global styles + Tailwind directives
-│   ├── package.json                  # Frontend dependencies
-│   └── tailwind.config.js            # Tailwind custom theme
+│   │   │   └── api.js               # Axios API client
+│   │   ├── App.js                   # React Router setup
+│   │   ├── index.js                 # React entry point
+│   │   └── index.css                # Global styles
+│   ├── tailwind.config.js           # Tailwind theme (green)
+│   ├── package.json
+│   └── .env.example
 │
-└── DOCUMENTATION.md                  # This file
+├── .gitignore
+├── README.md
+└── DOCUMENTATION.md                 # This file
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Installation & Setup
 
 ### Prerequisites
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-- MongoDB Atlas account (credentials already configured)
-- Git
+- **Node.js** 18.x or higher
+- **npm** 9.x or higher
+- **MongoDB Atlas** account (free tier available)
+- **Git** for version control
 
 ### Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/naveediqbal4765/smart-assistant-senior-citizens.git
 cd smart-assistant-senior-citizens
 ```
 
----
+### Step 2: Backend Setup
 
-## ⚙️ Backend Setup
-
-### Step 2: Install Backend Dependencies
 ```bash
+# Navigate to backend directory
 cd backend
-npm install
-```
 
-### Step 3: Configure Environment Variables
-```bash
-# Copy the example env file
+# Install dependencies
+npm install
+
+# Create .env file from template
 cp .env.example .env
 
-# Edit .env with your actual values
-nano .env   # or use any text editor
+# Edit .env with your credentials (see Environment Variables section)
+nano .env  # or use your preferred editor
 ```
 
-**Required .env values:**
-```env
+### Step 3: Frontend Setup
+
+```bash
+# Navigate to frontend directory (from project root)
+cd frontend
+
+# Install dependencies
+npm install
+
+# Create .env file (optional, for API URL)
+cp .env.example .env
+```
+
+### Step 4: MongoDB Atlas Setup
+
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a free account
+3. Create a new cluster (M0 free tier)
+4. Get your connection string: `mongodb+srv://username:password@cluster.mongodb.net/dbname`
+5. Add this to your backend `.env` file as `MONGO_URI`
+
+### Step 5: Email Configuration (Nodemailer)
+
+For OTP emails to work:
+
+1. **Gmail Setup:**
+   - Enable 2-factor authentication on your Gmail account
+   - Generate an App Password: https://myaccount.google.com/apppasswords
+   - Add to `.env`:
+     ```
+     EMAIL_USER=your-email@gmail.com
+     EMAIL_PASS=your-app-password
+     ```
+
+2. **Alternative Email Providers:**
+   - Update `EMAIL_HOST` and `EMAIL_PORT` in `.env`
+   - Example for Outlook: `smtp-mail.outlook.com:587`
+
+---
+
+## 🔐 Environment Variables
+
+### Backend (.env)
+
+```bash
+# Server Configuration
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb+srv://smartAssistant:EhecvOdyRjtMFgf9@cluster0.mongodb.net/smartAssistantDB?retryWrites=true&w=majority
-JWT_SECRET=your_long_random_secret_here
-JWT_REFRESH_SECRET=another_long_random_secret
-EMAIL_USER=your_gmail@gmail.com
-EMAIL_PASS=your_gmail_app_password
+
+# MongoDB Atlas
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/smartAssistantDB?retryWrites=true&w=majority
+
+# JWT Secrets (use long random strings in production)
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_REFRESH_SECRET=your_super_secret_refresh_key_change_this_in_production
+JWT_EXPIRE=7d
+JWT_REFRESH_EXPIRE=30d
+
+# Email Configuration (Nodemailer)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password_here
+EMAIL_FROM=SmartAssistant <noreply@smartassistant.com>
+
+# Frontend URL (for CORS)
 CLIENT_URL=http://localhost:3000
+
+# OTP Expiry (in minutes)
+OTP_EXPIRE_MINUTES=10
+
+# OAuth (optional, for future implementation)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+APPLE_CLIENT_ID=your_apple_client_id
 ```
 
-> **Gmail App Password:** Go to Google Account → Security → 2-Step Verification → App Passwords → Generate one for "Mail"
+### Frontend (.env)
 
-### Step 4: Start Backend Server
 ```bash
-# Development mode (auto-restart on file changes)
-npm run dev
-
-# Production mode
-npm start
+# API Base URL
+REACT_APP_API_URL=http://localhost:5000/api
 ```
 
-**Expected output:**
+---
+
+## ▶️ Running the Application
+
+### Terminal 1: Start Backend Server
+
+```bash
+cd backend
+npm run dev
+```
+
+Expected output:
 ```
 ✅ MongoDB Connected: cluster0.mongodb.net
+📦 Database: smartAssistantDB
 🚀 Smart Assistant Server running on port 5000
 📡 Environment: development
 🔗 API Base URL: http://localhost:5000/api
 💡 Health Check: http://localhost:5000/api/health
 ```
 
----
+### Terminal 2: Start Frontend Development Server
 
-## 🎨 Frontend Setup
-
-### Step 5: Install Frontend Dependencies
 ```bash
-cd ../frontend
-npm install
-```
-
-### Step 6: Configure Frontend Environment (Optional)
-```bash
-# Create .env file in frontend folder
-echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
-```
-
-### Step 7: Start Frontend Development Server
-```bash
+cd frontend
 npm start
 ```
 
-The app will open at **http://localhost:3000**
+Expected output:
+```
+Compiled successfully!
+
+You can now view smart-assistant-frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.x.x:3000
+```
+
+### Access the Application
+
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:5000/api
+- **Health Check:** http://localhost:5000/api/health
 
 ---
 
-## 🔌 API Endpoints Reference
+## 📡 API Documentation
 
-### Authentication Routes (`/api/auth`)
+### Authentication Endpoints
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/login` | Login with email + password | No |
-| POST | `/api/auth/signup` | Register new user (any role) | No |
-| POST | `/api/auth/verify-otp` | Verify email OTP after signup | No |
-| POST | `/api/auth/forgot-password` | Request password reset OTP | No |
-| POST | `/api/auth/verify-reset-otp` | Verify OTP for password reset | No |
-| POST | `/api/auth/reset-password` | Set new password | No |
-| POST | `/api/auth/resend-otp` | Resend OTP to email | No |
-| POST | `/api/auth/oauth` | OAuth login (Google/Facebook/Apple) | No |
-| GET | `/api/auth/me` | Get current user profile | ✅ Yes |
-| DELETE | `/api/auth/delete-account` | Soft delete account | ✅ Yes |
+All endpoints prefixed with `/api/auth`
 
-### Request/Response Examples
-
-**Login Request:**
-```json
+#### 1. **Login**
+```
 POST /api/auth/login
+Content-Type: application/json
+
 {
   "email": "user@example.com",
-  "password": "MyPassword@123",
+  "password": "SecurePassword123!",
   "rememberMe": true
 }
-```
 
-**Login Response (Success):**
-```json
+Response (200):
 {
   "success": true,
   "message": "Login successful",
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
   "user": {
-    "_id": "64abc123...",
-    "fullName": "Ahmed Khan",
-    "email": "user@example.com",
+    "_id": "507f1f77bcf86cd799439011",
+    "fullName": "Ali Khan",
+    "email": "ali@example.com",
     "role": "elder",
-    "isVerified": true,
-    "elderData": { "seniorId": "SR-A1B2C3", ... }
+    "isVerified": true
   }
 }
 ```
 
-**Login Response (Wrong Credentials):**
-```json
+#### 2. **Signup**
+```
+POST /api/auth/signup
+Content-Type: application/json
+
 {
-  "success": false,
-  "message": "Entered wrong email or password"
+  "fullName": "Ali Khan",
+  "email": "ali@example.com",
+  "phone": "+923001234567",
+  "password": "SecurePassword123!",
+  "confirmPassword": "SecurePassword123!",
+  "role": "elder",
+  "dateOfBirth": "1960-05-15",
+  "nationalId": "1234567890123",
+  
+  // Elder-specific
+  "livesAlone": true,
+  "emergencyContacts": [
+    {
+      "name": "Fatima Khan",
+      "phone": "+923009876543",
+      "email": "fatima@example.com",
+      "relationship": "Daughter"
+    }
+  ],
+  "medicalConditions": ["Diabetes", "Hypertension"],
+  "hasMedicalIssues": true,
+  "locationPermission": true
+}
+
+Response (201):
+{
+  "success": true,
+  "message": "Account created successfully! Please check your email for the verification OTP.",
+  "email": "ali@example.com",
+  "requiresVerification": true,
+  "seniorId": "SR-a1b2c3d4"
+}
+```
+
+#### 3. **Verify OTP**
+```
+POST /api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "email": "ali@example.com",
+  "otp": "123456"
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "Email verified successfully! Welcome to Smart Assistant.",
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
+  "user": { ... }
+}
+```
+
+#### 4. **Forgot Password**
+```
+POST /api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "ali@example.com"
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "If an account with this email exists, an OTP has been sent."
+}
+```
+
+#### 5. **Verify Reset OTP**
+```
+POST /api/auth/verify-reset-otp
+Content-Type: application/json
+
+{
+  "email": "ali@example.com",
+  "otp": "123456"
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "OTP verified. You can now set a new password.",
+  "email": "ali@example.com"
+}
+```
+
+#### 6. **Reset Password**
+```
+POST /api/auth/reset-password
+Content-Type: application/json
+
+{
+  "email": "ali@example.com",
+  "password": "NewPassword123!",
+  "confirmPassword": "NewPassword123!"
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "Password reset successfully! Please login with your new password."
+}
+```
+
+#### 7. **Get Current User**
+```
+GET /api/auth/me
+Authorization: Bearer <accessToken>
+
+Response (200):
+{
+  "success": true,
+  "user": { ... }
+}
+```
+
+#### 8. **Delete Account**
+```
+DELETE /api/auth/delete-account
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+
+{
+  "password": "CurrentPassword123!",
+  "confirmDelete": true
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "Your account has been successfully deleted."
 }
 ```
 
 ---
 
-## 🗄️ Database Schema
+## 🎨 Frontend Components
 
-### User Model (MongoDB)
+### Page Components
+
+#### **LoginPage.js**
+- Email/password login form
+- "Remember Me" checkbox
+- "Reset Password" link
+- OAuth buttons (Google, Facebook, Apple)
+- Error handling with inline messages
+- Responsive design matching UserInterface1.png
+
+#### **SignupPage.js**
+- Role selection tabs (Elder | Caregiver | Volunteer)
+- Profile picture upload
+- Common fields (Name, Email, Phone, DOB, National ID, Password)
+- Dynamic role-specific form rendering
+- Photo collage grid on right side
+- Matches UserInterface2.png design
+
+#### **ElderSignupForm.js**
+- Q1: Lives alone? (Yes/No)
+- Q2: Medical conditions? (Multi-select dropdown)
+- Q3: Location permission? (Required for SOS)
+- Emergency contacts (1-3 family members)
+- Medical conditions with custom input
+
+#### **CaregiverSignupForm.js**
+- Relationship to Elder
+- Elder's email for pairing
+- 6-digit pairing code verification
+- Push notification consent
+- Availability toggle
+
+#### **VolunteerSignupForm.js**
+- NGO affiliation selection
+- Service radius slider (1-10 km)
+- Skills multi-select (Medical, Errands, Physical Help)
+- Availability schedule (Days + Time slots)
+- Location permission
+
+#### **VerifyOTPPage.js**
+- 6-digit OTP input with auto-formatting
+- Resend OTP button
+- Auto-redirect after verification
+
+#### **ForgotPasswordPage.js**
+- Email input for password reset
+- Sends OTP to email
+
+#### **ResetPasswordPage.js**
+- Two-step process:
+  1. OTP verification
+  2. New password entry
+
+#### **Dashboard Pages**
+- **ElderDashboard.js** - SOS button, health stats, request help
+- **CaregiverDashboard.js** - Linked elder status, health monitoring, location tracking
+- **VolunteerDashboard.js** - Go online/offline, available tasks, rewards
+
+### Utility Components
+
+#### **ProtectedRoute.js**
+- Checks authentication status
+- Verifies user role
+- Redirects unauthorized users to login
+
+#### **AuthContext.js**
+- Global authentication state management
+- Login/logout functions
+- Token persistence (localStorage/sessionStorage)
+- User data management
+
+#### **api.js (Axios Client)**
+- Centralized API configuration
+- Automatic JWT token attachment
+- Global error handling
+- Request/response interceptors
+
+---
+
+## 💾 Database Schema
+
+### User Model
 
 ```javascript
 {
-  // Common fields (all roles)
-  fullName: String,          // Required
-  email: String,             // Required, unique, lowercase
-  phone: String,             // Required
-  password: String,          // Hashed with bcrypt (12 rounds)
-  profilePicture: String,    // URL to image
+  // Basic Info (All Roles)
+  fullName: String,
+  email: String (unique),
+  phone: String,
+  password: String (hashed),
+  profilePicture: String (URL),
   dateOfBirth: Date,
-  address: { text, lat, lng },
-  nationalId: String,        // 13-digit CNIC
-  role: "elder" | "caregiver" | "volunteer",
-  authProvider: "local" | "google" | "facebook" | "apple",
-  isVerified: Boolean,       // Email verified?
-  isActive: Boolean,
-  isDeleted: Boolean,        // Soft delete
-  
-  // OTP fields (excluded from queries by default)
-  otp: String,               // Hashed OTP
-  otpExpiry: Date,
-  otpPurpose: String,
-  
-  // Role-specific data (only one populated)
-  elderData: {
-    seniorId: String,        // Auto-generated unique ID
-    livesAlone: Boolean,
-    emergencyContacts: [...], // Max 3
-    medicalConditions: [...],
-    pairingCode: String,     // 6-digit code for caregiver linking
-    pairingCodeExpiry: Date,
-    priorityMonitor: Boolean,
-    locationPermission: Boolean,
+  address: {
+    text: String,
+    lat: Number,
+    lng: Number
   },
+  nationalId: String,
+
+  // Role Assignment
+  role: Enum ["elder", "caregiver", "volunteer"],
+
+  // OAuth Provider Info
+  authProvider: Enum ["local", "google", "facebook", "apple"],
+  providerId: String,
+
+  // Account Status
+  isVerified: Boolean,
+  isActive: Boolean,
+  isDeleted: Boolean (soft delete),
+
+  // OTP for Email Verification & Password Reset
+  otp: String (hashed),
+  otpExpiry: Date,
+  otpPurpose: Enum ["email-verification", "password-reset", "login"],
+
+  // Remember Me / Session
+  rememberMe: Boolean,
+
+  // Role-Specific Data
+  elderData: {
+    seniorId: String (unique),
+    livesAlone: Boolean,
+    emergencyContacts: [{
+      name: String,
+      phone: String,
+      email: String,
+      relationship: String
+    }],
+    medicalConditions: [String],
+    hasMedicalIssues: Boolean,
+    locationPermission: Boolean,
+    pairingCode: String,
+    pairingCodeExpiry: Date,
+    priorityMonitor: Boolean
+  },
+
   caregiverData: {
     relationshipToElder: String,
     linkedElderEmail: String,
-    linkedElderId: ObjectId,
+    linkedElderId: ObjectId (ref: User),
     isPaired: Boolean,
-    accessLevel: "view-only" | "action",
     notificationsEnabled: Boolean,
     isAvailable: Boolean,
+    accessLevel: Enum ["view-only", "action"]
   },
+
   volunteerData: {
     affiliation: String,
-    serviceRadius: Number,   // 1-10 km
-    skills: [...],           // Medical, Errands, Physical Help
-    availability: { days: [...], timeSlots: [...] },
+    ngoId: String,
+    serviceRadius: Number (1-10 km),
+    skills: [Enum ["Medical", "Errands", "Physical Help"]],
+    availability: {
+      days: [String],
+      timeSlots: [String]
+    },
     locationPermission: Boolean,
     isLive: Boolean,
     totalPoints: Number,
-    badges: [...],
+    badges: [String]
   },
-  
-  // Geospatial (for volunteer matching)
-  location: { type: "Point", coordinates: [lng, lat] },
-  
+
+  // Geospatial Location
+  location: {
+    type: "Point",
+    coordinates: [Number, Number] // [longitude, latitude]
+  },
+
   // Timestamps
-  createdAt: Date,
-  updatedAt: Date,
   lastLogin: Date,
+  passwordChangedAt: Date,
+  createdAt: Date,
+  updatedAt: Date
 }
 ```
 
 ---
 
-## 🔐 Security Features
+## ✨ Features Implemented
 
-| Feature | Implementation |
-|---------|---------------|
-| Password Hashing | bcryptjs with salt rounds = 12 |
-| JWT Authentication | jsonwebtoken, 7-day expiry |
-| Rate Limiting | express-rate-limit: 20 req/15min on auth routes |
-| Input Validation | express-validator on all endpoints |
-| Security Headers | helmet.js middleware |
-| CORS | Configured for frontend origin only |
-| OTP Security | Hashed with bcrypt before storage |
-| Soft Delete | Accounts marked deleted, not removed |
-| Password Strength | Min 8 chars + number + special char |
-| CNIC Validation | Regex: exactly 13 digits |
+### Module 1: User Authentication & Login ✅
 
----
+#### Implemented:
+- ✅ Email/password login with validation
+- ✅ User signup with role selection (Elder/Caregiver/Volunteer)
+- ✅ OTP email verification (Nodemailer)
+- ✅ Password reset via OTP
+- ✅ OAuth skeleton (Google/Facebook/Apple)
+- ✅ Remember Me functionality
+- ✅ Account deletion (soft delete)
+- ✅ JWT + bcrypt security
+- ✅ Rate limiting (brute force protection)
+- ✅ Role-based access control (RBAC)
+- ✅ Elder pairing code system
+- ✅ Caregiver-Elder linking
+- ✅ Volunteer availability + skills
+- ✅ Socket.io SOS broadcasting skeleton
 
-## 🔄 User Flows
+#### UI/UX:
+- ✅ Login page (UserInterface1.png exact match)
+- ✅ Signup page with role tabs (UserInterface2.png exact match)
+- ✅ Senior-friendly design (large fonts, high contrast)
+- ✅ Responsive layout (desktop, tablet, mobile)
+- ✅ Form validation with error messages
+- ✅ Loading states and animations
+- ✅ Toast notifications
 
-### Flow 1: New User Signup (Elder)
-```
-1. Open app → Login page shown
-2. Click "Create New Account"
-3. Select "I am an Elder"
-4. Fill common fields (name, email, phone, password, CNIC)
-5. Fill elder-specific fields:
-   - Lives alone? → Yes/No
-   - If No: Add 1-3 emergency contacts
-   - Medical conditions? → Yes/No → Select conditions
-   - Allow location access → Browser permission dialog
-6. Click "Create Account"
-7. OTP sent to email → Redirected to VerifyOTPPage
-8. Enter 6-digit OTP → Email verified
-9. Redirected to Elder Dashboard
-10. Senior ID generated (e.g., SR-A1B2C3)
-11. Pairing code generated for caregiver linking
-```
+### Modules 2-12: Pending Development 🔜
 
-### Flow 2: Caregiver Linking
-```
-1. Elder goes to dashboard → "Share Access" button
-2. Elder shares their email + 6-digit pairing code with caregiver
-3. Caregiver signs up → Selects "Caregiver" role
-4. Enters elder's email + pairing code
-5. Backend verifies code matches and is not expired
-6. Accounts linked → Caregiver can now see elder's health data
-```
-
-### Flow 3: Password Reset
-```
-1. Login page → Click "Reset Password"
-2. Enter registered email → OTP sent
-3. Enter 6-digit OTP from email
-4. Enter new password + confirm
-5. Password updated → Redirected to login
-```
-
-### Flow 4: OAuth Login
-```
-1. Click Google/Facebook/Apple button
-2. OAuth popup opens → User authenticates
-3. Backend checks if email exists in DB
-4. If YES → Login directly → Redirect to dashboard
-5. If NO → Redirect to signup with pre-filled data
-```
+- Module 2: User Profile Management
+- Module 3: Task Request Module
+- Module 4: Communication Module
+- Module 5: Health & Medication
+- Module 6: Wellness & Physical Rehab
+- Module 7: Emergency & Safety
+- Module 8: Social Circle
+- Module 9: Volunteer Rewards
+- Module 10: Smart Travel Escort
+- Module 11: Adaptive Assistance
+- Module 12: Emergency Guide
 
 ---
 
-## 🔌 Socket.io Events
+## 🧪 Testing
 
-| Event | Direction | Description |
-|-------|-----------|-------------|
-| `sos:trigger` | Client → Server | Elder triggers SOS emergency |
-| `sos:received` | Server → Client | Caregiver receives SOS alert |
-| `sos:acknowledged` | Server → Client | Confirms SOS was sent |
-| `location:update` | Client → Server | Elder shares live location |
-| `chat:message` | Client → Server | Send chat message |
-| `chat:newMessage` | Server → Client | Receive chat message |
-| `volunteer:toggleAvailability` | Client → Server | Volunteer goes online/offline |
-| `volunteer:availabilityUpdated` | Server → Client | Confirms availability change |
+### Manual Testing
 
----
+#### Test Login Flow:
+1. Go to http://localhost:3000/login
+2. Enter email: `test@example.com`
+3. Enter password: `TestPassword123!`
+4. Click "Login"
+5. Should redirect to dashboard
 
-## 🧪 Testing Guide
+#### Test Signup Flow:
+1. Go to http://localhost:3000/signup
+2. Select role: "Elder"
+3. Fill in all required fields
+4. Click "Sign up"
+5. Check email for OTP
+6. Enter OTP on verification page
+7. Should redirect to dashboard
 
-### Test Case 1: Login with Wrong Credentials
-```
-1. Open http://localhost:3000
-2. Enter any email + wrong password
-3. Expected: "Entered wrong email or password" shown in fields
-4. User should NOT be logged in
-```
+#### Test Protected Routes:
+1. Try accessing `/dashboard/elder` without login
+2. Should redirect to `/login`
+3. Login successfully
+4. Should access dashboard
 
-### Test Case 2: Signup as Elder
-```
-1. Click "Create New Account"
-2. Select "Elder"
-3. Fill all required fields
-4. Submit → Check email for OTP
-5. Enter OTP → Should redirect to Elder Dashboard
-6. Verify Senior ID is shown in sidebar
-```
+### Automated Testing (Future)
 
-### Test Case 3: OTP Expiry
-```
-1. Request OTP
-2. Wait 10+ minutes
-3. Try to use expired OTP
-4. Expected: "OTP has expired" error message
-```
-
-### Test Case 4: Caregiver Pairing
-```
-1. Login as Elder → Note pairing code from dashboard
-2. Signup as Caregiver → Enter elder's email + pairing code
-3. Expected: Accounts linked, caregiver can see elder's data
-```
-
-### Test Case 5: Protected Routes
-```
-1. Try to access /dashboard/elder without logging in
-2. Expected: Redirected to /login
-3. Login as volunteer → Try to access /dashboard/elder
-4. Expected: Redirected to /dashboard/volunteer (wrong role)
-```
-
----
-
-## 📦 Dependencies
-
-### Backend
-| Package | Version | Purpose |
-|---------|---------|---------|
-| express | ^4.18.2 | Web framework |
-| mongoose | ^8.0.3 | MongoDB ODM |
-| bcryptjs | ^2.4.3 | Password hashing |
-| jsonwebtoken | ^9.0.2 | JWT authentication |
-| socket.io | ^4.6.1 | Real-time communication |
-| nodemailer | ^6.9.7 | Email sending (OTP) |
-| express-validator | ^7.0.1 | Input validation |
-| express-rate-limit | ^7.1.5 | Rate limiting |
-| helmet | ^7.1.0 | Security headers |
-| cors | ^2.8.5 | Cross-origin requests |
-| dotenv | ^16.3.1 | Environment variables |
-| morgan | ^1.10.0 | HTTP request logging |
-| uuid | ^9.0.1 | Unique ID generation |
-
-### Frontend
-| Package | Version | Purpose |
-|---------|---------|---------|
-| react | ^18.2.0 | UI framework |
-| react-router-dom | ^6.21.0 | Client-side routing |
-| axios | ^1.6.2 | HTTP client |
-| socket.io-client | ^4.6.1 | Real-time client |
-| tailwindcss | ^3.4.0 | Utility-first CSS |
-| react-hot-toast | ^2.4.1 | Toast notifications |
-| react-icons | ^4.12.0 | Icon library |
-| browser-image-compression | ^2.0.2 | Profile picture compression |
-
----
-
-## 🚀 Deployment Notes
-
-### Backend Deployment (e.g., Railway, Render, Heroku)
 ```bash
-# Set environment variables in deployment platform
-# Build command: npm install
-# Start command: npm start
+# Run unit tests
+npm test
+
+# Run integration tests
+npm run test:integration
+
+# Run E2E tests
+npm run test:e2e
+
+# Generate coverage report
+npm run test:coverage
 ```
 
-### Frontend Deployment (e.g., Vercel, Netlify)
+---
+
+## 🌐 Deployment
+
+### Backend Deployment (Heroku/Railway/Render)
+
+1. **Create account** on Heroku/Railway/Render
+2. **Connect GitHub repository**
+3. **Set environment variables** in deployment platform
+4. **Deploy** (automatic on push to main)
+
+### Frontend Deployment (Vercel/Netlify)
+
+1. **Create account** on Vercel/Netlify
+2. **Connect GitHub repository**
+3. **Set `REACT_APP_API_URL`** to production backend URL
+4. **Deploy** (automatic on push to main)
+
+### Production Checklist
+
+- [ ] Change `NODE_ENV` to `production`
+- [ ] Update `JWT_SECRET` and `JWT_REFRESH_SECRET` with strong random strings
+- [ ] Enable HTTPS
+- [ ] Set up SSL certificate
+- [ ] Configure CORS for production domain
+- [ ] Enable rate limiting
+- [ ] Set up monitoring and logging
+- [ ] Configure backup strategy for MongoDB
+- [ ] Set up CI/CD pipeline
+- [ ] Perform security audit
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### **MongoDB Connection Error**
+```
+Error: connect ECONNREFUSED 127.0.0.1:27017
+```
+**Solution:**
+- Ensure MongoDB Atlas cluster is running
+- Check `MONGO_URI` in `.env` is correct
+- Verify IP whitelist in MongoDB Atlas (add 0.0.0.0/0 for development)
+
+#### **Email Not Sending**
+```
+Error: Invalid login: 535-5.7.8 Username and password not accepted
+```
+**Solution:**
+- Use Gmail App Password (not regular password)
+- Enable 2-factor authentication on Gmail
+- Check `EMAIL_USER` and `EMAIL_PASS` in `.env`
+
+#### **CORS Error**
+```
+Access to XMLHttpRequest blocked by CORS policy
+```
+**Solution:**
+- Ensure `CLIENT_URL` in backend `.env` matches frontend URL
+- Check CORS configuration in `server.js`
+- For development: use `http://localhost:3000`
+
+#### **Port Already in Use**
+```
+Error: listen EADDRINUSE: address already in use :::5000
+```
+**Solution:**
 ```bash
-# Build command: npm run build
-# Output directory: build/
-# Set REACT_APP_API_URL to your deployed backend URL
+# Kill process on port 5000
+lsof -ti:5000 | xargs kill -9
+
+# Or use different port
+PORT=5001 npm run dev
+```
+
+#### **JWT Token Expired**
+```
+Error: Token has expired. Please log in again.
+```
+**Solution:**
+- Token expires after 7 days (configurable in `.env`)
+- Use refresh token to get new access token
+- User must log in again
+
+---
+
+## 🤝 Contributing
+
+### Development Workflow
+
+1. **Create feature branch**
+   ```bash
+   git checkout -b feature/module-2-profile
+   ```
+
+2. **Make changes** and commit
+   ```bash
+   git add .
+   git commit -m "feat: add user profile management"
+   ```
+
+3. **Push to GitHub**
+   ```bash
+   git push origin feature/module-2-profile
+   ```
+
+4. **Create Pull Request** on GitHub
+5. **Code review** and merge to main
+
+### Code Style
+
+- **JavaScript:** Use ES6+ syntax
+- **React:** Use functional components with hooks
+- **Naming:** camelCase for variables/functions, PascalCase for components
+- **Comments:** Add comments for complex logic
+- **Formatting:** Use Prettier for consistent formatting
+
+### Commit Message Format
+
+```
+<type>: <subject>
+
+<body>
+
+<footer>
+```
+
+**Types:**
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `style:` Code style (formatting, missing semicolons, etc.)
+- `refactor:` Code refactoring
+- `test:` Adding tests
+- `chore:` Build process, dependencies, etc.
+
+**Example:**
+```
+feat: add OTP email verification for signup
+
+- Generate 6-digit OTP
+- Send OTP via Nodemailer
+- Verify OTP before account activation
+- Resend OTP functionality
+
+Closes #123
 ```
 
 ---
 
-## 📋 Module Development Roadmap
+## 📞 Support & Contact
 
-| Module | Status | Priority |
-|--------|--------|----------|
-| ✅ Module 1: User Authentication & Login | **COMPLETE** | Done |
-| 🔜 Module 2: User Profile Management | Pending | Next |
-| 🔜 Module 3: Task Request Module | Pending | - |
-| 🔜 Module 4: Communication Module | Pending | - |
-| 🔜 Module 5: Health & Medication | Pending | - |
-| 🔜 Module 6: Wellness & Physical Rehab | Pending | - |
-| 🔜 Module 7: Emergency & Safety | Pending | - |
-| 🔜 Module 8: Social Circle | Pending | - |
-| 🔜 Module 9: Volunteer Rewards | Pending | - |
-| 🔜 Module 10: Smart Travel Escort | Pending | - |
-| 🔜 Module 11: Adaptive Assistance | Pending | - |
-| 🔜 Module 12: Emergency Guide | Pending | - |
+For questions or issues:
+- **GitHub Issues:** https://github.com/naveediqbal4765/smart-assistant-senior-citizens/issues
+- **Email:** naveediqbal4765@gmail.com
+- **Supervisor:** Mr. Ghaffar Ahmed (SZABIST)
 
 ---
 
-## 👥 Team Contacts
+## 📄 License
 
-- **Naveed Iqbal** (2212474) - naveediqbal4765@gmail.com
-- **Manahil Chaudhary** (2212470)
-- **Sartaj Riaz** (2212498)
-- **Supervisor:** Mr. Ghaffar Ahmed
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-*Last Updated: April 2026 | SZABIST University, Islamabad*
+## 🎯 Roadmap
+
+### Q2 2026 (Next Phase)
+- [ ] Module 2: User Profile Management
+- [ ] Module 3: Task Request Module
+- [ ] OAuth implementation (Google, Facebook, Apple)
+- [ ] Push notifications
+- [ ] Mobile app (React Native)
+
+### Q3 2026
+- [ ] Module 4-6: Communication, Health, Wellness
+- [ ] AI-powered health insights
+- [ ] Wearable device integration
+- [ ] Advanced analytics dashboard
+
+### Q4 2026
+- [ ] Module 7-12: Emergency, Social, Rewards, Travel, Adaptive, Guide
+- [ ] Machine learning for fall detection
+- [ ] Voice assistant integration
+- [ ] Production deployment
+
+---
+
+**Last Updated:** April 2026  
+**Version:** 1.0.0 (Module 1 Complete)  
+**Status:** Active Development 🚀

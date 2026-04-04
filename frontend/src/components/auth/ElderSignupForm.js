@@ -1,287 +1,416 @@
 // ============================================================
-// components/auth/ElderSignupForm.js - Elder-Specific Signup Fields
-// Handles: Lives alone, emergency contacts, medical conditions, location
+// components/auth/ElderSignupForm.js
+// Elder-specific signup fields (rendered inside SignupPage)
+// Fields: livesAlone, emergencyContacts, medicalConditions, locationPermission
 // ============================================================
 
 import React, { useState } from "react";
-import { FaPlus, FaTrash, FaMapMarkerAlt } from "react-icons/fa";
 
-const ElderSignupForm = ({ roleData, setRoleData, errors }) => {
-  // ---- Local state for dynamic emergency contacts ----
-  const [contacts, setContacts] = useState([
-    { name: "", phone: "", email: "", relationship: "" }, // Start with 1 contact
-  ]);
+const ElderSignupForm = ({ data, onChange, errors }) => {
+  // ---- Local state for dynamic emergency contacts list ----
+  const [contacts, setContacts] = useState(
+    data.emergencyContacts?.length > 0
+      ? data.emergencyContacts
+      : [{ name: "", phone: "", email: "", relationship: "" }]
+  );
 
-  // ---- Update parent roleData whenever local state changes ----
-  const updateRoleData = (updates) => {
-    setRoleData((prev) => ({ ...prev, ...updates }));
+  // ---- Medical conditions list (searchable) ----
+  const commonConditions = [
+    "Diabetes", "Hypertension", "Heart Disease", "Arthritis",
+    "Asthma", "Alzheimer's", "Parkinson's", "Osteoporosis",
+    "Kidney Disease", "Cancer", "Depression", "Anxiety",
+    "Stroke", "COPD", "Cataracts", "Hearing Loss",
+  ];
+
+  const [selectedConditions, setSelectedConditions] = useState(data.medicalConditions || []);
+  const [otherCondition, setOtherCondition] = useState("");
+  const [showConditionDropdown, setShowConditionDropdown] = useState(false);
+
+  // ---- Update parent form data when contacts change ----
+  const updateContacts = (updatedContacts) => {
+    setContacts(updatedContacts);
+    onChange({ target: { name: "emergencyContacts", value: updatedContacts } });
   };
 
-  // ---- Add emergency contact (max 3) ----
+  // ---- Add a new emergency contact row ----
   const addContact = () => {
-    if (contacts.length >= 3) {
-      return; // Max 3 contacts allowed
+    if (contacts.length < 3) {
+      updateContacts([...contacts, { name: "", phone: "", email: "", relationship: "" }]);
     }
-    const newContacts = [...contacts, { name: "", phone: "", email: "", relationship: "" }];
-    setContacts(newContacts);
-    updateRoleData({ emergencyContacts: newContacts });
   };
 
-  // ---- Remove emergency contact ----
+  // ---- Remove an emergency contact row ----
   const removeContact = (index) => {
-    if (contacts.length <= 1) return; // Keep at least 1 contact
-    const newContacts = contacts.filter((_, i) => i !== index);
-    setContacts(newContacts);
-    updateRoleData({ emergencyContacts: newContacts });
+    if (contacts.length > 1) {
+      updateContacts(contacts.filter((_, i) => i !== index));
+    }
   };
 
   // ---- Update a specific contact field ----
   const updateContact = (index, field, value) => {
-    const newContacts = contacts.map((contact, i) =>
-      i === index ? { ...contact, [field]: value } : contact
+    const updated = contacts.map((c, i) =>
+      i === index ? { ...c, [field]: value } : c
     );
-    setContacts(newContacts);
-    updateRoleData({ emergencyContacts: newContacts });
+    updateContacts(updated);
   };
 
-  // ---- Request browser geolocation ----
-  const requestLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
+  // ---- Toggle medical condition selection ----
+  const toggleCondition = (condition) => {
+    const updated = selectedConditions.includes(condition)
+      ? selectedConditions.filter((c) => c !== condition)
+      : [...selectedConditions, condition];
+    setSelectedConditions(updated);
+    onChange({ target: { name: "medicalConditions", value: updated } });
+  };
+
+  // ---- Add custom "Other" condition ----
+  const addOtherCondition = () => {
+    if (otherCondition.trim() && !selectedConditions.includes(otherCondition.trim())) {
+      const updated = [...selectedConditions, otherCondition.trim()];
+      setSelectedConditions(updated);
+      onChange({ target: { name: "medicalConditions", value: updated } });
+      setOtherCondition("");
     }
+  };
 
-    // Show explanation modal before requesting (as per requirements)
-    const confirmed = window.confirm(
-      "📍 Location Permission Required\n\n" +
-      "Smart Assistant needs your location to:\n" +
-      "• Send help to your exact location in emergencies\n" +
-      "• Match you with nearby volunteers\n" +
-      "• Enable fall detection alerts\n\n" +
-      "⚠️ Without location, SOS and Fall Detection features cannot function.\n\n" +
-      "Allow location access?"
-    );
+  const sectionStyle = {
+    backgroundColor: "rgba(255,255,255,0.35)",
+    borderRadius: "12px",
+    padding: "16px",
+    marginBottom: "20px",
+    border: "1px solid #a8d5b5",
+  };
 
-    if (!confirmed) {
-      updateRoleData({ locationPermission: false });
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        updateRoleData({
-          locationPermission: true,
-          location: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          },
-        });
-        alert("✅ Location access granted! Your safety features are now active.");
-      },
-      (error) => {
-        updateRoleData({ locationPermission: false });
-        alert("❌ Location access denied. SOS and Fall Detection will not work without location.");
-      }
-    );
+  const questionStyle = {
+    fontSize: "1rem",
+    fontWeight: 700,
+    color: "#1b4332",
+    marginBottom: "10px",
   };
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-bold text-primary">Elder-Specific Information</h3>
+    <div>
 
-      {/* ---- Question 1: Lives Alone ---- */}
-      <div className="bg-blue-50 rounded-senior p-5 border border-blue-200">
-        <p className="text-senior-base font-semibold text-neutral-800 mb-3">
-          Do you live alone? *
-        </p>
-        <div className="flex gap-6">
-          <label className="flex items-center gap-3 cursor-pointer">
+      {/* ============================================================
+          QUESTION 1: Lives Alone?
+          ============================================================ */}
+      <div style={sectionStyle}>
+        <p style={questionStyle}>Q1. Do you live alone?</p>
+        <div style={{ display: "flex", gap: "16px" }}>
+          {/* Yes */}
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
             <input
               type="radio"
               name="livesAlone"
-              value="yes"
-              onChange={() => updateRoleData({ livesAlone: true })}
-              className="w-5 h-5 accent-accent"
+              value="true"
+              checked={data.livesAlone === true}
+              onChange={() => onChange({ target: { name: "livesAlone", value: true } })}
+              style={{ width: "20px", height: "20px", accentColor: "#2d6a4f" }}
             />
-            <span className="text-senior-base font-medium">Yes, I live alone</span>
+            Yes
           </label>
-          <label className="flex items-center gap-3 cursor-pointer">
+          {/* No */}
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
             <input
               type="radio"
               name="livesAlone"
-              value="no"
-              onChange={() => updateRoleData({ livesAlone: false })}
-              className="w-5 h-5 accent-accent"
+              value="false"
+              checked={data.livesAlone === false}
+              onChange={() => onChange({ target: { name: "livesAlone", value: false } })}
+              style={{ width: "20px", height: "20px", accentColor: "#2d6a4f" }}
             />
-            <span className="text-senior-base font-medium">No, I live with family</span>
+            No, I live with family
           </label>
         </div>
 
-        {/* If lives with family, show emergency contacts */}
-        {roleData.livesAlone === false && (
-          <div className="mt-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="font-semibold text-neutral-700">
-                Emergency Contacts (1-3 persons) *
-              </p>
-              {contacts.length < 3 && (
-                <button
-                  type="button"
-                  onClick={addContact}
-                  className="flex items-center gap-2 text-accent font-semibold hover:underline"
-                >
-                  <FaPlus /> Add Contact
-                </button>
-              )}
-            </div>
+        {/* ---- If lives with family: show emergency contacts ---- */}
+        {data.livesAlone === false && (
+          <div style={{ marginTop: "16px" }}>
+            <p style={{ fontSize: "0.9rem", fontWeight: 600, color: "#2d6a4f", marginBottom: "10px" }}>
+              Family Emergency Contacts (min 1, max 3):
+            </p>
 
             {contacts.map((contact, index) => (
-              <div key={index} className="bg-white rounded-senior p-4 border border-neutral-200 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-neutral-600">Contact {index + 1}</span>
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.5)",
+                  borderRadius: "10px",
+                  padding: "12px",
+                  marginBottom: "10px",
+                  border: "1px solid #c8e6c9",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <span style={{ fontWeight: 700, color: "#1b4332", fontSize: "0.9rem" }}>
+                    Contact {index + 1}
+                  </span>
                   {contacts.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeContact(index)}
-                      className="text-danger hover:text-red-700"
+                      style={{ background: "#e63946", color: "white", border: "none", borderRadius: "6px", padding: "3px 10px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 700 }}
                     >
-                      <FaTrash />
+                      Remove
                     </button>
                   )}
                 </div>
-                <input
-                  type="text"
-                  placeholder="Full Name *"
-                  value={contact.name}
-                  onChange={(e) => updateContact(index, "name", e.target.value)}
-                  className="input-field"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number *"
-                  value={contact.phone}
-                  onChange={(e) => updateContact(index, "phone", e.target.value)}
-                  className="input-field"
-                />
-                <input
-                  type="email"
-                  placeholder="Email (optional)"
-                  value={contact.email}
-                  onChange={(e) => updateContact(index, "email", e.target.value)}
-                  className="input-field"
-                />
-                <select
-                  value={contact.relationship}
-                  onChange={(e) => updateContact(index, "relationship", e.target.value)}
-                  className="input-field"
-                >
-                  <option value="">Select Relationship *</option>
-                  <option value="Son">Son</option>
-                  <option value="Daughter">Daughter</option>
-                  <option value="Spouse">Spouse</option>
-                  <option value="Sibling">Sibling</option>
-                  <option value="Grandchild">Grandchild</option>
-                  <option value="Friend">Friend</option>
-                  <option value="Neighbor">Neighbor</option>
-                  <option value="Other">Other</option>
-                </select>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                  <div>
+                    <label className="form-label" style={{ fontSize: "0.82rem" }}>Full Name *</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      style={{ fontSize: "0.9rem", minHeight: "42px" }}
+                      value={contact.name}
+                      onChange={(e) => updateContact(index, "name", e.target.value)}
+                      placeholder="e.g. Ali Khan"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: "0.82rem" }}>Phone *</label>
+                    <input
+                      type="tel"
+                      className="form-input"
+                      style={{ fontSize: "0.9rem", minHeight: "42px" }}
+                      value={contact.phone}
+                      onChange={(e) => updateContact(index, "phone", e.target.value)}
+                      placeholder="+923001234567"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: "0.82rem" }}>Email (optional)</label>
+                    <input
+                      type="email"
+                      className="form-input"
+                      style={{ fontSize: "0.9rem", minHeight: "42px" }}
+                      value={contact.email}
+                      onChange={(e) => updateContact(index, "email", e.target.value)}
+                      placeholder="email@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: "0.82rem" }}>Relationship *</label>
+                    <select
+                      className="form-input"
+                      style={{ fontSize: "0.9rem", minHeight: "42px" }}
+                      value={contact.relationship}
+                      onChange={(e) => updateContact(index, "relationship", e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>Son</option>
+                      <option>Daughter</option>
+                      <option>Spouse</option>
+                      <option>Sibling</option>
+                      <option>Friend</option>
+                      <option>Neighbor</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             ))}
+
+            {contacts.length < 3 && (
+              <button
+                type="button"
+                onClick={addContact}
+                style={{
+                  background: "transparent",
+                  border: "2px dashed #52b788",
+                  borderRadius: "8px",
+                  padding: "8px 16px",
+                  color: "#2d6a4f",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontSize: "0.9rem",
+                  width: "100%",
+                }}
+              >
+                + Add Another Contact
+              </button>
+            )}
           </div>
         )}
       </div>
 
-      {/* ---- Question 2: Medical Issues ---- */}
-      <div className="bg-yellow-50 rounded-senior p-5 border border-yellow-200">
-        <p className="text-senior-base font-semibold text-neutral-800 mb-3">
-          Do you have any medical conditions? *
-        </p>
-        <div className="flex gap-6 mb-4">
-          <label className="flex items-center gap-3 cursor-pointer">
+      {/* ============================================================
+          QUESTION 2: Medical Issues?
+          ============================================================ */}
+      <div style={sectionStyle}>
+        <p style={questionStyle}>Q2. Do you have any medical conditions?</p>
+        <div style={{ display: "flex", gap: "16px", marginBottom: "12px" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
             <input
               type="radio"
               name="hasMedicalIssues"
-              value="yes"
-              onChange={() => updateRoleData({ hasMedicalIssues: true })}
-              className="w-5 h-5 accent-accent"
+              checked={data.hasMedicalIssues === true}
+              onChange={() => onChange({ target: { name: "hasMedicalIssues", value: true } })}
+              style={{ width: "20px", height: "20px", accentColor: "#2d6a4f" }}
             />
-            <span className="text-senior-base font-medium">Yes</span>
+            Yes
           </label>
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
             <input
               type="radio"
               name="hasMedicalIssues"
-              value="no"
-              onChange={() => updateRoleData({ hasMedicalIssues: false })}
-              className="w-5 h-5 accent-accent"
+              checked={data.hasMedicalIssues === false}
+              onChange={() => onChange({ target: { name: "hasMedicalIssues", value: false } })}
+              style={{ width: "20px", height: "20px", accentColor: "#2d6a4f" }}
             />
-            <span className="text-senior-base font-medium">No</span>
+            No
           </label>
         </div>
 
-        {/* If yes, show medical conditions dropdown */}
-        {roleData.hasMedicalIssues === true && (
-          <div className="space-y-3">
-            <p className="text-neutral-600 font-medium">Select your conditions:</p>
-            {["Diabetes", "Hypertension", "Heart Disease", "Arthritis", "Dementia", "Parkinson's", "Osteoporosis", "Asthma", "Vision Impairment", "Hearing Loss"].map((condition) => (
-              <label key={condition} className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  value={condition}
-                  onChange={(e) => {
-                    const current = roleData.medicalConditions || [];
-                    if (e.target.checked) {
-                      updateRoleData({ medicalConditions: [...current, condition] });
-                    } else {
-                      updateRoleData({ medicalConditions: current.filter((c) => c !== condition) });
-                    }
-                  }}
-                  className="w-5 h-5 accent-accent"
-                />
-                <span className="text-senior-base">{condition}</span>
-              </label>
-            ))}
-            <input
-              type="text"
-              placeholder="Other condition (type here)"
-              className="input-field mt-2"
-              onChange={(e) => {
-                if (e.target.value) {
-                  const current = roleData.medicalConditions || [];
-                  updateRoleData({ medicalConditions: [...current.filter((c) => !c.startsWith("Other:")), `Other: ${e.target.value}`] });
-                }
-              }}
-            />
+        {/* ---- If yes: show condition selector ---- */}
+        {data.hasMedicalIssues === true && (
+          <div>
+            {/* Selected conditions tags */}
+            {selectedConditions.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+                {selectedConditions.map((c) => (
+                  <span
+                    key={c}
+                    style={{
+                      backgroundColor: "#1b4332",
+                      color: "white",
+                      borderRadius: "20px",
+                      padding: "4px 12px",
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    {c}
+                    <button
+                      type="button"
+                      onClick={() => toggleCondition(c)}
+                      style={{ background: "none", border: "none", color: "white", cursor: "pointer", fontSize: "1rem", lineHeight: 1, padding: 0 }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Dropdown list */}
+            <div style={{ position: "relative" }}>
+              <button
+                type="button"
+                onClick={() => setShowConditionDropdown(!showConditionDropdown)}
+                className="form-input"
+                style={{ textAlign: "left", cursor: "pointer", color: "#6b7280" }}
+              >
+                Select conditions... ▾
+              </button>
+              {showConditionDropdown && (
+                <div style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  backgroundColor: "white",
+                  border: "1.5px solid #a8d5b5",
+                  borderRadius: "8px",
+                  zIndex: 50,
+                  maxHeight: "180px",
+                  overflowY: "auto",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                }}>
+                  {commonConditions.map((c) => (
+                    <div
+                      key={c}
+                      onClick={() => { toggleCondition(c); }}
+                      style={{
+                        padding: "10px 14px",
+                        cursor: "pointer",
+                        fontSize: "0.95rem",
+                        fontWeight: selectedConditions.includes(c) ? 700 : 400,
+                        color: selectedConditions.includes(c) ? "#1b4332" : "#333",
+                        backgroundColor: selectedConditions.includes(c) ? "#e8f5e9" : "transparent",
+                      }}
+                    >
+                      {selectedConditions.includes(c) ? "✓ " : ""}{c}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Other condition text input */}
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              <input
+                type="text"
+                className="form-input"
+                style={{ fontSize: "0.9rem", minHeight: "42px" }}
+                placeholder="Other condition..."
+                value={otherCondition}
+                onChange={(e) => setOtherCondition(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addOtherCondition())}
+              />
+              <button
+                type="button"
+                onClick={addOtherCondition}
+                style={{ background: "#2d6a4f", color: "white", border: "none", borderRadius: "8px", padding: "0 16px", cursor: "pointer", fontWeight: 700, whiteSpace: "nowrap" }}
+              >
+                Add
+              </button>
+            </div>
           </div>
         )}
       </div>
 
-      {/* ---- Question 3: Location Permission ---- */}
-      <div className="bg-green-50 rounded-senior p-5 border border-green-200">
-        <p className="text-senior-base font-semibold text-neutral-800 mb-2">
-          📍 Location Permission *
+      {/* ============================================================
+          QUESTION 3: Location Permission
+          ============================================================ */}
+      <div style={sectionStyle}>
+        <p style={questionStyle}>Q3. Allow location access?</p>
+        <p style={{ fontSize: "0.88rem", color: "#4a4a4a", marginBottom: "10px", lineHeight: 1.5 }}>
+          ⚠️ Location is required for SOS alerts and fall detection. Without it, emergency features cannot function.
         </p>
-        <p className="text-neutral-600 mb-4">
-          Required for SOS alerts and volunteer matching. Without this, emergency features won't work.
-        </p>
-        <button
-          type="button"
-          onClick={requestLocation}
-          className={`flex items-center gap-3 px-6 py-3 rounded-senior font-bold text-senior-base transition-all
-            ${roleData.locationPermission
-              ? "bg-success text-white"
-              : "bg-primary text-white hover:bg-primary-dark"
-            }`}
-        >
-          <FaMapMarkerAlt />
-          {roleData.locationPermission ? "✅ Location Granted" : "Allow Location Access"}
-        </button>
-        {!roleData.locationPermission && (
-          <p className="text-warning text-sm mt-2 font-medium">
-            ⚠️ SOS and Fall Detection require location access
-          </p>
+        <div style={{ display: "flex", gap: "16px" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
+            <input
+              type="radio"
+              name="locationPermission"
+              checked={data.locationPermission === true}
+              onChange={() => {
+                onChange({ target: { name: "locationPermission", value: true } });
+                // Request browser geolocation
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                      onChange({ target: { name: "lat", value: pos.coords.latitude } });
+                      onChange({ target: { name: "lng", value: pos.coords.longitude } });
+                    },
+                    () => {}
+                  );
+                }
+              }}
+              style={{ width: "20px", height: "20px", accentColor: "#2d6a4f" }}
+            />
+            Yes, allow location
+          </label>
+          <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#e63946" }}>
+            <input
+              type="radio"
+              name="locationPermission"
+              checked={data.locationPermission === false}
+              onChange={() => onChange({ target: { name: "locationPermission", value: false } })}
+              style={{ width: "20px", height: "20px", accentColor: "#e63946" }}
+            />
+            No (SOS disabled)
+          </label>
+        </div>
+        {errors?.locationPermission && (
+          <p className="error-msg">⚠️ {errors.locationPermission}</p>
         )}
       </div>
+
     </div>
   );
 };

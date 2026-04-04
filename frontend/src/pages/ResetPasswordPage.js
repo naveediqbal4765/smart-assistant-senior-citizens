@@ -1,112 +1,113 @@
-// ============================================================
-// pages/ResetPasswordPage.js - Set New Password Page
-// Shown after OTP verification for password reset
-// ============================================================
-
 import React, { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { authAPI } from "../services/api";
 import toast from "react-hot-toast";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email || "";
-
-  const [formData, setFormData] = useState({ password: "", confirmPassword: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [step, setStep] = useState("otp"); // otp or password
+  const [email] = useState(location.state?.email || "");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 8) newErrors.password = "Minimum 8 characters";
-    else if (!/[0-9]/.test(formData.password)) newErrors.password = "Must contain a number";
-    else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) newErrors.password = "Must contain a special character";
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleVerifyOTP = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!otp || otp.length !== 6) {
+      setError("OTP must be 6 digits");
+      return;
+    }
 
     setIsLoading(true);
     try {
-      await authAPI.resetPassword({ email, password: formData.password, confirmPassword: formData.confirmPassword });
-      toast.success("Password reset successfully! Please login with your new password.");
+      await authAPI.verifyResetOTP({ email, otp });
+      setStep("password");
+      setError("");
+    } catch (error) {
+      setError(error.response?.data?.message || "Invalid OTP");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!password || password.length < 8) {
+      setError("Password must be at least 8 characters");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords don't match");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await authAPI.resetPassword({ email, password });
+      toast.success("Password reset successfully!");
       navigate("/login");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Password reset failed.");
+      setError(error.response?.data?.message || "Failed to reset password");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-auth flex items-center justify-center p-4">
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="card shadow-senior-lg">
-          <div className="text-center mb-6">
-            <div className="text-5xl mb-3">🔑</div>
-            <h2 className="text-2xl font-bold text-primary">Set New Password</h2>
-            <p className="text-neutral-600 text-senior-base mt-2">
-              Create a strong new password for your account.
+    <div className="page-bg flex items-center justify-center min-h-screen p-4">
+      <div className="auth-card w-full max-w-sm">
+        {step === "otp" ? (
+          <>
+            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "8px", textAlign: "center" }}>
+              Verify OTP
+            </h1>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280", textAlign: "center", marginBottom: "24px" }}>
+              Enter the 6-digit code sent to {email}
             </p>
-          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* New Password */}
-            <div>
-              <label className="form-label">New Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => { setFormData((p) => ({ ...p, password: e.target.value })); setErrors((p) => ({ ...p, password: "" })); }}
-                  placeholder="Enter new password"
-                  className={`input-field pr-14 ${errors.password ? "input-error" : ""}`}
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500">
-                  {showPassword ? <FaEyeSlash size={22} /> : <FaEye size={22} />}
-                </button>
+            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>⚠️ {error}</div>}
+
+            <form onSubmit={handleVerifyOTP}>
+              <div style={{ marginBottom: "20px" }}>
+                <label className="form-label">OTP *</label>
+                <input type="text" value={otp} onChange={(e) => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} className="form-input" placeholder="000000" maxLength="6" style={{ fontSize: "1.5rem", letterSpacing: "8px", textAlign: "center", fontWeight: 700 }} />
               </div>
-              {errors.password && <p className="error-text">{errors.password}</p>}
-            </div>
+              <button type="submit" className="btn-primary" disabled={isLoading}>{isLoading ? "Verifying..." : "Verify OTP"}</button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "8px", textAlign: "center" }}>
+              Set New Password
+            </h1>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280", textAlign: "center", marginBottom: "24px" }}>
+              Create a strong password for your account
+            </p>
 
-            {/* Confirm Password */}
-            <div>
-              <label className="form-label">Confirm New Password</label>
-              <div className="relative">
-                <input
-                  type={showConfirm ? "text" : "password"}
-                  value={formData.confirmPassword}
-                  onChange={(e) => { setFormData((p) => ({ ...p, confirmPassword: e.target.value })); setErrors((p) => ({ ...p, confirmPassword: "" })); }}
-                  placeholder="Re-enter new password"
-                  className={`input-field pr-14 ${errors.confirmPassword ? "input-error" : ""}`}
-                />
-                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500">
-                  {showConfirm ? <FaEyeSlash size={22} /> : <FaEye size={22} />}
-                </button>
+            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>⚠️ {error}</div>}
+
+            <form onSubmit={handleResetPassword}>
+              <div style={{ marginBottom: "14px" }}>
+                <label className="form-label">New Password *</label>
+                <input type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(""); }} className="form-input" placeholder="" />
               </div>
-              {errors.confirmPassword && <p className="error-text">{errors.confirmPassword}</p>}
-            </div>
+              <div style={{ marginBottom: "20px" }}>
+                <label className="form-label">Confirm Password *</label>
+                <input type="password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); setError(""); }} className="form-input" placeholder="" />
+              </div>
+              <button type="submit" className="btn-primary" disabled={isLoading}>{isLoading ? "Resetting..." : "Reset Password"}</button>
+            </form>
+          </>
+        )}
 
-            <button type="submit" className="btn-primary" disabled={isLoading}>
-              {isLoading ? "Resetting..." : "Reset Password"}
-            </button>
-          </form>
-
-          <div className="text-center mt-4">
-            <Link to="/login" className="text-neutral-500 hover:text-primary font-semibold">
-              Back to Login
-            </Link>
-          </div>
-        </div>
+        <p style={{ textAlign: "center", fontSize: "0.9rem", color: "#6b7280", marginTop: "16px" }}>
+          <button type="button" onClick={() => navigate("/login")} className="btn-ghost">
+            Back to Login
+          </button>
+        </p>
       </div>
     </div>
   );
