@@ -1,6 +1,6 @@
 // ============================================================
 // pages/LoginPage.js - Login Page
-// Horizontal layout: Left (logo + title + description) | Divider | Right (form)
+// Fully responsive horizontal layout: Left (logo + title + description) | Divider | Right (form)
 // Top and bottom borders with correct color scheme
 // ============================================================
 
@@ -51,7 +51,7 @@ const AppleIcon = () => (
 );
 
 // ============================================================
-// LoginPage Component - Horizontal Layout
+// LoginPage Component - Fully Responsive
 // ============================================================
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -146,42 +146,44 @@ const LoginPage = () => {
   };
 
   // ============================================================
-  // RENDER - HORIZONTAL LAYOUT WITH BORDERS
+  // RENDER - FULLY RESPONSIVE HORIZONTAL LAYOUT
   // ============================================================
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* TOP BORDER - 48px height, #1C382A */}
       <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
 
-      {/* MAIN CONTENT - Horizontal Layout */}
+      {/* MAIN CONTENT - Fully Responsive Horizontal Layout */}
       <div
         style={{
           flex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "40px 20px",
-          gap: "40px",
+          padding: "20px",
+          gap: "20px",
           backgroundColor: "#A9C6B2",
-          flexWrap: "wrap",
+          minHeight: "calc(100vh - 96px)",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
         {/* LEFT SIDE - Logo + Title + Description */}
         <div
           style={{
-            flex: "1 1 300px",
-            minWidth: "300px",
-            maxWidth: "500px",
+            flex: "1 1 auto",
+            minWidth: "0",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
+            padding: "20px",
           }}
         >
           {/* Logo */}
-          <div style={{ marginBottom: "30px" }}>
-            <AppLogo size={120} />
+          <div style={{ marginBottom: "20px", flexShrink: 0 }}>
+            <AppLogo size={Math.min(120, window.innerWidth * 0.15)} />
           </div>
 
           {/* Title */}
@@ -189,10 +191,11 @@ const LoginPage = () => {
             style={{
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 700,
-              fontSize: "clamp(28px, 5vw, 48px)",
+              fontSize: "clamp(24px, 4vw, 48px)",
               lineHeight: "1.2",
               color: "#1C382A",
-              margin: "0 0 20px 0",
+              margin: "0 0 15px 0",
+              wordBreak: "break-word",
             }}
           >
             Smart Assistant for<br />Senior Citizens
@@ -202,11 +205,12 @@ const LoginPage = () => {
           <p
             style={{
               fontFamily: "Montserrat, sans-serif",
-              fontSize: "clamp(14px, 2vw, 18px)",
-              lineHeight: "1.6",
+              fontSize: "clamp(12px, 2vw, 16px)",
+              lineHeight: "1.5",
               color: "#1C382A",
               margin: "0",
-              maxWidth: "400px",
+              maxWidth: "100%",
+              wordBreak: "break-word",
             }}
           >
             <span style={{ color: "#1C382A", fontWeight: 700 }}>Lorem Ipsum</span>
@@ -214,41 +218,41 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* VERTICAL DIVIDER - Hidden on mobile */}
+        {/* VERTICAL DIVIDER - Responsive visibility */}
         <div
           style={{
-            display: "none",
-            "@media (min-width: 1024px)": {
-              display: "block",
-            },
+            display: window.innerWidth >= 768 ? "block" : "none",
             width: "1px",
-            height: "400px",
+            minHeight: "300px",
             backgroundColor: "#1C382A4D",
             flexShrink: 0,
+            margin: "0 10px",
           }}
         />
 
         {/* RIGHT SIDE - Login Form */}
         <div
           style={{
-            flex: "1 1 300px",
-            minWidth: "300px",
-            maxWidth: "450px",
-            width: "100%",
+            flex: "1 1 auto",
+            minWidth: "0",
+            maxWidth: "100%",
+            padding: "20px",
           }}
         >
           <div
             style={{
               backgroundColor: "#BAE4C7",
               borderRadius: "48px",
-              padding: "clamp(30px, 5vw, 40px)",
+              padding: "clamp(20px, 5vw, 40px)",
               boxShadow: "9px 10px 20px 2px #00000040",
               animation: shakeForm ? "shake 0.5s ease-in-out" : "none",
+              width: "100%",
+              boxSizing: "border-box",
             }}
           >
             {/* Form Logo */}
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-              <AppLogo size={70} />
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "15px" }}>
+              <AppLogo size={Math.min(70, window.innerWidth * 0.12)} />
             </div>
 
             {/* Error Message */}
@@ -261,14 +265,15 @@ const LoginPage = () => {
                   padding: "10px 14px",
                   marginBottom: "16px",
                   color: "#c1121f",
-                  fontSize: "0.9rem",
+                  fontSize: "clamp(12px, 2vw, 14px)",
                   fontWeight: 600,
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
+                  wordBreak: "break-word",
                 }}
               >
-                <span>⚠️</span>
+                <span style={{ flexShrink: 0 }}>⚠️</span>
                 <span>{errors.general}</span>
               </div>
             )}
@@ -281,7 +286,7 @@ const LoginPage = () => {
                   display: "block",
                   fontFamily: "Montserrat, sans-serif",
                   fontWeight: 600,
-                  fontSize: "clamp(14px, 2vw, 16px)",
+                  fontSize: "clamp(12px, 2vw, 16px)",
                   color: "#1C382A",
                   marginBottom: "8px",
                 }}
@@ -299,8 +304,8 @@ const LoginPage = () => {
                 onChange={handleChange}
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
-                  fontSize: "14px",
+                  padding: "clamp(10px, 2vw, 12px) 14px",
+                  fontSize: "clamp(12px, 2vw, 14px)",
                   backgroundColor: "#FFFFFF",
                   color: "#1C382A",
                   borderRadius: "8px",
@@ -322,7 +327,7 @@ const LoginPage = () => {
                 }}
               />
               {errors.email && (
-                <p style={{ color: "#e63946", fontSize: "0.85rem", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
+                <p style={{ color: "#e63946", fontSize: "clamp(11px, 2vw, 13px)", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
                   ⚠️ {errors.email}
                 </p>
               )}
@@ -333,7 +338,7 @@ const LoginPage = () => {
                   display: "block",
                   fontFamily: "Montserrat, sans-serif",
                   fontWeight: 600,
-                  fontSize: "clamp(14px, 2vw, 16px)",
+                  fontSize: "clamp(12px, 2vw, 16px)",
                   color: "#1C382A",
                   marginBottom: "8px",
                 }}
@@ -351,8 +356,8 @@ const LoginPage = () => {
                 onChange={handleChange}
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
-                  fontSize: "14px",
+                  padding: "clamp(10px, 2vw, 12px) 14px",
+                  fontSize: "clamp(12px, 2vw, 14px)",
                   backgroundColor: "#FFFFFF",
                   color: "#1C382A",
                   borderRadius: "8px",
@@ -374,20 +379,21 @@ const LoginPage = () => {
                 }}
               />
               {errors.password && (
-                <p style={{ color: "#e63946", fontSize: "0.85rem", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
+                <p style={{ color: "#e63946", fontSize: "clamp(11px, 2vw, 13px)", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
                   ⚠️ {errors.password}
                 </p>
               )}
 
               {/* Login and Sign Up Buttons */}
-              <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+              <div style={{ display: "flex", gap: "12px", marginBottom: "16px", flexWrap: "wrap" }}>
                 <button
                   type="submit"
                   disabled={isLoading}
                   style={{
-                    flex: 1,
-                    padding: "12px 20px",
-                    fontSize: "clamp(14px, 2vw, 16px)",
+                    flex: "1 1 auto",
+                    minWidth: "80px",
+                    padding: "clamp(10px, 2vw, 12px) 20px",
+                    fontSize: "clamp(12px, 2vw, 16px)",
                     fontWeight: 700,
                     color: "#FFFFFF",
                     backgroundColor: "#1C382A",
@@ -418,9 +424,10 @@ const LoginPage = () => {
                   onClick={() => navigate("/signup")}
                   disabled={isLoading}
                   style={{
-                    flex: 1,
-                    padding: "12px 20px",
-                    fontSize: "clamp(14px, 2vw, 16px)",
+                    flex: "1 1 auto",
+                    minWidth: "80px",
+                    padding: "clamp(10px, 2vw, 12px) 20px",
+                    fontSize: "clamp(12px, 2vw, 16px)",
                     fontWeight: 700,
                     color: "#1C382A",
                     backgroundColor: "transparent",
@@ -461,11 +468,12 @@ const LoginPage = () => {
                     alignItems: "center",
                     gap: "8px",
                     cursor: "pointer",
-                    fontSize: "clamp(12px, 2vw, 14px)",
+                    fontSize: "clamp(11px, 2vw, 14px)",
                     fontWeight: 500,
                     color: "#1C382A",
                     userSelect: "none",
                     fontFamily: "Montserrat, sans-serif",
+                    minWidth: "fit-content",
                   }}
                 >
                   <input
@@ -481,6 +489,7 @@ const LoginPage = () => {
                       border: "none",
                       borderRadius: "3px",
                       minWidth: "18px",
+                      flexShrink: 0,
                     }}
                   />
                   Remember me
@@ -493,12 +502,13 @@ const LoginPage = () => {
                     background: "none",
                     border: "none",
                     color: "#1C382A",
-                    fontSize: "clamp(12px, 2vw, 14px)",
+                    fontSize: "clamp(11px, 2vw, 14px)",
                     fontWeight: 600,
                     cursor: "pointer",
                     textDecoration: "underline",
                     padding: "0",
                     fontFamily: "Montserrat, sans-serif",
+                    minWidth: "fit-content",
                   }}
                 >
                   Reset Password?
@@ -508,12 +518,12 @@ const LoginPage = () => {
               {/* OR Divider */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
                 <div style={{ flex: 1, height: "1px", backgroundColor: "#1C382A" }} />
-                <span style={{ color: "#1C382A", fontSize: "12px", fontWeight: 400, fontFamily: "Montserrat, sans-serif" }}>OR</span>
+                <span style={{ color: "#1C382A", fontSize: "clamp(11px, 2vw, 12px)", fontWeight: 400, fontFamily: "Montserrat, sans-serif", whiteSpace: "nowrap" }}>OR</span>
                 <div style={{ flex: 1, height: "1px", backgroundColor: "#1C382A" }} />
               </div>
 
               {/* OAuth Buttons */}
-              <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px" }}>
+              <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px", flexWrap: "wrap" }}>
                 <button
                   type="button"
                   onClick={() => handleOAuth("Google")}
@@ -530,6 +540,7 @@ const LoginPage = () => {
                     border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
+                    flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.backgroundColor = "#1C382A15";
@@ -557,6 +568,7 @@ const LoginPage = () => {
                     border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
+                    flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.backgroundColor = "#1C382A15";
@@ -584,6 +596,7 @@ const LoginPage = () => {
                     border: "none",
                     minWidth: "44px",
                     minHeight: "44px",
+                    flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.backgroundColor = "#1C382A15";
@@ -609,6 +622,13 @@ const LoginPage = () => {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-10px); }
           75% { transform: translateX(10px); }
+        }
+        
+        @media (max-width: 768px) {
+          body {
+            margin: 0;
+            padding: 0;
+          }
         }
       `}</style>
     </div>
