@@ -1,7 +1,8 @@
 // ============================================================
 // pages/LoginPage.js - Login Page
 // Exact match to UserInterface1.png:
-//   Left: Logo + title + description text
+//   Left: Logo + title + description text (sideways layout)
+//   Middle: Vertical divider line
 //   Right: Rounded card with login form, OAuth buttons
 // ============================================================
 
@@ -167,16 +168,16 @@ const LoginPage = () => {
   };
 
   // ============================================================
-  // RENDER
+  // RENDER - SIDEWAYS LAYOUT (Left Content | Divider | Right Form)
   // ============================================================
   return (
     <div className="page-bg flex items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center gap-8 md:gap-16 animate-fade-in">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-0 md:gap-0 animate-fade-in">
 
         {/* ============================================================
-            LEFT SIDE — Logo + Title + Description (from UI1)
+            LEFT SIDE — Logo + Title + Description (SIDEWAYS)
             ============================================================ */}
-        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left px-4 md:px-8">
           {/* Large Logo */}
           <div className="mb-6">
             <AppLogo size={120} />
@@ -196,16 +197,16 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* ---- Vertical Divider (visible on desktop) ---- */}
+        {/* ---- VERTICAL DIVIDER (visible on desktop) ---- */}
         <div
           className="hidden md:block"
-          style={{ width: "1px", height: "340px", backgroundColor: "#a8d5b5" }}
+          style={{ width: "1px", height: "340px", backgroundColor: "#a8d5b5", flexShrink: 0 }}
         />
 
         {/* ============================================================
-            RIGHT SIDE — Login Card (from UI1)
+            RIGHT SIDE — Login Card (FORM)
             ============================================================ */}
-        <div className="flex-1 flex justify-center w-full">
+        <div className="flex-1 flex justify-center w-full px-4 md:px-8">
           <div
             className={`auth-card w-full max-w-sm ${shakeForm ? "animate-shake" : ""}`}
             style={{ minWidth: "300px" }}
