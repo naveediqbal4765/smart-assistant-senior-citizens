@@ -1,33 +1,31 @@
 // ============================================================
-// services/api.js - Axios API Service Configuration
-// Central HTTP client for all backend API calls
+// services/api.js - API Service with Axios
 // ============================================================
 
 import axios from "axios";
-import toast from "react-hot-toast";
 
-// Create Axios instance with base configuration
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api", // Backend API base URL
-  timeout: 15000, // 15 second timeout
+// ============================================================
+// API Configuration
+// ============================================================
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+// Create axios instance
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // ============================================================
-// REQUEST INTERCEPTOR - Runs before every API request
-// Automatically attaches JWT token to Authorization header
+// Request Interceptor - Add JWT Token
 // ============================================================
-api.interceptors.request.use(
+apiClient.interceptors.request.use(
   (config) => {
-    // Get token from localStorage or sessionStorage
-    const token =
-      localStorage.getItem("accessToken") ||
-      sessionStorage.getItem("accessToken");
-
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Attach token
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -37,81 +35,172 @@ api.interceptors.request.use(
 );
 
 // ============================================================
-// RESPONSE INTERCEPTOR - Runs after every API response
-// Handles global error cases (401 unauthorized, network errors)
+// Response Interceptor - Handle Errors
 // ============================================================
-api.interceptors.response.use(
-  (response) => response, // Pass through successful responses
-
+apiClient.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
   (error) => {
-    const { response } = error;
-
-    if (!response) {
-      // Network error (no internet, server down)
-      toast.error("Network error. Please check your internet connection.");
-      return Promise.reject(error);
-    }
-
-    if (response.status === 401) {
-      // Unauthorized - token expired or invalid
-      // Clear stored auth and redirect to login
-      localStorage.removeItem("accessToken");
+    // Handle 401 Unauthorized - Clear token and redirect to login
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
       localStorage.removeItem("user");
-      sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("user");
-
-      // Only redirect if not already on auth pages
-      if (!window.location.pathname.includes("/login")) {
-        window.location.href = "/login";
-        toast.error("Session expired. Please log in again.");
-      }
+      window.location.href = "/login";
     }
 
-    if (response.status === 403) {
-      toast.error("You don't have permission to perform this action.");
-    }
-
-    if (response.status === 500) {
-      toast.error("Server error. Please try again later.");
-    }
-
-    return Promise.reject(error);
+    // Return error response
+    return Promise.reject(error.response?.data || error);
   }
 );
 
 // ============================================================
-// AUTH API CALLS
+// Authentication API
 // ============================================================
+
 export const authAPI = {
-  // Login with email and password
-  login: (data) => api.post("/auth/login", data),
+  // Signup
+  signup: (userData) => apiClient.post("/auth/signup", userData),
 
-  // Register new user
-  signup: (data) => api.post("/auth/signup", data),
+  // Login
+  login: (email, password) => apiClient.post("/auth/login", { email, password }),
 
-  // Verify email OTP
-  verifyOTP: (data) => api.post("/auth/verify-otp", data),
+  // Verify OTP
+  verifyOTP: (email, otp) => apiClient.post("/auth/verify-otp", { email, otp }),
 
-  // Request password reset OTP
-  forgotPassword: (data) => api.post("/auth/forgot-password", data),
+  // Forgot Password
+  forgotPassword: (email) => apiClient.post("/auth/forgot-password", { email }),
 
-  // Verify password reset OTP
-  verifyResetOTP: (data) => api.post("/auth/verify-reset-otp", data),
-
-  // Set new password
-  resetPassword: (data) => api.post("/auth/reset-password", data),
+  // Reset Password
+  resetPassword: (resetToken, newPassword) =>
+    apiClient.post("/auth/reset-password", { resetToken, newPassword }),
 
   // Resend OTP
-  resendOTP: (data) => api.post("/auth/resend-otp", data),
-
-  // OAuth login (Google, Facebook, Apple)
-  oauthLogin: (data) => api.post("/auth/oauth", data),
-
-  // Get current user profile
-  getMe: () => api.get("/auth/me"),
-
-  // Delete account
-  deleteAccount: (data) => api.delete("/auth/delete-account", { data }),
+  resendOTP: (email) => apiClient.post("/auth/resend-otp", { email }),
 };
 
-export default api;
+// ============================================================
+// User API
+// ============================================================
+
+export const userAPI = {
+  // Get Profile
+  getProfile: () => apiClient.get("/users/profile"),
+
+  // Update Profile
+  updateProfile: (userData) => apiClient.put("/users/profile", userData),
+
+  // Get User by ID
+  getUserById: (userId) => apiClient.get(`/users/${userId}`),
+
+  // Change Password
+  changePassword: (currentPassword, newPassword) =>
+    apiClient.put("/users/password", { currentPassword, newPassword }),
+};
+
+// ============================================================
+// Elder API
+// ============================================================
+
+export const elderAPI = {
+  // Get Elder Profile
+  getProfile: (userId) => apiClient.get(`/elders/${userId}`),
+
+  // Update Elder Profile
+  updateProfile: (userId, elderData) => apiClient.put(`/elders/${userId}`, elderData),
+
+  // Add Emergency Contact
+  addEmergencyContact: (userId, contact) =>
+    apiClient.post(`/elders/${userId}/emergency-contacts`, contact),
+
+  // Get Medical History
+  getMedicalHistory: (userId) => apiClient.get(`/elders/${userId}/medical-history`),
+
+  // Delete Emergency Contact
+  deleteEmergencyContact: (userId, contactIndex) =>
+    apiClient.delete(`/elders/${userId}/emergency-contacts/${contactIndex}`),
+};
+
+// ============================================================
+// Caregiver API
+// ============================================================
+
+export const caregiverAPI = {
+  // Get Caregiver Profile
+  getProfile: (userId) => apiClient.get(`/caregivers/${userId}`),
+
+  // Update Caregiver Profile
+  updateProfile: (userId, caregiverData) =>
+    apiClient.put(`/caregivers/${userId}`, caregiverData),
+
+  // Pair with Elder
+  pairWithElder: (pairingCode, elderEmail) =>
+    apiClient.post("/caregivers/pair", { pairingCode, elderEmail }),
+
+  // Get Assigned Elders
+  getAssignedElders: (userId) => apiClient.get(`/caregivers/${userId}/assigned-elders`),
+};
+
+// ============================================================
+// Volunteer API
+// ============================================================
+
+export const volunteerAPI = {
+  // Get Volunteer Profile
+  getProfile: (userId) => apiClient.get(`/volunteers/${userId}`),
+
+  // Update Volunteer Profile
+  updateProfile: (userId, volunteerData) =>
+    apiClient.put(`/volunteers/${userId}`, volunteerData),
+
+  // Update Availability
+  updateAvailability: (userId, availabilityData) =>
+    apiClient.put(`/volunteers/${userId}/availability`, availabilityData),
+
+  // Get Nearby Volunteers
+  getNearby: (latitude, longitude, radius = 5, skills = null) => {
+    let url = `/volunteers/nearby?latitude=${latitude}&longitude=${longitude}&radius=${radius}`;
+    if (skills) {
+      url += `&skills=${skills}`;
+    }
+    return apiClient.get(url);
+  },
+};
+
+// ============================================================
+// SOS API
+// ============================================================
+
+export const sosAPI = {
+  // Trigger SOS Alert
+  trigger: (location, description, severity = "high") =>
+    apiClient.post("/sos/trigger", { location, description, severity }),
+
+  // Get SOS History
+  getHistory: (limit = 10, offset = 0, status = null) => {
+    let url = `/sos/history?limit=${limit}&offset=${offset}`;
+    if (status) {
+      url += `&status=${status}`;
+    }
+    return apiClient.get(url);
+  },
+
+  // Get SOS Details
+  getDetails: (sosId) => apiClient.get(`/sos/${sosId}`),
+
+  // Resolve SOS Alert
+  resolve: (sosId, status = "resolved", notes = "") =>
+    apiClient.put(`/sos/${sosId}/resolve`, { status, notes }),
+};
+
+// ============================================================
+// Health Check
+// ============================================================
+
+export const healthCheck = () => apiClient.get("/health");
+
+// ============================================================
+// Export API Client
+// ============================================================
+
+export default apiClient;
