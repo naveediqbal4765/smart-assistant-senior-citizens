@@ -93,12 +93,7 @@ const ElderDashboard = () => {
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.lightGray }}>
       {/* ============================================================
-          NAVBAR
-          ============================================================ */}
-      <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
-
-      {/* ============================================================
-          HEADER WITH SCREEN READER TOGGLE
+          INTEGRATED HEADER WITH NAVBAR
           ============================================================ */}
       <div
         style={{
@@ -115,9 +110,10 @@ const ElderDashboard = () => {
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: 1 }}>
+        {/* Left Side: Logo + Title + Navigation */}
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: 1, minWidth: "0" }}>
           <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
-          <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+          <div style={{ minWidth: "0", flex: "0 1 auto" }}>
             <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: COLORS.white, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Smart Assistant
             </h1>
@@ -125,28 +121,117 @@ const ElderDashboard = () => {
               Care for Seniors, By Community
             </p>
           </div>
+
+          {/* Navigation Links */}
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", marginLeft: "20px" }}>
+            <button
+              onClick={() => navigate("/elder-dashboard")}
+              style={{
+                background: "none",
+                border: "none",
+                color: COLORS.white,
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "13px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                padding: "6px 10px",
+                borderRadius: "6px",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.mediumGreen;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+              }}
+            >
+              🏠 Home
+            </button>
+
+            <button
+              onClick={() => {
+                // Open contact modal - will be handled by Navbar component
+                const event = new CustomEvent('openContactModal');
+                window.dispatchEvent(event);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                color: COLORS.white,
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "13px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                padding: "6px 10px",
+                borderRadius: "6px",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.mediumGreen;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+              }}
+            >
+              📞 Contact
+            </button>
+
+            <button
+              onClick={() => {
+                // Open about modal - will be handled by Navbar component
+                const event = new CustomEvent('openAboutModal');
+                window.dispatchEvent(event);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                color: COLORS.white,
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "13px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                padding: "6px 10px",
+                borderRadius: "6px",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.mediumGreen;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+              }}
+            >
+              ℹ️ About Us
+            </button>
+          </div>
         </div>
 
-        {/* Screen Reader Toggle */}
-        <button
-          onClick={handleScreenReaderToggle}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.white,
-            color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen,
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontWeight: 600,
-            fontSize: "12px",
-            fontFamily: "Montserrat, sans-serif",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
-          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-        >
-          {screenReaderEnabled ? "🔊 Voice ON" : "🔇 Voice OFF"}
-        </button>
+        {/* Right Side: Screen Reader + Profile */}
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          {/* Screen Reader Toggle */}
+          <button
+            onClick={handleScreenReaderToggle}
+            style={{
+              padding: "8px 12px",
+              backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.veryLightGreen,
+              color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen,
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "12px",
+              fontFamily: "Montserrat, sans-serif",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            {screenReaderEnabled ? "🔊" : "🔇"}
+          </button>
+
+          {/* Profile Dropdown */}
+          <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
+        </div>
       </div>
 
       {/* ============================================================

@@ -32,123 +32,26 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
     navigate("/login");
   };
 
+  // Listen for modal events from header
+  React.useEffect(() => {
+    const handleContactModal = () => setShowContactModal(true);
+    const handleAboutModal = () => setShowAboutModal(true);
+
+    window.addEventListener('openContactModal', handleContactModal);
+    window.addEventListener('openAboutModal', handleAboutModal);
+
+    return () => {
+      window.removeEventListener('openContactModal', handleContactModal);
+      window.removeEventListener('openAboutModal', handleAboutModal);
+    };
+  }, []);
+
   return (
     <>
       {/* ============================================================
-          NAVBAR
+          PROFILE DROPDOWN ONLY
           ============================================================ */}
-      <nav
-        style={{
-          backgroundColor: COLORS.darkGreen,
-          padding: "12px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          flexWrap: "wrap",
-          gap: "15px",
-        }}
-      >
-        {/* Left Side - Navigation Links */}
-        <div style={{ display: "flex", gap: "20px", alignItems: "center", flex: 1 }}>
-          <button
-            onClick={() => navigate("/elder-dashboard")}
-            style={{
-              background: "none",
-              border: "none",
-              color: COLORS.white,
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: "14px",
-              fontFamily: "Montserrat, sans-serif",
-              transition: "all 0.3s ease",
-              padding: "8px 12px",
-              borderRadius: "6px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = COLORS.mediumGreen;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "transparent";
-            }}
-          >
-            🏠 Home
-          </button>
-
-          <button
-            onClick={() => setShowContactModal(true)}
-            style={{
-              background: "none",
-              border: "none",
-              color: COLORS.white,
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: "14px",
-              fontFamily: "Montserrat, sans-serif",
-              transition: "all 0.3s ease",
-              padding: "8px 12px",
-              borderRadius: "6px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = COLORS.mediumGreen;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "transparent";
-            }}
-          >
-            📞 Contact
-          </button>
-
-          <button
-            onClick={() => setShowAboutModal(true)}
-            style={{
-              background: "none",
-              border: "none",
-              color: COLORS.white,
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: "14px",
-              fontFamily: "Montserrat, sans-serif",
-              transition: "all 0.3s ease",
-              padding: "8px 12px",
-              borderRadius: "6px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = COLORS.mediumGreen;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "transparent";
-            }}
-          >
-            ℹ️ About Us
-          </button>
-        </div>
-
-        {/* Right Side - Screen Reader & Profile */}
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          {/* Screen Reader Toggle */}
-          <button
-            onClick={onScreenReaderToggle}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.veryLightGreen,
-              color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen,
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: "12px",
-              fontFamily: "Montserrat, sans-serif",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-          >
-            {screenReaderEnabled ? "🔊" : "🔇"}
-          </button>
-
-          {/* Profile Menu */}
-          <div style={{ position: "relative" }}>
+      <div style={{ position: "relative" }}>
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               style={{
