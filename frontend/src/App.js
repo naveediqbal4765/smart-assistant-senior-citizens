@@ -30,6 +30,7 @@ import ElderHealthHistory from "./pages/ElderHealthHistory";
 import ElderLabReports from "./pages/ElderLabReports";
 import ElderPrescriptions from "./pages/ElderPrescriptions";
 import ElderSupport from "./pages/ElderSupport";
+import ElderPhysicalRehabilitation from "./pages/ElderPhysicalRehabilitation";
 import ElderMyProfile from "./pages/ElderMyProfile";
 import ElderSettings from "./pages/ElderSettings";
 import CaregiverDashboard from "./pages/CaregiverDashboard";
@@ -126,6 +127,7 @@ function App() {
           <Route path="/elder-lab-reports" element={<ElderLabReports />} />
           <Route path="/elder-prescriptions" element={<ElderPrescriptions />} />
           <Route path="/elder-support" element={<ElderSupport />} />
+          <Route path="/elder-physical-rehabilitation" element={<ElderPhysicalRehabilitation />} />
           <Route path="/elder-my-profile" element={<ElderMyProfile />} />
           <Route path="/elder-settings" element={<ElderSettings />} />
           <Route path="/caregiver-dashboard" element={<CaregiverDashboard />} />

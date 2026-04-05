@@ -458,7 +458,7 @@ const ElderDashboard = () => {
               ============================================================ */}
           <div style={{ marginBottom: "30px" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              💬 Communication & Utilities
+              💚 Wellness & Support
             </h3>
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
@@ -481,11 +481,11 @@ const ElderDashboard = () => {
                 >
                   ⏰ Medication Reminder
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-physical-rehabilitation")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  📞 Support
+                  💪 Physical Rehabilitation
                 </button>
               </div>
             </div>
