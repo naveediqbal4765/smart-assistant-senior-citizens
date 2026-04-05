@@ -425,7 +425,7 @@ const ElderDashboard = () => {
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-task-request")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
@@ -463,19 +463,19 @@ const ElderDashboard = () => {
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-messages")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   💬 Messages
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-sleep-timer")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   🎵 Sleep Timer
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-medication-reminder")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >

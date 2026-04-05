@@ -22,6 +22,10 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 // Dashboard Pages (role-based)
 import ElderDashboard from "./pages/ElderDashboard";
+import ElderMessages from "./pages/ElderMessages";
+import ElderSleepTimer from "./pages/ElderSleepTimer";
+import ElderMedicationReminder from "./pages/ElderMedicationReminder";
+import ElderTaskRequest from "./pages/ElderTaskRequest";
 import CaregiverDashboard from "./pages/CaregiverDashboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 
@@ -108,6 +112,10 @@ function App() {
           <Route path="/test/caregiver-dashboard" element={<CaregiverDashboard />} />
           <Route path="/test/volunteer-dashboard" element={<VolunteerDashboard />} />
           <Route path="/elder-dashboard" element={<ElderDashboard />} />
+          <Route path="/elder-messages" element={<ElderMessages />} />
+          <Route path="/elder-sleep-timer" element={<ElderSleepTimer />} />
+          <Route path="/elder-medication-reminder" element={<ElderMedicationReminder />} />
+          <Route path="/elder-task-request" element={<ElderTaskRequest />} />
           <Route path="/caregiver-dashboard" element={<CaregiverDashboard />} />
           <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
 
