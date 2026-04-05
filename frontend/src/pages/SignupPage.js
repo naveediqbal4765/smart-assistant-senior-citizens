@@ -716,7 +716,33 @@ const SignupPage = () => {
   if (currentStep === 2) {
     return (
       <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
+        {/* Header */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "#1C382A",
+            padding: "clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px)",
+            display: "flex",
+            alignItems: "center",
+            gap: "clamp(8px, 2vw, 16px)",
+            zIndex: 10,
+            flexWrap: "wrap",
+            justifyContent: "flex-start",
+          }}
+        >
+          <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+          <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Smart Assistant
+            </h1>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Care for Seniors, By Community
+            </p>
+          </div>
+        </div>
         <div
           style={{
             flex: 1,
@@ -1232,7 +1258,33 @@ const SignupPage = () => {
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {gpsModalOpen && <GPSModal type={gpsModalType} />}
-      <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
+      {/* Header */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "#1C382A",
+          padding: "clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px)",
+          display: "flex",
+          alignItems: "center",
+          gap: "clamp(8px, 2vw, 16px)",
+          zIndex: 10,
+          flexWrap: "wrap",
+          justifyContent: "flex-start",
+        }}
+      >
+        <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+        <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+          <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            Smart Assistant
+          </h1>
+          <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            Care for Seniors, By Community
+          </p>
+        </div>
+      </div>
       <div
         style={{
           flex: 1,
