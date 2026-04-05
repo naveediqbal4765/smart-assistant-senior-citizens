@@ -188,7 +188,7 @@ const ElderSupport = () => {
                   </button>
                 </div>
 
-                <div style={{ fontSize: "12px", color: COLORS.darkGray", textAlign: "center" }}>
+                <div style={{ fontSize: "12px", color: COLORS.darkGray, textAlign: "center" }}>
                   {volunteer.phone}
                 </div>
               </div>
