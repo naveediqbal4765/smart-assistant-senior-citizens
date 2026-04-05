@@ -284,9 +284,9 @@ const ElderDashboard = () => {
                       transition: "all 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = COLORS.mediumGreen;
+                      e.currentTarget.style.backgroundColor = COLORS.dashboardBg;
                       e.currentTarget.style.transform = "scale(1.05)";
-                      e.currentTarget.style.color = COLORS.white;
+                      e.currentTarget.style.color = COLORS.darkGreen;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = COLORS.veryLightGreen;
@@ -429,13 +429,13 @@ const ElderDashboard = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  🛒 Request Groceries
+                  📋 Task Request
                 </button>
                 <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  🧹 Request Cleaning
+                  🎤 AI Voice Assistant
                 </button>
                 <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
