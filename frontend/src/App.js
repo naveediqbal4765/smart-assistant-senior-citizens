@@ -14,33 +14,35 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 // Auth Pages
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import VerifyOTPPage from "./pages/VerifyOTPPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
+import VerifyOTPPage from "./pages/auth/VerifyOTPPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
-// Dashboard Pages (role-based)
-import ElderDashboard from "./pages/ElderDashboard";
-import ElderMessages from "./pages/ElderMessages";
-import ElderSleepTimer from "./pages/ElderSleepTimer";
-import ElderMedicationReminder from "./pages/ElderMedicationReminder";
-import ElderTaskRequest from "./pages/ElderTaskRequest";
-import ElderHealthHistory from "./pages/ElderHealthHistory";
-import ElderLabReports from "./pages/ElderLabReports";
-import ElderPrescriptions from "./pages/ElderPrescriptions";
-import ElderSupport from "./pages/ElderSupport";
-import ElderPhysicalRehabilitation from "./pages/ElderPhysicalRehabilitation";
-import ElderMyProfile from "./pages/ElderMyProfile";
-import ElderSettings from "./pages/ElderSettings";
-import CaregiverDashboard from "./pages/CaregiverDashboard";
-import VolunteerDashboard from "./pages/VolunteerDashboard";
+// Elder Pages
+import ElderDashboard from "./pages/elder/ElderDashboard";
+import ElderMessages from "./pages/elder/ElderMessages";
+import ElderSleepTimer from "./pages/elder/ElderSleepTimer";
+import ElderMedicationReminder from "./pages/elder/ElderMedicationReminder";
+import ElderTaskRequest from "./pages/elder/ElderTaskRequest";
+import ElderHealthHistory from "./pages/elder/ElderHealthHistory";
+import ElderLabReports from "./pages/elder/ElderLabReports";
+import ElderPrescriptions from "./pages/elder/ElderPrescriptions";
+import ElderSupport from "./pages/elder/ElderSupport";
+import ElderPhysicalRehabilitation from "./pages/elder/ElderPhysicalRehabilitation";
+import ElderMyProfile from "./pages/elder/ElderMyProfile";
+import ElderSettings from "./pages/elder/ElderSettings";
 
-// Test Pages
-import TestDashboardsPage from "./pages/TestDashboardsPage";
+// Caregiver Pages
+import CaregiverDashboard from "./pages/caregiver/CaregiverDashboard";
 
-// 404 Page
-import NotFoundPage from "./pages/NotFoundPage";
+// Volunteer Pages
+import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+
+// Common Pages
+import TestDashboardsPage from "./pages/common/TestDashboardsPage";
+import NotFoundPage from "./pages/common/NotFoundPage";
 
 // ============================================================
 // App - Root component with routing configuration

@@ -132,24 +132,41 @@ smart-assistant-senior-citizens/
 │   │   │   ├── Header.js
 │   │   │   ├── Navbar.js
 │   │   │   ├── Footer.js
-│   │   │   └── ProtectedRoute.js
-│   │   ├── pages/
-│   │   │   ├── LoginPage.js
-│   │   │   ├── SignupPage.js
-│   │   │   ├── VerifyOTPPage.js
-│   │   │   ├── ForgotPasswordPage.js
-│   │   │   ├── ResetPasswordPage.js
-│   │   │   ├── ElderDashboard.js
-│   │   │   ├── ElderHealthHistory.js
-│   │   │   ├── ElderLabReports.js
-│   │   │   ├── ElderPrescriptions.js
-│   │   │   ├── ElderSupport.js
-│   │   │   ├── ElderPhysicalRehabilitation.js
-│   │   │   ├── ElderMyProfile.js
-│   │   │   ├── ElderSettings.js
-│   │   │   ├── CaregiverDashboard.js
-│   │   │   ├── VolunteerDashboard.js
-│   │   │   └── NotFoundPage.js
+│   │   │   └── common/
+│   │   │       └── ProtectedRoute.js
+│   │   │
+│   │   ├── pages/                    # ⭐ ORGANIZED STRUCTURE
+│   │   │   ├── auth/                 # 🔐 Authentication Pages
+│   │   │   │   ├── LoginPage.js
+│   │   │   │   ├── SignupPage.js
+│   │   │   │   ├── VerifyOTPPage.js
+│   │   │   │   ├── ForgotPasswordPage.js
+│   │   │   │   └── ResetPasswordPage.js
+│   │   │   │
+│   │   │   ├── elder/                # 👴 Elder Pages (12 pages)
+│   │   │   │   ├── ElderDashboard.js
+│   │   │   │   ├── ElderHealthHistory.js
+│   │   │   │   ├── ElderLabReports.js
+│   │   │   │   ├── ElderPrescriptions.js
+│   │   │   │   ├── ElderSupport.js
+│   │   │   │   ├── ElderPhysicalRehabilitation.js
+│   │   │   │   ├── ElderMyProfile.js
+│   │   │   │   ├── ElderSettings.js
+│   │   │   │   ├── ElderMessages.js
+│   │   │   │   ├── ElderSleepTimer.js
+│   │   │   │   ├── ElderMedicationReminder.js
+│   │   │   │   └── ElderTaskRequest.js
+│   │   │   │
+│   │   │   ├── caregiver/            # 👨‍⚕️ Caregiver Pages
+│   │   │   │   └── CaregiverDashboard.js
+│   │   │   │
+│   │   │   ├── volunteer/            # 👥 Volunteer Pages
+│   │   │   │   └── VolunteerDashboard.js
+│   │   │   │
+│   │   │   └── common/               # 🔧 Common Pages
+│   │   │       ├── NotFoundPage.js
+│   │   │       └── TestDashboardsPage.js
+│   │   │
 │   │   ├── context/
 │   │   │   └── AuthContext.js
 │   │   ├── services/
