@@ -26,6 +26,11 @@ import ElderMessages from "./pages/ElderMessages";
 import ElderSleepTimer from "./pages/ElderSleepTimer";
 import ElderMedicationReminder from "./pages/ElderMedicationReminder";
 import ElderTaskRequest from "./pages/ElderTaskRequest";
+import ElderHealthHistory from "./pages/ElderHealthHistory";
+import ElderPrescriptions from "./pages/ElderPrescriptions";
+import ElderSupport from "./pages/ElderSupport";
+import ElderMyProfile from "./pages/ElderMyProfile";
+import ElderSettings from "./pages/ElderSettings";
 import CaregiverDashboard from "./pages/CaregiverDashboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 
@@ -116,6 +121,11 @@ function App() {
           <Route path="/elder-sleep-timer" element={<ElderSleepTimer />} />
           <Route path="/elder-medication-reminder" element={<ElderMedicationReminder />} />
           <Route path="/elder-task-request" element={<ElderTaskRequest />} />
+          <Route path="/elder-health-history" element={<ElderHealthHistory />} />
+          <Route path="/elder-prescriptions" element={<ElderPrescriptions />} />
+          <Route path="/elder-support" element={<ElderSupport />} />
+          <Route path="/elder-my-profile" element={<ElderMyProfile />} />
+          <Route path="/elder-settings" element={<ElderSettings />} />
           <Route path="/caregiver-dashboard" element={<CaregiverDashboard />} />
           <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
 

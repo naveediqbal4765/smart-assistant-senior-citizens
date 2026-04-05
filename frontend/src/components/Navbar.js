@@ -108,7 +108,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
             <button
               onClick={() => {
                 setShowProfileMenu(false);
-                // Navigate to profile settings
+                window.location.href = "/elder-settings";
               }}
               style={{
                 width: "100%",
@@ -132,7 +132,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
             <button
               onClick={() => {
                 setShowProfileMenu(false);
-                // Navigate to profile page
+                window.location.href = "/elder-my-profile";
               }}
               style={{
                 width: "100%",
