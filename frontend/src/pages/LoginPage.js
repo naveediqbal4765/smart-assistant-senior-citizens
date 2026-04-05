@@ -158,6 +158,7 @@ const LoginPage = () => {
           alignItems: "center",
           justifyContent: "center",
           padding: "40px 20px",
+          paddingTop: "clamp(100px, 20vw, 150px)",
           gap: "40px",
           backgroundColor: "#A9C6B2",
           minHeight: "100vh",

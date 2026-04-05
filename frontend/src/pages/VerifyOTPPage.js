@@ -94,7 +94,8 @@ const VerifyOTPPage = () => {
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px", backgroundColor: "#A9C6B2", minHeight: "100vh", width: "100%", boxSizing: "border-box" }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px",
+          paddingTop: "clamp(100px, 20vw, 150px)", backgroundColor: "#A9C6B2", minHeight: "100vh", width: "100%", boxSizing: "border-box" }}>
         <div className="auth-card w-full max-w-sm">
         <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "8px", textAlign: "center" }}>
           Verify Your Email
