@@ -393,19 +393,19 @@ const ElderDashboard = () => {
                 📋 Medical Vault
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
-                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-lab-reports")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   📄 Lab Reports
                 </button>
-                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-prescriptions")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   💊 Prescriptions
                 </button>
-                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                <button onClick={() => navigate("/elder-health-history")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
