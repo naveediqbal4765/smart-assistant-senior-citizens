@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 // ---- SVG Logo: Green cross with red heart ----
 const AppLogo = ({ size = 80 }) => (
@@ -91,6 +92,11 @@ const ElderDashboard = () => {
 
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.lightGray }}>
+      {/* ============================================================
+          NAVBAR
+          ============================================================ */}
+      <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
+
       {/* ============================================================
           HEADER WITH SCREEN READER TOGGLE
           ============================================================ */}
