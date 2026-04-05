@@ -52,136 +52,134 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           PROFILE DROPDOWN ONLY
           ============================================================ */}
       <div style={{ position: "relative" }}>
+        <button
+          onClick={() => setShowProfileMenu(!showProfileMenu)}
+          style={{
+            padding: "8px 12px",
+            backgroundColor: COLORS.veryLightGreen,
+            color: COLORS.darkGreen,
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontWeight: 600,
+            fontSize: "12px",
+            fontFamily: "Montserrat, sans-serif",
+            transition: "all 0.3s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
+        >
+          👤 {user?.fullName.split(" ")[0]}
+        </button>
+
+        {/* Profile Dropdown Menu */}
+        {showProfileMenu && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              right: 0,
+              backgroundColor: COLORS.white,
+              border: `2px solid ${COLORS.mediumGreen}`,
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              zIndex: 1000,
+              minWidth: "200px",
+              marginTop: "8px",
+            }}
+          >
+            {/* Profile Info */}
+            <div style={{ padding: "12px 16px", borderBottom: `1px solid ${COLORS.veryLightGreen}` }}>
+              <div style={{ fontSize: "12px", fontWeight: 600, color: COLORS.darkGreen }}>
+                {user?.fullName}
+              </div>
+              <div style={{ fontSize: "11px", color: COLORS.darkGray, marginTop: "4px" }}>
+                {user?.email}
+              </div>
+              <div style={{ fontSize: "11px", color: COLORS.darkGray }}>
+                Role: {user?.role}
+              </div>
+            </div>
+
+            {/* Profile Options */}
             <button
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-              style={{
-                padding: "8px 12px",
-                backgroundColor: COLORS.veryLightGreen,
-                color: COLORS.darkGreen,
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "12px",
-                fontFamily: "Montserrat, sans-serif",
-                transition: "all 0.3s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
+              onClick={() => {
+                setShowProfileMenu(false);
+                // Navigate to profile settings
               }}
-              onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
-              onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                backgroundColor: "transparent",
+                border: "none",
+                textAlign: "left",
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                fontSize: "13px",
+                color: COLORS.darkGreen,
+                transition: "all 0.3s ease",
+                borderBottom: `1px solid ${COLORS.veryLightGreen}`,
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
             >
-              👤 {user?.fullName.split(" ")[0]}
+              ⚙️ Settings
             </button>
 
-            {/* Profile Dropdown Menu */}
-            {showProfileMenu && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  right: 0,
-                  backgroundColor: COLORS.white,
-                  border: `2px solid ${COLORS.mediumGreen}`,
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  zIndex: 1000,
-                  minWidth: "200px",
-                  marginTop: "8px",
-                }}
-              >
-                {/* Profile Info */}
-                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${COLORS.veryLightGreen}` }}>
-                  <div style={{ fontSize: "12px", fontWeight: 600, color: COLORS.darkGreen }}>
-                    {user?.fullName}
-                  </div>
-                  <div style={{ fontSize: "11px", color: COLORS.darkGray, marginTop: "4px" }}>
-                    {user?.email}
-                  </div>
-                  <div style={{ fontSize: "11px", color: COLORS.darkGray }}>
-                    Role: {user?.role}
-                  </div>
-                </div>
+            <button
+              onClick={() => {
+                setShowProfileMenu(false);
+                // Navigate to profile page
+              }}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                backgroundColor: "transparent",
+                border: "none",
+                textAlign: "left",
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                fontSize: "13px",
+                color: COLORS.darkGreen,
+                transition: "all 0.3s ease",
+                borderBottom: `1px solid ${COLORS.veryLightGreen}`,
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+            >
+              👤 My Profile
+            </button>
 
-                {/* Profile Options */}
-                <button
-                  onClick={() => {
-                    setShowProfileMenu(false);
-                    // Navigate to profile settings
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontSize: "13px",
-                    color: COLORS.darkGreen,
-                    transition: "all 0.3s ease",
-                    borderBottom: `1px solid ${COLORS.veryLightGreen}`,
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
-                >
-                  ⚙️ Settings
-                </button>
-
-                <button
-                  onClick={() => {
-                    setShowProfileMenu(false);
-                    // Navigate to profile page
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontSize: "13px",
-                    color: COLORS.darkGreen,
-                    transition: "all 0.3s ease",
-                    borderBottom: `1px solid ${COLORS.veryLightGreen}`,
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
-                >
-                  👤 My Profile
-                </button>
-
-                {/* Logout */}
-                <button
-                  onClick={() => {
-                    setShowProfileMenu(false);
-                    handleLogout();
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontSize: "13px",
-                    color: COLORS.red,
-                    transition: "all 0.3s ease",
-                    fontWeight: 600,
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#ffe0e0")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
-                >
-                  🚪 Logout
-                </button>
-              </div>
-            )}
+            {/* Logout */}
+            <button
+              onClick={() => {
+                setShowProfileMenu(false);
+                handleLogout();
+              }}
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                backgroundColor: "transparent",
+                border: "none",
+                textAlign: "left",
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                fontSize: "13px",
+                color: COLORS.red,
+                transition: "all 0.3s ease",
+                fontWeight: 600,
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#ffe0e0")}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+            >
+              🚪 Logout
+            </button>
           </div>
-        </div>
-      </nav>
+        )}
+      </div>
 
       {/* ============================================================
           CONTACT MODAL
