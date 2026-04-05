@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -21,10 +21,63 @@ const AppLogo = ({ size = 80 }) => (
 const ElderDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+  const [selectedMedication, setSelectedMedication] = useState(null);
+  const [showMedicationModal, setShowMedicationModal] = useState(false);
+
+  // Mock data
+  const emergencyContacts = [
+    { id: 1, name: "Sarah", relation: "Daughter", phone: "+923001234567", emoji: "👩" },
+    { id: 2, name: "John", relation: "Son", phone: "+923009876543", emoji: "👨" },
+    { id: 3, name: "Dr. Ahmed", relation: "Doctor", phone: "+923005555555", emoji: "👨‍⚕️" },
+  ];
+
+  const todaysMedications = [
+    { id: 1, name: "Aspirin", time: "08:00 AM", taken: true },
+    { id: 2, name: "Blood Pressure Med", time: "12:00 PM", taken: false },
+    { id: 3, name: "Vitamin D", time: "06:00 PM", taken: false },
+  ];
+
+  const vitals = {
+    heartRate: 72,
+    oxygen: 98,
+    temperature: 36.5,
+    lastUpdated: "Just now",
+  };
+
+  const handleScreenReaderToggle = () => {
+    setScreenReaderEnabled(!screenReaderEnabled);
+    if (!screenReaderEnabled) {
+      const utterance = new SpeechSynthesisUtterance("Screen reader enabled");
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const handleEmergencyCall = (contact) => {
+    if (screenReaderEnabled) {
+      const utterance = new SpeechSynthesisUtterance(`Calling ${contact.name}`);
+      window.speechSynthesis.speak(utterance);
+    }
+    alert(`Calling ${contact.name} at ${contact.phone}`);
+  };
+
+  const handleSOS = () => {
+    if (screenReaderEnabled) {
+      const utterance = new SpeechSynthesisUtterance("Emergency SOS activated");
+      window.speechSynthesis.speak(utterance);
+    }
+    alert("🚨 SOS ACTIVATED! Emergency services and caregivers have been notified. Your location is being shared.");
+  };
+
+  const handleMedicationTaken = (medicationId) => {
+    alert(`✅ Marked "${todaysMedications.find(m => m.id === medicationId).name}" as taken!`);
+  };
 
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Header */}
+      {/* ============================================================
+          HEADER WITH SCREEN READER TOGGLE
+          ============================================================ */}
       <div
         style={{
           position: "sticky",
@@ -36,80 +89,352 @@ const ElderDashboard = () => {
           gap: "clamp(8px, 2vw, 16px)",
           zIndex: 10,
           flexWrap: "wrap",
-          justifyContent: "flex-start",
+          justifyContent: "space-between",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
-        <div style={{ minWidth: "0", flex: "1 1 auto" }}>
-          <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            Smart Assistant
-          </h1>
-          <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            Care for Seniors, By Community
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: 1 }}>
+          <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+          <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Smart Assistant
+            </h1>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Care for Seniors, By Community
+            </p>
+          </div>
         </div>
+
+        {/* Screen Reader Toggle */}
+        <button
+          onClick={handleScreenReaderToggle}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: screenReaderEnabled ? "#52b788" : "#FFFFFF",
+            color: screenReaderEnabled ? "#FFFFFF" : "#1C382A",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontWeight: 600,
+            fontSize: "12px",
+            fontFamily: "Montserrat, sans-serif",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+        >
+          {screenReaderEnabled ? "🔊 Voice ON" : "🔇 Voice OFF"}
+        </button>
       </div>
 
-      {/* Main Content */}
-      <div className="page-bg min-h-screen p-6" style={{ flex: 1 }}>
+      {/* ============================================================
+          MAIN CONTENT
+          ============================================================ */}
+      <div style={{ flex: 1, padding: "20px", backgroundColor: "#f5f5f5", overflowY: "auto" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-          <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#1b4332" }}>
-            Welcome, {user?.fullName.split(" ")[0]}! 👋
-          </h1>
-          <button onClick={() => { logout(); navigate("/login"); }} className="btn-primary" style={{ width: "auto" }}>
-            Logout
-          </button>
-        </div>
+          {/* Welcome Section */}
+          <div style={{ marginBottom: "30px" }}>
+            <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#1C382A", margin: "0 0 10px 0" }}>
+              Welcome, {user?.fullName.split(" ")[0]}! 👋
+            </h2>
+            <p style={{ fontSize: "14px", color: "#666", margin: "0" }}>
+              {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+            </p>
+          </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
-          {/* SOS Button */}
-          <div className="auth-card" style={{ textAlign: "center", padding: "40px 20px" }}>
-            <button style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "#e63946", color: "white", border: "none", fontSize: "2rem", fontWeight: 700, cursor: "pointer", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              🆘
+          {/* ============================================================
+              1. SAFETY FIRST LAYER
+              ============================================================ */}
+          <div style={{ marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C382A", marginBottom: "15px" }}>
+              🛡️ Safety First
+            </h3>
+
+            {/* Emergency Contacts Speed Dial */}
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <h4 style={{ fontSize: "14px", fontWeight: 600, color: "#1C382A", marginBottom: "15px" }}>
+                Emergency Contacts (One-Tap Calling)
+              </h4>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: "15px" }}>
+                {emergencyContacts.map((contact) => (
+                  <button
+                    key={contact.id}
+                    onClick={() => handleEmergencyCall(contact)}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "15px",
+                      backgroundColor: "#BAE4C7",
+                      border: "none",
+                      borderRadius: "12px",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#52b788";
+                      e.currentTarget.style.transform = "scale(1.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#BAE4C7";
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  >
+                    <div style={{ fontSize: "32px" }}>{contact.emoji}</div>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#1C382A", textAlign: "center" }}>
+                      {contact.name}
+                    </div>
+                    <div style={{ fontSize: "10px", color: "#1C382A", textAlign: "center" }}>
+                      {contact.relation}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ============================================================
+              2. MEDICAL HUB
+              ============================================================ */}
+          <div style={{ marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C382A", marginBottom: "15px" }}>
+              🏥 Medical Hub
+            </h3>
+
+            {/* Live Vitals Monitor */}
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <h4 style={{ fontSize: "14px", fontWeight: 600, color: "#1C382A", marginBottom: "15px" }}>
+                Live Vitals Monitor
+              </h4>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
+                <div style={{ backgroundColor: "#f0f0f0", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: "#e63946" }}>❤️ {vitals.heartRate}</div>
+                  <div style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}>Heart Rate (bpm)</div>
+                </div>
+                <div style={{ backgroundColor: "#f0f0f0", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: "#52b788" }}>🫁 {vitals.oxygen}%</div>
+                  <div style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}>Oxygen Level</div>
+                </div>
+                <div style={{ backgroundColor: "#f0f0f0", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: "#FFC107" }}>🌡️ {vitals.temperature}°C</div>
+                  <div style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}>Temperature</div>
+                </div>
+              </div>
+              <p style={{ fontSize: "11px", color: "#999", marginTop: "10px", textAlign: "center" }}>
+                Last updated: {vitals.lastUpdated}
+              </p>
+            </div>
+
+            {/* Today's Medications */}
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <h4 style={{ fontSize: "14px", fontWeight: 600, color: "#1C382A", marginBottom: "15px" }}>
+                💊 Today's Medication Schedule
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {todaysMedications.map((med) => (
+                  <div
+                    key={med.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "12px",
+                      backgroundColor: med.taken ? "#e8f5e9" : "#fff3e0",
+                      borderRadius: "8px",
+                      borderLeft: `4px solid ${med.taken ? "#52b788" : "#FFC107"}`,
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: "14px", fontWeight: 600, color: "#1C382A" }}>
+                        {med.name}
+                      </div>
+                      <div style={{ fontSize: "12px", color: "#666" }}>
+                        {med.time}
+                      </div>
+                    </div>
+                    {med.taken ? (
+                      <div style={{ fontSize: "20px" }}>✅</div>
+                    ) : (
+                      <button
+                        onClick={() => handleMedicationTaken(med.id)}
+                        style={{
+                          padding: "8px 16px",
+                          backgroundColor: "#52b788",
+                          color: "#FFFFFF",
+                          border: "none",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          fontFamily: "Montserrat, sans-serif",
+                        }}
+                      >
+                        I took it
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Medical Vault */}
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <h4 style={{ fontSize: "14px", fontWeight: 600, color: "#1C382A", marginBottom: "15px" }}>
+                📋 Medical Vault
+              </h4>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
+                <button style={{ padding: "12px", backgroundColor: "#BAE4C7", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>
+                  📄 Lab Reports
+                </button>
+                <button style={{ padding: "12px", backgroundColor: "#BAE4C7", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>
+                  💊 Prescriptions
+                </button>
+                <button style={{ padding: "12px", backgroundColor: "#BAE4C7", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>
+                  📊 Health History
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ============================================================
+              3. MOBILITY & HELP LAYER
+              ============================================================ */}
+          <div style={{ marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C382A", marginBottom: "15px" }}>
+              🚗 Mobility & Help
+            </h3>
+
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
+                <button style={{ padding: "20px", backgroundColor: "#52b788", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+                >
+                  🛒 Request Groceries
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#52b788", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+                >
+                  🧹 Request Cleaning
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#52b788", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+                >
+                  🚕 Book a Ride
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#52b788", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+                >
+                  👥 Find Volunteer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ============================================================
+              4. COMMUNICATION & UTILITY LAYER
+              ============================================================ */}
+          <div style={{ marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C382A", marginBottom: "15px" }}>
+              💬 Communication & Utilities
+            </h3>
+
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
+                <button style={{ padding: "20px", backgroundColor: "#2d6a4f", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#1b4332")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                >
+                  💬 Messages
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#2d6a4f", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#1b4332")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                >
+                  🎵 Sleep Timer
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#2d6a4f", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#1b4332")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                >
+                  ⚙️ Settings
+                </button>
+                <button style={{ padding: "20px", backgroundColor: "#2d6a4f", color: "#FFFFFF", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#1b4332")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                >
+                  📞 Support
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Logout Button */}
+          <div style={{ marginBottom: "30px", textAlign: "center" }}>
+            <button
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+              style={{
+                padding: "12px 30px",
+                backgroundColor: "#e63946",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "14px",
+                fontFamily: "Montserrat, sans-serif",
+              }}
+            >
+              Logout
             </button>
-            <p style={{ marginTop: "16px", fontSize: "1rem", fontWeight: 700, color: "#1b4332" }}>Emergency SOS</p>
           </div>
-
-          {/* Health Stats */}
-          <div className="auth-card">
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Health Stats</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>❤️ Heart Rate: -- bpm</p>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>🫁 Oxygen: -- %</p>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>🌡️ Temperature: -- °C</p>
-          </div>
-
-          {/* Request Help */}
-          <div className="auth-card" style={{ textAlign: "center" }}>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Need Help?</h3>
-            <button className="btn-primary" style={{ marginTop: "12px" }}>Request Task</button>
-          </div>
-
-          {/* Medications */}
-          <div className="auth-card">
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Medications</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>No medications scheduled</p>
-          </div>
-
-          {/* Emergency Contacts */}
-          <div className="auth-card">
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Emergency Contacts</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>View your emergency contacts</p>
-          </div>
-
-          {/* Messages */}
-          <div className="auth-card">
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Messages</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>No new messages</p>
-          </div>
-        </div>
-
-        <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
-          🚀 Elder Dashboard - Module 1 Skeleton (More features coming soon!)
-        </p>
         </div>
       </div>
+
+      {/* ============================================================
+          FIXED SOS BUTTON (Always Visible at Bottom Center)
+          ============================================================ */}
+      <button
+        onClick={handleSOS}
+        style={{
+          position: "fixed",
+          bottom: "30px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "120px",
+          height: "120px",
+          borderRadius: "50%",
+          backgroundColor: "#e63946",
+          color: "#FFFFFF",
+          border: "4px solid #FFFFFF",
+          fontSize: "48px",
+          fontWeight: 700,
+          cursor: "pointer",
+          boxShadow: "0 8px 24px rgba(230, 57, 70, 0.4)",
+          zIndex: 100,
+          transition: "all 0.3s ease",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.transform = "translateX(-50%) scale(1.1)";
+          e.target.style.boxShadow = "0 12px 32px rgba(230, 57, 70, 0.6)";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.transform = "translateX(-50%) scale(1)";
+          e.target.style.boxShadow = "0 8px 24px rgba(230, 57, 70, 0.4)";
+        }}
+      >
+        🆘
+      </button>
 
       {/* Footer */}
       <Footer />
