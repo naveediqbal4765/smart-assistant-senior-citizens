@@ -99,6 +99,11 @@ function App() {
             }
           />
 
+          {/* ---- TEST ROUTES (No authentication required - for viewing logos) ---- */}
+          <Route path="/test/elder-dashboard" element={<ElderDashboard />} />
+          <Route path="/test/caregiver-dashboard" element={<CaregiverDashboard />} />
+          <Route path="/test/volunteer-dashboard" element={<VolunteerDashboard />} />
+
           {/* ---- 404 Not Found ---- */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
