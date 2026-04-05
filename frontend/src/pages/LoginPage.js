@@ -8,7 +8,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
-import Header from "../components/Header";
 import toast from "react-hot-toast";
 
 // ---- SVG Logo: Green cross with red heart ----
@@ -151,12 +150,6 @@ const LoginPage = () => {
   // ============================================================
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* HEADER WITH LOGO AND NAME */}
-      <Header showBorder={true} />
-
-      {/* TOP BORDER - 48px height, #1C382A */}
-      <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
-
       {/* MAIN CONTENT - Responsive Horizontal Layout */}
       <div
         style={{
@@ -167,12 +160,39 @@ const LoginPage = () => {
           padding: "40px 20px",
           gap: "40px",
           backgroundColor: "#A9C6B2",
-          minHeight: "calc(100vh - 96px)",
+          minHeight: "100vh",
           width: "100%",
           boxSizing: "border-box",
           flexWrap: "wrap",
+          position: "relative",
         }}
       >
+        {/* Header Overlay - Positioned absolutely */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "#1C382A",
+            padding: "16px 40px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            zIndex: 10,
+          }}
+        >
+          <AppLogo size={40} />
+          <div>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FFFFFF", margin: "0" }}>
+              Smart Assistant
+            </h1>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "12px", color: "#BAE4C7", margin: "0" }}>
+              Care for Seniors, By Community
+            </p>
+          </div>
+        </div>
+
         {/* LEFT SIDE - Logo + Title + Description */}
         <div
           style={{
@@ -608,9 +628,6 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-
-      {/* BOTTOM BORDER - 48px height, #1C382A */}
-      <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
 
       {/* Shake Animation */}
       <style>{`
