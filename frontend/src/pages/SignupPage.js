@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
+import Header from "../components/Header";
 import toast from "react-hot-toast";
 
 // ---- SVG Logo: Green cross with red heart ----
@@ -77,11 +78,13 @@ const SignupPage = () => {
     livesAlone: null,
     emergencyContacts: [],
     medicalConditions: [],
+    medicalConditionsOther: "",
     hasMedicalIssues: null,
     locationPermission: null,
 
     // Caregiver-specific
     relationshipToElder: "",
+    relationshipToElderOther: "",
     linkedElderEmail: "",
     pairingCode: "",
     notificationsEnabled: false,
@@ -89,6 +92,7 @@ const SignupPage = () => {
 
     // Volunteer-specific
     affiliation: "",
+    affiliationOther: "",
     ngoId: "",
     serviceRadius: 5,
     skills: [],
@@ -418,7 +422,17 @@ const SignupPage = () => {
   if (currentStep === 1) {
     return (
       <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
+        <div style={{ width: "100%", backgroundColor: "#1C382A", padding: "16px 40px", display: "flex", alignItems: "center", gap: "12px" }}>
+          <AppLogo size={40} />
+          <div>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FFFFFF", margin: "0" }}>
+              Smart Assistant
+            </h1>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "12px", color: "#BAE4C7", margin: "0" }}>
+              Care for Seniors, By Community
+            </p>
+          </div>
+        </div>
         <div
           style={{
             flex: 1,
@@ -1659,6 +1673,35 @@ const SignupPage = () => {
                   </select>
                   {errors.relationshipToElder && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.relationshipToElder}</p>}
 
+                  {/* Custom Relationship (if Other selected) */}
+                  {formData.relationshipToElder === "Other" && (
+                    <>
+                      <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
+                        Please specify your relationship *
+                      </label>
+                      <input
+                        name="relationshipToElderOther"
+                        type="text"
+                        value={formData.relationshipToElderOther}
+                        onChange={handleChange}
+                        placeholder="Enter your relationship"
+                        style={{
+                          width: "100%",
+                          padding: "10px 12px",
+                          marginBottom: "16px",
+                          borderRadius: "8px",
+                          border: "1px solid #ddd",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          backgroundColor: "#FFFFFF",
+                          color: "#1C382A",
+                          minHeight: "40px",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </>
+                  )}
+
                   {/* Senior's Email */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
                     Senior's Email *
@@ -1774,6 +1817,35 @@ const SignupPage = () => {
                     <option value="Other">Other</option>
                   </select>
                   {errors.affiliation && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>⚠️ {errors.affiliation}</p>}
+
+                  {/* Custom Affiliation (if Other selected) */}
+                  {formData.affiliation === "Other" && (
+                    <>
+                      <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
+                        Please specify your NGO *
+                      </label>
+                      <input
+                        name="affiliationOther"
+                        type="text"
+                        value={formData.affiliationOther}
+                        onChange={handleChange}
+                        placeholder="Enter your NGO name"
+                        style={{
+                          width: "100%",
+                          padding: "10px 12px",
+                          marginBottom: "16px",
+                          borderRadius: "8px",
+                          border: "1px solid #ddd",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          backgroundColor: "#FFFFFF",
+                          color: "#1C382A",
+                          minHeight: "40px",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </>
+                  )}
 
                   {/* NGO ID */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>

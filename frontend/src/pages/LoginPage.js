@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
+import Header from "../components/Header";
 import toast from "react-hot-toast";
 
 // ---- SVG Logo: Green cross with red heart ----
@@ -150,6 +151,9 @@ const LoginPage = () => {
   // ============================================================
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* HEADER WITH LOGO AND NAME */}
+      <Header showBorder={true} />
+
       {/* TOP BORDER - 48px height, #1C382A */}
       <div style={{ width: "100%", height: "48px", backgroundColor: "#1C382A" }} />
 
