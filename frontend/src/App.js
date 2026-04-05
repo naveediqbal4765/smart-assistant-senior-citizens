@@ -25,6 +25,9 @@ import ElderDashboard from "./pages/ElderDashboard";
 import CaregiverDashboard from "./pages/CaregiverDashboard";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
 
+// Test Pages
+import TestDashboardsPage from "./pages/TestDashboardsPage";
+
 // 404 Page
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -99,10 +102,14 @@ function App() {
             }
           />
 
-          {/* ---- TEST ROUTES (No authentication required - for viewing logos) ---- */}
+          {/* ---- TEST ROUTES (No authentication required - for testing) ---- */}
+          <Route path="/test-dashboards" element={<TestDashboardsPage />} />
           <Route path="/test/elder-dashboard" element={<ElderDashboard />} />
           <Route path="/test/caregiver-dashboard" element={<CaregiverDashboard />} />
           <Route path="/test/volunteer-dashboard" element={<VolunteerDashboard />} />
+          <Route path="/elder-dashboard" element={<ElderDashboard />} />
+          <Route path="/caregiver-dashboard" element={<CaregiverDashboard />} />
+          <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
 
           {/* ---- 404 Not Found ---- */}
           <Route path="*" element={<NotFoundPage />} />
