@@ -100,7 +100,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
                 {user?.email}
               </div>
               <div style={{ fontSize: "11px", color: COLORS.darkGray }}>
-                Role: {user?.role}
+                Role: {user?.role === "elder" ? "Senior" : user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
               </div>
             </div>
 
