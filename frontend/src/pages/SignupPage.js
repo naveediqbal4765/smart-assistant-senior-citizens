@@ -422,17 +422,6 @@ const SignupPage = () => {
   if (currentStep === 1) {
     return (
       <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", backgroundColor: "#1C382A", padding: "16px 40px", display: "flex", alignItems: "center", gap: "12px" }}>
-          <AppLogo size={40} />
-          <div>
-            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FFFFFF", margin: "0" }}>
-              Smart Assistant
-            </h1>
-            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "12px", color: "#BAE4C7", margin: "0" }}>
-              Care for Seniors, By Community
-            </p>
-          </div>
-        </div>
         <div
           style={{
             flex: 1,
@@ -442,12 +431,38 @@ const SignupPage = () => {
             padding: "40px 20px",
             gap: "40px",
             backgroundColor: "#A9C6B2",
-            minHeight: "calc(100vh - 96px)",
+            minHeight: "100vh",
             width: "100%",
             boxSizing: "border-box",
             flexWrap: "wrap",
+            position: "relative",
           }}
         >
+          {/* Header Overlay - Positioned absolutely */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: "#1C382A",
+              padding: "16px 40px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              zIndex: 10,
+            }}
+          >
+            <AppLogo size={40} />
+            <div>
+              <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "20px", color: "#FFFFFF", margin: "0" }}>
+                Smart Assistant
+              </h1>
+              <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "12px", color: "#BAE4C7", margin: "0" }}>
+                Care for Seniors, By Community
+              </p>
+            </div>
+          </div>
           {/* LEFT SIDE - Live Image Carousel */}
           <div
             style={{
