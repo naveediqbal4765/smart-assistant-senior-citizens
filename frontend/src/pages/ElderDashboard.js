@@ -19,7 +19,7 @@ const AppLogo = ({ size = 80 }) => (
   </svg>
 );
 
-// ---- COLOR SCHEME (Consistent with Login/Signup Pages) ----
+// ---- COLOR SCHEME ----
 const COLORS = {
   darkGreen: "#1C382A",
   mediumGreen: "#52b788",
@@ -35,12 +35,15 @@ const COLORS = {
   lightDarkGray: "#999999",
   red: "#e63946",
   yellow: "#FFC107",
+  dashboardBg: "#E2FFEB",
+  cardBg: "#BAE4C7",
 };
 
 const ElderDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+  const [medicationStates, setMedicationStates] = useState({});
 
   // Mock data
   const emergencyContacts = [
@@ -87,13 +90,16 @@ const ElderDashboard = () => {
   };
 
   const handleMedicationTaken = (medicationId) => {
-    alert(`✅ Marked "${todaysMedications.find(m => m.id === medicationId).name}" as taken!`);
+    setMedicationStates(prev => ({
+      ...prev,
+      [medicationId]: !prev[medicationId]
+    }));
   };
 
   return (
-    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.lightGray }}>
+    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.dashboardBg }}>
       {/* ============================================================
-          INTEGRATED HEADER WITH NAVBAR
+          INTEGRATED HEADER WITH NAVBAR ON RIGHT
           ============================================================ */}
       <div
         style={{
@@ -150,7 +156,6 @@ const ElderDashboard = () => {
 
             <button
               onClick={() => {
-                // Open contact modal - will be handled by Navbar component
                 const event = new CustomEvent('openContactModal');
                 window.dispatchEvent(event);
               }}
@@ -178,7 +183,6 @@ const ElderDashboard = () => {
 
             <button
               onClick={() => {
-                // Open about modal - will be handled by Navbar component
                 const event = new CustomEvent('openAboutModal');
                 window.dispatchEvent(event);
               }}
@@ -229,7 +233,7 @@ const ElderDashboard = () => {
             {screenReaderEnabled ? "🔊" : "🔇"}
           </button>
 
-          {/* Profile Dropdown */}
+          {/* Profile Dropdown - NOW ON RIGHT */}
           <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
         </div>
       </div>
@@ -258,7 +262,7 @@ const ElderDashboard = () => {
             </h3>
 
             {/* Emergency Contacts Speed Dial */}
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
                 Emergency Contacts (One-Tap Calling)
               </h4>
@@ -312,7 +316,7 @@ const ElderDashboard = () => {
             </h3>
 
             {/* Live Vitals Monitor */}
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
                 Live Vitals Monitor
               </h4>
@@ -336,7 +340,7 @@ const ElderDashboard = () => {
             </div>
 
             {/* Today's Medications */}
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
                 💊 Today's Medication Schedule
               </h4>
@@ -349,9 +353,9 @@ const ElderDashboard = () => {
                       alignItems: "center",
                       justifyContent: "space-between",
                       padding: "12px",
-                      backgroundColor: med.taken ? "#e8f5e9" : "#fff3e0",
+                      backgroundColor: medicationStates[med.id] ? "#e8f5e9" : "#fff3e0",
                       borderRadius: "8px",
-                      borderLeft: `4px solid ${med.taken ? COLORS.mediumGreen : COLORS.yellow}`,
+                      borderLeft: `4px solid ${medicationStates[med.id] ? COLORS.mediumGreen : COLORS.yellow}`,
                     }}
                   >
                     <div>
@@ -362,55 +366,48 @@ const ElderDashboard = () => {
                         {med.time}
                       </div>
                     </div>
-                    {med.taken ? (
-                      <div style={{ fontSize: "20px" }}>✅</div>
-                    ) : (
-                      <button
-                        onClick={() => handleMedicationTaken(med.id)}
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      {medicationStates[med.id] && (
+                        <div style={{ fontSize: "20px" }}>✅</div>
+                      )}
+                      <input
+                        type="checkbox"
+                        checked={medicationStates[med.id] || false}
+                        onChange={() => handleMedicationTaken(med.id)}
                         style={{
-                          padding: "8px 16px",
-                          backgroundColor: COLORS.mediumGreen,
-                          color: COLORS.white,
-                          border: "none",
-                          borderRadius: "6px",
+                          width: "20px",
+                          height: "20px",
                           cursor: "pointer",
-                          fontWeight: 600,
-                          fontSize: "12px",
-                          fontFamily: "Montserrat, sans-serif",
-                          transition: "all 0.3s ease",
+                          accentColor: COLORS.mediumGreen,
                         }}
-                        onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                        onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
-                      >
-                        I took it
-                      </button>
-                    )}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Medical Vault */}
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
                 📋 Medical Vault
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
-                <button style={{ padding: "12px", backgroundColor: COLORS.veryLightGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.darkGreen, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
+                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   📄 Lab Reports
                 </button>
-                <button style={{ padding: "12px", backgroundColor: COLORS.veryLightGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.darkGreen, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
+                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   💊 Prescriptions
                 </button>
-                <button style={{ padding: "12px", backgroundColor: COLORS.veryLightGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.darkGreen, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
+                <button style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   📊 Health History
                 </button>
@@ -426,29 +423,29 @@ const ElderDashboard = () => {
               🚗 Mobility & Help
             </h3>
 
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button style={{ padding: "20px", backgroundColor: COLORS.mediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   🛒 Request Groceries
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.mediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   🧹 Request Cleaning
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.mediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   🚕 Book a Ride
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.mediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   👥 Find Volunteer
                 </button>
@@ -464,29 +461,29 @@ const ElderDashboard = () => {
               💬 Communication & Utilities
             </h3>
 
-            <div style={{ backgroundColor: COLORS.white, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkMediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkestGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   💬 Messages
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkMediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkestGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   🎵 Sleep Timer
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkMediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkestGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  ⚙️ Settings
+                  ⏰ Medication Reminder
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkMediumGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkestGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
                   📞 Support
                 </button>
