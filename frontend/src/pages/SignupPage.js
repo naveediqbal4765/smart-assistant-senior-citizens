@@ -1573,6 +1573,35 @@ const SignupPage = () => {
                           </label>
                         ))}
                       </div>
+
+                      {/* Custom Medical Condition (if Other selected) */}
+                      {formData.medicalConditions.includes("Other") && (
+                        <>
+                          <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
+                            Please specify your medical condition *
+                          </label>
+                          <input
+                            name="medicalConditionsOther"
+                            type="text"
+                            value={formData.medicalConditionsOther}
+                            onChange={handleChange}
+                            placeholder="Enter your medical condition"
+                            style={{
+                              width: "100%",
+                              padding: "10px 12px",
+                              marginBottom: "16px",
+                              borderRadius: "8px",
+                              border: "1px solid #ddd",
+                              fontSize: "13px",
+                              fontFamily: "Montserrat, sans-serif",
+                              backgroundColor: "#FFFFFF",
+                              color: "#1C382A",
+                              minHeight: "40px",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </>
+                      )}
                     </>
                   )}
 
