@@ -1,0 +1,11 @@
+#!/bin/bash
+# Auto-push to Git after every commit
+
+echo "🚀 Auto-pushing to GitHub..."
+git push origin main
+
+if [ $? -eq 0 ]; then
+    echo "✅ Successfully pushed to GitHub"
+else
+    echo "⚠️ Push failed - please check your connection"
+fi
