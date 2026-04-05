@@ -568,6 +568,66 @@ const SignupPage = () => {
               >
                 Create Account
               </h2>
+              {/* Quick Access Links for Testing */}
+              <div style={{ width: "100%", marginBottom: "20px", textAlign: "center" }}>
+                <p style={{ fontSize: "12px", color: "#666", margin: "0 0 10px 0", fontFamily: "Montserrat, sans-serif" }}>
+                  🧪 Quick access to dashboards (testing):
+                </p>
+                <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/elder-dashboard")}
+                    style={{
+                      padding: "8px 12px",
+                      backgroundColor: "#52b788",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      fontFamily: "Montserrat, sans-serif",
+                    }}
+                  >
+                    👴 Elder
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/caregiver-dashboard")}
+                    style={{
+                      padding: "8px 12px",
+                      backgroundColor: "#2d6a4f",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      fontFamily: "Montserrat, sans-serif",
+                    }}
+                  >
+                    🏥 Caregiver
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/volunteer-dashboard")}
+                    style={{
+                      padding: "8px 12px",
+                      backgroundColor: "#1b4332",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      fontFamily: "Montserrat, sans-serif",
+                    }}
+                  >
+                    🤝 Volunteer
+                  </button>
+                </div>
+              </div>
+
               <p
                 style={{
                   fontFamily: "Montserrat, sans-serif",
