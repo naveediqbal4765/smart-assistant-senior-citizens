@@ -1580,26 +1580,84 @@ const SignupPage = () => {
                           <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
                             Please specify your medical condition *
                           </label>
-                          <input
-                            name="medicalConditionsOther"
-                            type="text"
-                            value={formData.medicalConditionsOther}
-                            onChange={handleChange}
-                            placeholder="Enter your medical condition"
-                            style={{
-                              width: "100%",
-                              padding: "10px 12px",
-                              marginBottom: "16px",
-                              borderRadius: "8px",
-                              border: "1px solid #ddd",
-                              fontSize: "13px",
-                              fontFamily: "Montserrat, sans-serif",
-                              backgroundColor: "#FFFFFF",
-                              color: "#1C382A",
-                              minHeight: "40px",
-                              boxSizing: "border-box",
-                            }}
-                          />
+                          <div style={{
+                            width: "100%",
+                            padding: "10px 12px",
+                            marginBottom: "16px",
+                            borderRadius: "8px",
+                            border: "1px solid #ddd",
+                            fontSize: "13px",
+                            fontFamily: "Montserrat, sans-serif",
+                            backgroundColor: "#FFFFFF",
+                            color: "#1C382A",
+                            minHeight: "40px",
+                            boxSizing: "border-box",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                            alignItems: "center",
+                          }}>
+                            {/* Display tags for each custom condition */}
+                            {formData.medicalConditionsOther.split(",").map((condition, idx) => {
+                              const trimmed = condition.trim();
+                              return trimmed ? (
+                                <div key={idx} style={{
+                                  backgroundColor: "#52b788",
+                                  color: "#FFFFFF",
+                                  padding: "6px 12px",
+                                  borderRadius: "20px",
+                                  fontSize: "12px",
+                                  fontWeight: 600,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "6px",
+                                  whiteSpace: "nowrap",
+                                }}>
+                                  {trimmed}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const conditions = formData.medicalConditionsOther.split(",").filter((_, i) => i !== idx);
+                                      setFormData((prev) => ({ ...prev, medicalConditionsOther: conditions.join(",") }));
+                                    }}
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                      color: "#FFFFFF",
+                                      cursor: "pointer",
+                                      fontSize: "16px",
+                                      padding: "0",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ) : null;
+                            })}
+                            <input
+                              name="medicalConditionsOther"
+                              type="text"
+                              value={formData.medicalConditionsOther}
+                              onChange={handleChange}
+                              placeholder="Type condition and press comma (,) to add"
+                              style={{
+                                border: "none",
+                                outline: "none",
+                                fontSize: "13px",
+                                fontFamily: "Montserrat, sans-serif",
+                                backgroundColor: "transparent",
+                                color: "#1C382A",
+                                flex: 1,
+                                minWidth: "150px",
+                              }}
+                            />
+                          </div>
+                          <p style={{ fontSize: "12px", color: "#666", marginTop: "-12px", marginBottom: "16px" }}>
+                            💡 Tip: Separate multiple conditions with commas (e.g., "Diabetes, Arthritis")
+                          </p>
                         </>
                       )}
                     </>
