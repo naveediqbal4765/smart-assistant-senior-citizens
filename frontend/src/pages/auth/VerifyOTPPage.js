@@ -4,8 +4,8 @@
 
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { authAPI } from "../services/api";
-import { useAuth } from "../context/AuthContext";
+import { authAPI } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
 // ---- SVG Logo: Green cross with red heart ----

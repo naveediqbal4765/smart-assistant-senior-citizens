@@ -6,9 +6,9 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { authAPI } from "../services/api";
-import Header from "../components/Header";
+import { useAuth } from "../../context/AuthContext";
+import { authAPI } from "../../services/api";
+import Header from "../../components/Header";
 import toast from "react-hot-toast";
 
 // ---- SVG Logo: Green cross with red heart ----

@@ -1,7 +1,7 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 
 // ---- SVG Logo: Green cross with red heart ----
 const AppLogo = ({ size = 80 }) => (

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import { useAuth } from "../../context/AuthContext";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
 
 const COLORS = {
   darkGreen: "#1C382A",
