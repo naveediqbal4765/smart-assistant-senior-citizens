@@ -105,11 +105,11 @@ const SignupPage = () => {
 
   // Image URLs from public folder
   const images = [
-    require("../assets/images/signup-1.jpeg"),
-    require("../assets/images/signup-2.jpeg"),
-    require("../assets/images/signup-3.jpeg"),
-    require("../assets/images/signup-4.jpeg"),
-    require("../assets/images/signup-5.jpeg"),
+    require("../../assets/images/signup-1.jpeg"),
+    require("../../assets/images/signup-2.jpeg"),
+    require("../../assets/images/signup-3.jpeg"),
+    require("../../assets/images/signup-4.jpeg"),
+    require("../../assets/images/signup-5.jpeg"),
   ];
 
   // Auto-rotate images every 5 seconds
