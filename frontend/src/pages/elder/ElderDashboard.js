@@ -231,27 +231,6 @@ const ElderDashboard = () => {
 
         {/* Right Side: Screen Reader + Profile */}
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          {/* Screen Reader Toggle */}
-          <button
-            onClick={handleScreenReaderToggle}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.veryLightGreen,
-              color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen,
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: "12px",
-              fontFamily: "Montserrat, sans-serif",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-          >
-            {screenReaderEnabled ? "🔊" : "🔇"}
-          </button>
-
           {/* Profile Dropdown - NOW ON RIGHT */}
           <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
         </div>
@@ -574,24 +553,28 @@ const ElderDashboard = () => {
         🆘
       </button>
 
-      {/* Screen Recorder Tab - Bottom Corner */}
+      {/* Screen Reader Tab - Bottom Corner */}
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}>
-        <button style={{ 
-          backgroundColor: COLORS.darkGreen, 
-          color: COLORS.white, 
-          padding: "10px 20px", 
-          borderRadius: "30px", 
-          border: "none", 
-          cursor: "pointer", 
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "12px",
-          fontWeight: 600
-        }}>
-          <span style={{ width: '10px', height: '10px', backgroundColor: '#ff4d4d', borderRadius: '50%', display: 'inline-block' }}></span>
-          Screen Recorder
+        <button 
+          onClick={handleScreenReaderToggle}
+          style={{ 
+            backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.darkGreen, 
+            color: COLORS.white, 
+            padding: "10px 20px", 
+            borderRadius: "30px", 
+            border: "none", 
+            cursor: "pointer", 
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "12px",
+            fontWeight: 600,
+            transition: "all 0.3s ease"
+          }}
+        >
+          <span style={{ width: '10px', height: '10px', backgroundColor: screenReaderEnabled ? '#fff' : '#ff4d4d', borderRadius: '50%', display: 'inline-block' }}></span>
+          {screenReaderEnabled ? "Screen Reader On" : "Screen Reader Off"}
         </button>
       </div>
 
