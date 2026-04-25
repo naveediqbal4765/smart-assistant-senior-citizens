@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import Logo from "../../assets/images/Logo.png";
-import * as MageIcons from "mage-icons-react";
 
 // ---- COLOR SCHEME ----
 const COLORS = {
@@ -174,8 +173,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              <MageIcons.HomeIcon size={18} />
-              Home
+              🏠 Home
             </button>
 
             <button
@@ -205,8 +203,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              <MageIcons.PhoneIcon size={18} />
-              Contact
+              📞 Contact
             </button>
 
             <button
@@ -236,8 +233,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              <MageIcons.InformationCircleIcon size={18} />
-              About Us
+              ℹ️ About Us
             </button>
           </div>
         </div>
@@ -328,9 +324,7 @@ const ElderDashboard = () => {
                       e.currentTarget.style.color = "inherit";
                     }}
                   >
-                    <div style={{ fontSize: "32px" }}>
-                      {contact.id === 3 ? <MageIcons.UserIcon size={32} /> : <MageIcons.UserIcon size={32} />}
-                    </div>
+                    <div style={{ fontSize: "32px" }}>{contact.emoji}</div>
                     <div style={{ fontSize: "12px", fontWeight: 600, color: COLORS.darkGreen, textAlign: "center" }}>
                       {contact.name}
                     </div>
@@ -358,18 +352,15 @@ const ElderDashboard = () => {
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.red}` }}>
-                  {MageIcons.HeartIcon ? <MageIcons.HeartIcon size={32} color={COLORS.red} style={{ margin: '0 auto 8px auto' }} /> : "❤️"}
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>{vitals.heartRate}</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>❤️ {vitals.heartRate}</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Heart Rate (bpm)</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.mediumGreen}` }}>
-                  {MageIcons.LungsIcon ? <MageIcons.LungsIcon size={32} color={COLORS.mediumGreen} style={{ margin: '0 auto 8px auto' }} /> : "🫁"}
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>{vitals.oxygen}%</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>🫁 {vitals.oxygen}%</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Oxygen Level</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                  {MageIcons.ThermometerIcon ? <MageIcons.ThermometerIcon size={32} color={COLORS.yellow} style={{ margin: '0 auto 8px auto' }} /> : "🌡️"}
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>{vitals.temperature}°C</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>🌡️ {vitals.temperature}°C</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Temperature</div>
                 </div>
               </div>
@@ -432,26 +423,23 @@ const ElderDashboard = () => {
                 📋 Medical Vault
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
-                <button onClick={() => navigate("/elder-lab-reports")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-lab-reports")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.DocumentTextIcon size={18} />
-                  Lab Reports
+                  📄 Lab Reports
                 </button>
-                <button onClick={() => navigate("/elder-prescriptions")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-prescriptions")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.DocumentTextIcon size={18} />
-                  Prescriptions
+                  💊 Prescriptions
                 </button>
-                <button onClick={() => navigate("/elder-health-history")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-health-history")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.DocumentTextIcon size={18} />
-                  Health History
+                  📊 Health History
                 </button>
               </div>
             </div>
@@ -467,33 +455,29 @@ const ElderDashboard = () => {
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button onClick={() => navigate("/elder-task-request")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-task-request")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.DocumentTextIcon size={24} />
-                  Task Request
+                  📋 Task Request
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.InformationCircleIcon size={24} />
-                  AI Voice Assistant
+                  🎤 AI Voice Assistant
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.InformationCircleIcon size={24} />
-                  Book a Ride
+                  🚕 Book a Ride
                 </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.UserIcon size={24} />
-                  Find Volunteer
+                  👥 Find Volunteer
                 </button>
               </div>
             </div>
@@ -509,33 +493,29 @@ const ElderDashboard = () => {
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button onClick={() => navigate("/elder-messages")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-messages")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.ChatBubbleLeftRightIcon size={24} />
-                  Messages
+                  💬 Messages
                 </button>
-                <button onClick={() => navigate("/elder-sleep-timer")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-sleep-timer")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.ClockIcon size={24} />
-                  Sleep Timer
+                  🎵 Sleep Timer
                 </button>
-                <button onClick={() => navigate("/elder-medication-reminder")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-medication-reminder")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.CalendarIcon size={24} />
-                  Medication Reminder
+                  ⏰ Medication Reminder
                 </button>
-                <button onClick={() => navigate("/elder-physical-rehabilitation")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}
+                <button onClick={() => navigate("/elder-physical-rehabilitation")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  <MageIcons.InformationCircleIcon size={24} />
-                  Physical Rehabilitation
+                  💪 Physical Rehabilitation
                 </button>
               </div>
             </div>
