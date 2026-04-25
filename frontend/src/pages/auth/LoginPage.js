@@ -143,8 +143,8 @@ const LoginPage = () => {
         display: "flex", 
         flexDirection: "column",
         backgroundImage: `url(${Background})`,
-        backgroundColor: '#1a1a1a',
-        backgroundBlendMode: 'multiply',
+        backgroundColor: 'rgba(26, 26, 26, 0.4)',
+        backgroundBlendMode: 'overlay',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
