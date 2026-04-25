@@ -149,7 +149,20 @@ const LoginPage = () => {
   // RENDER - FULLY RESPONSIVE WITH PROPER PROPORTIONS
   // ============================================================
   return (
-    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div 
+      style={{ 
+        fontFamily: "Montserrat, sans-serif", 
+        minHeight: "100vh", 
+        display: "flex", 
+        flexDirection: "column",
+        backgroundImage: `url('/assets/Background.jpg')`,
+        backgroundColor: '#1a1a1a',
+        backgroundBlendMode: 'multiply',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
       {/* MAIN CONTENT - Responsive Horizontal Layout */}
       <div
         style={{
@@ -160,7 +173,6 @@ const LoginPage = () => {
           padding: "40px 20px",
           paddingTop: "clamp(100px, 20vw, 150px)",
           gap: "40px",
-          backgroundColor: "#A9C6B2",
           minHeight: "100vh",
           width: "100%",
           boxSizing: "border-box",
@@ -185,7 +197,11 @@ const LoginPage = () => {
             justifyContent: "flex-start",
           }}
         >
-          <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+          <img 
+            src="/assets/Logo.png" 
+            alt="Logo" 
+            style={{ width: 'auto', height: 'clamp(32px, 4vw, 48px)', objectFit: 'contain' }} 
+          />
           <div style={{ minWidth: "0", flex: "1 1 auto" }}>
             <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Smart Assistant
@@ -212,7 +228,7 @@ const LoginPage = () => {
         >
           {/* Logo */}
           <div style={{ marginBottom: "30px", flexShrink: 0 }}>
-            <AppLogo size={120} />
+            <img src="/assets/Logo.png" alt="Smart Assistant Logo" style={{ width: '120px', height: 'auto' }} />
           </div>
 
           {/* Title */}
@@ -222,7 +238,7 @@ const LoginPage = () => {
               fontWeight: 700,
               fontSize: "clamp(28px, 4vw, 48px)",
               lineHeight: "1.2",
-              color: "#1C382A",
+              color: "#FFFFFF",
               margin: "0 0 20px 0",
             }}
           >
@@ -235,13 +251,13 @@ const LoginPage = () => {
               fontFamily: "Montserrat, sans-serif",
               fontSize: "clamp(14px, 2vw, 18px)",
               lineHeight: "1.6",
-              color: "#1C382A",
+              color: "#FFFFFF",
               margin: "0",
               maxWidth: "100%",
+              opacity: 0.9
             }}
           >
-            <span style={{ color: "#1C382A", fontWeight: 700 }}>Lorem Ipsum</span>
-            <span style={{ fontWeight: 400 }}> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</span>
+            Smart Assistant is a gateway to independence, empowering seniors with secure health monitoring, instant connectivity, and dignified daily living.
           </p>
         </div>
 
@@ -251,7 +267,7 @@ const LoginPage = () => {
             display: window.innerWidth >= 900 ? "block" : "none",
             width: "1px",
             minHeight: "350px",
-            backgroundColor: "#1C382A4D",
+            backgroundColor: "#FFFFFF4D",
             flexShrink: 0,
           }}
         />
@@ -268,7 +284,8 @@ const LoginPage = () => {
         >
           <div
             style={{
-              backgroundColor: "#BAE4C7",
+              backgroundColor: "rgba(186, 228, 199, 0.9)",
+              backdropFilter: "blur(10px)",
               borderRadius: "48px",
               padding: "40px",
               boxShadow: "9px 10px 20px 2px #00000040",
@@ -279,7 +296,7 @@ const LoginPage = () => {
           >
             {/* Form Logo */}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-              <AppLogo size={70} />
+              <img src="/assets/Logo.png" alt="Form Logo" style={{ width: '70px', height: 'auto' }} />
             </div>
 
             {/* Error Message */}
@@ -658,33 +675,6 @@ const LoginPage = () => {
                   }}
                 >
                   <FacebookIcon />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleOAuth("Apple")}
-                  title="Continue with Apple"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <AppleIcon />
                 </button>
               </div>
             </form>

@@ -44,6 +44,29 @@ const ElderDashboard = () => {
   const navigate = useNavigate();
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
   const [medicationStates, setMedicationStates] = useState({});
+  const [sosPos, setSosPos] = useState({ x: 20, y: 20 });
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStart = (e) => {
+    setIsDragging(true);
+  };
+
+  const handleDrag = (e) => {
+    if (isDragging) {
+      const x = e.clientX || (e.touches && e.touches[0].clientX);
+      const y = e.clientY || (e.touches && e.touches[0].clientY);
+      if (x && y) {
+        setSosPos({
+          x: window.innerWidth - x - 60,
+          y: window.innerHeight - y - 60
+        });
+      }
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   // Mock data
   const emergencyContacts = [
@@ -97,7 +120,13 @@ const ElderDashboard = () => {
   };
 
   return (
-    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.dashboardBg }}>
+    <div 
+      style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.dashboardBg, position: "relative", overflowX: "hidden" }}
+      onMouseMove={handleDrag}
+      onTouchMove={handleDrag}
+      onMouseUp={handleDragEnd}
+      onTouchEnd={handleDragEnd}
+    >
       {/* ============================================================
           INTEGRATED HEADER WITH NAVBAR ON RIGHT
           ============================================================ */}
@@ -106,7 +135,7 @@ const ElderDashboard = () => {
           position: "sticky",
           top: 0,
           backgroundColor: COLORS.darkGreen,
-          padding: "clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px)",
+          padding: "clamp(10px, 2vw, 20px) clamp(10px, 4vw, 40px)",
           display: "flex",
           alignItems: "center",
           gap: "clamp(8px, 2vw, 16px)",
@@ -117,19 +146,23 @@ const ElderDashboard = () => {
         }}
       >
         {/* Left Side: Logo + Title + Navigation */}
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: 1, minWidth: "0" }}>
-          <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: "1 1 auto", minWidth: "0" }}>
+          <img 
+            src="/assets/Logo.png" 
+            alt="Logo" 
+            style={{ width: 'auto', height: 'clamp(32px, 4vw, 48px)', objectFit: 'contain' }} 
+          />
           <div style={{ minWidth: "0", flex: "0 1 auto" }}>
-            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: COLORS.white, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(14px, 3vw, 22px)", color: COLORS.white, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Smart Assistant
             </h1>
-            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: COLORS.veryLightGreen, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(9px, 1.5vw, 13px)", color: COLORS.veryLightGreen, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Care for Seniors, By Community
             </p>
           </div>
 
-          {/* Navigation Links */}
-          <div style={{ display: "flex", gap: "12px", alignItems: "center", marginLeft: "20px" }}>
+          {/* Navigation Links - Responsive */}
+          <div style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "12px", alignItems: "center", marginLeft: "20px" }}>
             <button
               onClick={() => navigate("/elder-dashboard")}
               style={{
@@ -241,11 +274,11 @@ const ElderDashboard = () => {
       {/* ============================================================
           MAIN CONTENT
           ============================================================ */}
-      <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
+      <div style={{ flex: 1, padding: "clamp(10px, 3vw, 20px)", overflowY: "auto" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           {/* Welcome Section */}
           <div style={{ marginBottom: "30px" }}>
-            <h2 style={{ fontSize: "28px", fontWeight: 700, color: COLORS.darkGreen, margin: "0 0 10px 0" }}>
+            <h2 style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: 700, color: COLORS.darkGreen, margin: "0 0 10px 0" }}>
               Welcome, {user?.fullName.split(" ")[0]}! 👋
             </h2>
             <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
@@ -320,17 +353,20 @@ const ElderDashboard = () => {
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
                 Live Vitals Monitor
               </h4>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "15px" }}>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.red}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>❤️ {vitals.heartRate}</div>
+                  <img src="https://www.svgrepo.com/show/532259/heart.svg" alt="Heart Rate" style={{ width: '32px', height: '32px', margin: '0 auto 8px auto' }} />
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>{vitals.heartRate}</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Heart Rate (bpm)</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.mediumGreen}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>🫁 {vitals.oxygen}%</div>
+                  <img src="https://www.svgrepo.com/show/532317/lungs.svg" alt="Oxygen" style={{ width: '32px', height: '32px', margin: '0 auto 8px auto' }} />
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>{vitals.oxygen}%</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Oxygen Level</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>🌡️ {vitals.temperature}°C</div>
+                  <img src="https://www.svgrepo.com/show/532311/thermometer.svg" alt="Temperature" style={{ width: '32px', height: '32px', margin: '0 auto 8px auto' }} />
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>{vitals.temperature}°C</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Temperature</div>
                 </div>
               </div>
@@ -520,42 +556,58 @@ const ElderDashboard = () => {
       </div>
 
       {/* ============================================================
-          FIXED SOS BUTTON (Always Visible at Bottom Center)
+          DRAGGABLE SOS BUTTON
           ============================================================ */}
       <button
         onClick={handleSOS}
+        onMouseDown={handleDragStart}
+        onTouchStart={handleDragStart}
         style={{
           position: "fixed",
-          bottom: "30px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "120px",
-          height: "120px",
+          bottom: `${sosPos.y}px`,
+          right: `${sosPos.x}px`,
+          width: "clamp(80px, 15vw, 120px)",
+          height: "clamp(80px, 15vw, 120px)",
           borderRadius: "50%",
           backgroundColor: COLORS.red,
           color: COLORS.white,
           border: `4px solid ${COLORS.white}`,
-          fontSize: "48px",
+          fontSize: "clamp(24px, 5vw, 48px)",
           fontWeight: 700,
-          cursor: "pointer",
+          cursor: "move",
           boxShadow: "0 8px 24px rgba(230, 57, 70, 0.4)",
           zIndex: 100,
-          transition: "all 0.3s ease",
+          transition: isDragging ? "none" : "all 0.3s ease",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.transform = "translateX(-50%) scale(1.1)";
-          e.target.style.boxShadow = "0 12px 32px rgba(230, 57, 70, 0.6)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.transform = "translateX(-50%) scale(1)";
-          e.target.style.boxShadow = "0 8px 24px rgba(230, 57, 70, 0.4)";
+          userSelect: "none",
+          touchAction: "none"
         }}
       >
         🆘
       </button>
+
+      {/* Screen Recorder Tab - Bottom Corner */}
+      <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}>
+        <button style={{ 
+          backgroundColor: COLORS.darkGreen, 
+          color: COLORS.white, 
+          padding: "10px 20px", 
+          borderRadius: "30px", 
+          border: "none", 
+          cursor: "pointer", 
+          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontSize: "12px",
+          fontWeight: 600
+        }}>
+          <span style={{ width: '10px', height: '10px', backgroundColor: '#ff4d4d', borderRadius: '50%', display: 'inline-block' }}></span>
+          Screen Recorder
+        </button>
+      </div>
 
       {/* Footer */}
       <Footer />

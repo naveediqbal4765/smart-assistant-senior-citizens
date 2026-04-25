@@ -71,8 +71,8 @@ const ElderMyProfile = () => {
       {/* Header */}
       <div style={{ position: "sticky", top: 0, backgroundColor: COLORS.darkGreen, padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-          <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
-            ← Back
+          <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "16px", fontWeight: 600 }}>
+            Back
           </button>
           <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>👤 My Profile</h1>
         </div>
@@ -88,12 +88,18 @@ const ElderMyProfile = () => {
       <div style={{ flex: 1, padding: "20px", maxWidth: "800px", margin: "0 auto", width: "100%" }}>
         {/* Profile Header */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "30px", marginBottom: "30px", textAlign: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <div style={{ fontSize: "80px", marginBottom: "15px" }}>👴</div>
+          <div style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "transparent", margin: "0 auto 15px auto", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "80px", overflow: "hidden" }}>
+            {user?.profileImage ? (
+              <img src={user.profileImage} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              "👴"
+            )}
+          </div>
           <h2 style={{ color: COLORS.darkGreen, margin: "0 0 10px 0", fontSize: "24px", fontWeight: 700 }}>
             {profileData.fullName}
           </h2>
           <p style={{ color: COLORS.darkGray, margin: "0 0 15px 0", fontSize: "14px" }}>
-            Role: <strong>Elder</strong>
+            Role: <strong>{user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : "Elder"}</strong>
           </p>
           {!isEditing && (
             <button
