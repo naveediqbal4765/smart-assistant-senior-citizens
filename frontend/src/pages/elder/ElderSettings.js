@@ -68,14 +68,34 @@ const ElderSettings = () => {
       <div style={{ position: "sticky", top: 0, backgroundColor: COLORS.darkGreen, padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
-            ← Back
+            Back
           </button>
           <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>⚙️ Settings</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <button onClick={handleScreenReaderToggle} style={{ padding: "8px 12px", backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.veryLightGreen, color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen, border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>
-            {screenReaderEnabled ? "🔊" : "🔇"}
-          </button>
+      <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
+        <button 
+          onClick={handleScreenReaderToggle} 
+          style={{ 
+            backgroundColor: screenReaderEnabled ? "#52b788" : "#1C382A", 
+            color: "#FFFFFF", 
+            padding: "10px 20px", 
+            borderRadius: "30px", 
+            border: "none", 
+            cursor: "pointer", 
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)", 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "8px", 
+            fontSize: "12px", 
+            fontWeight: 600, 
+            transition: "all 0.3s ease" 
+          }} 
+        > 
+          <span style={{ width: "10px", height: "10px", backgroundColor: screenReaderEnabled ? "#fff" : "#ff4d4d", borderRadius: "50%", display: "inline-block" }}></span> 
+          {screenReaderEnabled ? "Screen Reader On" : "Screen Reader Off"} 
+        </button> 
+      </div>
           <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
         </div>
       </div>

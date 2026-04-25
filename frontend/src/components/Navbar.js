@@ -53,7 +53,6 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           PROFILE DROPDOWN ONLY
           ============================================================ */}
       <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" }}>
-        <img src={Logo} alt="Logo" style={{ height: '32px', width: 'auto' }} />
         <button
           onClick={() => setShowProfileMenu(!showProfileMenu)}
           style={{

@@ -258,6 +258,29 @@ const ElderDashboard = () => {
         {/* Right Side: Screen Reader + Profile */}
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           {/* Profile Dropdown - NOW ON RIGHT */}
+      <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
+        <button 
+          onClick={handleScreenReaderToggle} 
+          style={{ 
+            backgroundColor: screenReaderEnabled ? "#52b788" : "#1C382A", 
+            color: "#FFFFFF", 
+            padding: "10px 20px", 
+            borderRadius: "30px", 
+            border: "none", 
+            cursor: "pointer", 
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)", 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "8px", 
+            fontSize: "12px", 
+            fontWeight: 600, 
+            transition: "all 0.3s ease" 
+          }} 
+        > 
+          <span style={{ width: "10px", height: "10px", backgroundColor: screenReaderEnabled ? "#fff" : "#ff4d4d", borderRadius: "50%", display: "inline-block" }}></span> 
+          {screenReaderEnabled ? "Screen Reader On" : "Screen Reader Off"} 
+        </button> 
+      </div>
           <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
         </div>
       </div>
