@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import Logo from "../../assets/images/Logo.png";
 
 const COLORS = {
   darkGreen: "#1C382A",
@@ -74,7 +75,8 @@ const ElderMyProfile = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "16px", fontWeight: 600 }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>👤 My Profile</h1>
+          <img src={Logo} alt="Logo" style={{ height: '32px', width: 'auto' }} />
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>My Profile</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <button onClick={handleScreenReaderToggle} style={{ padding: "8px 12px", backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.veryLightGreen, color: screenReaderEnabled ? COLORS.white : COLORS.darkGreen, border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: 600, fontSize: "12px" }}>

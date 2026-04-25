@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Logo from "../assets/images/Logo.png";
 
 // ---- COLOR SCHEME ----
 const COLORS = {
@@ -51,7 +52,8 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
       {/* ============================================================
           PROFILE DROPDOWN ONLY
           ============================================================ */}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" }}>
+        <img src={Logo} alt="Logo" style={{ height: '32px', width: 'auto' }} />
         <button
           onClick={() => setShowProfileMenu(!showProfileMenu)}
           style={{
