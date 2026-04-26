@@ -13,6 +13,10 @@ const {
   generateRememberMeToken,
   getRememberMeExpiration,
 } = require("../src/utils/rememberMeService");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../src/utils/jwtService");
 
 const router = express.Router();
 
