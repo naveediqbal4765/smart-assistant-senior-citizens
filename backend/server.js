@@ -13,11 +13,14 @@ const { errorHandler } = require("./middleware/errorHandler");
 // Load environment variables
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 // Initialize Express app
 const app = express();
+
+// Connect to database (async)
+connectDB().catch(err => {
+  console.error(`❌ Failed to connect to MongoDB: ${err.message}`);
+  process.exit(1);
+});
 
 // ============================================================
 // Middleware
