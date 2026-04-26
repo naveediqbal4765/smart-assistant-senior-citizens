@@ -119,8 +119,19 @@ const sendOTPEmail = async (email, otp, purpose = "verification", name = "User")
     text: `Your OTP is: ${otp}. It expires in 10 minutes. Do not share this with anyone.`, // Plain text fallback
   };
 
-  await transporter.sendMail(mailOptions);
-  console.log(`📧 OTP email sent to: ${email} (Purpose: ${purpose})`);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ OTP email sent successfully!`);
+    console.log(`   To: ${email}`);
+    console.log(`   Purpose: ${purpose}`);
+    console.log(`   Message ID: ${info.messageId}`);
+    console.log(`   Response: ${info.response}`);
+  } catch (error) {
+    console.error(`❌ Failed to send OTP email to ${email}`);
+    console.error(`   Error: ${error.message}`);
+    console.error(`   Code: ${error.code}`);
+    throw error;
+  }
 };
 
 module.exports = { generateOTP, getOTPExpiry, sendOTPEmail };
