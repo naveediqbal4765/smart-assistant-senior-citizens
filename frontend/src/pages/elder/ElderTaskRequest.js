@@ -65,11 +65,11 @@ const ElderTaskRequest = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case "completed":
-        return "✅";
+        return "✓";
       case "in-progress":
         return "⏳";
       default:
-        return "⏱️";
+        return "⏱";
     }
   };
 
