@@ -615,13 +615,49 @@ router.post("/verify-remember-me", async (req, res) => {
 // ============================================================
 router.post("/logout", protect, async (req, res) => {
   try {
+    // Get token from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.substring(7) : null; // Remove "Bearer " prefix
+
     // Clear remember me token for this user
     const user = await User.findById(req.user.userId);
     if (user) {
       user.rememberMeToken = null;
       user.rememberMeExpiry = null;
       user.rememberMeLastUsed = null;
+      user.refreshToken = null;
+      user.refreshTokenExpiry = null;
+      user.refreshTokenFamily = null;
+      user.refreshTokenRotationCount = 0;
       await user.save();
+    }
+
+    // Add token to blacklist if available
+    if (token && user) {
+      try {
+        const { revokeToken } = require("../middleware/tokenRevocation");
+        const { decodeToken } = require("../src/utils/jwtService");
+
+        const decoded = decodeToken(token);
+        if (decoded && decoded.exp) {
+          const expiresAt = new Date(decoded.exp * 1000);
+          const ipAddress = req.ip || req.connection.remoteAddress;
+          const userAgent = req.headers["user-agent"];
+
+          await revokeToken(
+            token,
+            user._id,
+            "access",
+            expiresAt,
+            "logout",
+            ipAddress,
+            userAgent
+          );
+        }
+      } catch (error) {
+        console.error("[Auth] Error adding token to blacklist:", error);
+        // Continue with logout even if blacklist fails
+      }
     }
 
     res.status(200).json({

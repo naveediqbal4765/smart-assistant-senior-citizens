@@ -8,6 +8,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import createAPIInterceptor from "../services/apiInterceptor";
 import toast from "react-hot-toast";
 
 // Create the Auth Context
