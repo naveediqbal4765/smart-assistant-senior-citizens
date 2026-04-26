@@ -688,17 +688,26 @@ router.post("/google", async (req, res) => {
       });
     }
 
-    // Verify Google token (in production, verify with Google's API)
-    // For now, we'll extract the token payload
+    // Verify Google token
     let googleUser;
     try {
-      // Decode JWT token (without verification for now)
+      // The token from Google Sign-In is a JWT
+      // We'll decode it without verification for development
+      // In production, verify with Google's API
       const parts = token.split('.');
+      
       if (parts.length !== 3) {
         throw new Error("Invalid token format");
       }
       
-      const decoded = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+      // Decode the payload (second part)
+      const payload = parts[1];
+      // Add padding if needed
+      const padded = payload + '='.repeat((4 - payload.length % 4) % 4);
+      const decoded = JSON.parse(Buffer.from(padded, 'base64').toString());
+      
+      console.log('Google token decoded:', decoded);
+      
       googleUser = {
         googleId: decoded.sub,
         email: decoded.email,
@@ -709,7 +718,7 @@ router.post("/google", async (req, res) => {
       console.error("Token decode error:", error);
       return res.status(401).json({
         success: false,
-        message: "Invalid Google token",
+        message: "Invalid Google token: " + error.message,
       });
     }
 
@@ -791,7 +800,7 @@ router.post("/google", async (req, res) => {
     console.error("Google login error:", error);
     res.status(500).json({
       success: false,
-      message: "Google login failed",
+      message: "Google login failed: " + error.message,
       error: error.message,
     });
   }
