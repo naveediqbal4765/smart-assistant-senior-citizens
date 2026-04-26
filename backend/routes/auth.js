@@ -749,6 +749,11 @@ router.post("/google", async (req, res) => {
       const elder = new Elder({
         userId: user._id,
         email: googleUser.email,
+        livesAlone: false, // Default value for OAuth users
+        emergencyContacts: [],
+        medicalConditions: [],
+        hasMedicalIssues: false,
+        locationPermission: false,
       });
       await elder.save();
 
@@ -872,6 +877,11 @@ router.post("/facebook", async (req, res) => {
       const elder = new Elder({
         userId: user._id,
         email: facebookUser.email,
+        livesAlone: false, // Default value for OAuth users
+        emergencyContacts: [],
+        medicalConditions: [],
+        hasMedicalIssues: false,
+        locationPermission: false,
       });
       await elder.save();
 
