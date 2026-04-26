@@ -136,16 +136,29 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
       }
 
       // Show success message
-      toast.success(`Welcome back, ${user.fullName}!`);
+      toast.success(`Welcome, ${user.fullName}!`);
 
       // Call success callback
       if (onSuccess) {
         onSuccess(user);
       }
 
-      // Redirect to dashboard
-      const dashboardPath = `/dashboard/${user.role}`;
-      navigate(dashboardPath);
+      // Check if new user without role - redirect to role selection
+      if (data.data.isNewUser && !user.role) {
+        navigate("/select-role", {
+          state: {
+            userId: user.userId,
+            email: user.email,
+            fullName: user.fullName,
+            profilePicture: user.profilePicture,
+            accessToken,
+          },
+        });
+      } else {
+        // Existing user - redirect to dashboard
+        const dashboardPath = `/dashboard/${user.role}`;
+        navigate(dashboardPath);
+      }
     } catch (error) {
       console.error("[Google Login] Error:", error);
       toast.error(error.message || "Google login failed");

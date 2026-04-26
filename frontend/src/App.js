@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
 import VerifyOTPPage from "./pages/auth/VerifyOTPPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
@@ -78,6 +79,7 @@ function App() {
 
           {/* ---- Public Auth Routes ---- */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/select-role" element={<RoleSelectionPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/verify-otp" element={<VerifyOTPPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
