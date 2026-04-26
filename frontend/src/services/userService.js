@@ -26,10 +26,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only redirect to login on 401 (Unauthorized)
+    // Don't redirect on network errors or other status codes
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
+    // For all other errors (including network errors), just reject
     return Promise.reject(error);
   }
 );
