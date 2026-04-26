@@ -165,11 +165,9 @@ const userSchema = new mongoose.Schema(
       verificationToken: { type: String, select: false },     // Token for password reset confirmation
     },
 
-    // ---- JWT Refresh Token for Session Persistence ----
-    refreshToken: { type: String, select: false },            // Refresh token for generating new access tokens
-    refreshTokenExpiry: { type: Date, select: false },        // Refresh token expiration (7 days)
-    refreshTokenFamily: { type: String, select: false },      // Token family for rotation detection
-    refreshTokenRotationCount: { type: Number, default: 0, select: false }, // Track token rotations
+    // ---- OAuth Integration ----
+    googleId: { type: String, default: null, sparse: true },  // Google OAuth ID
+    facebookId: { type: String, default: null, sparse: true }, // Facebook OAuth ID (for future use)
 
     // ---- Role-Specific Data (only one will be populated based on role) ----
     elderData: { type: elderSchema, default: null },
