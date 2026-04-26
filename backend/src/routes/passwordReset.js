@@ -142,8 +142,17 @@ router.post('/verify-otp', otpVerificationLimiter, async (req, res) => {
       });
     }
 
-    // Check if OTP matches
-    if (user.passwordReset.otp !== otp) {
+    // Check if OTP matches (trim whitespace for comparison)
+    const trimmedOTP = otp.trim();
+    const storedOTP = user.passwordReset.otp.trim();
+    
+    if (storedOTP !== trimmedOTP) {
+      console.log('OTP Mismatch Debug:', {
+        received: trimmedOTP,
+        stored: storedOTP,
+        receivedLength: trimmedOTP.length,
+        storedLength: storedOTP.length,
+      });
       return res.status(400).json({
         success: false,
         message: 'Invalid OTP. Please try again.',
