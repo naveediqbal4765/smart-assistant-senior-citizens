@@ -104,7 +104,6 @@ const caregiverSchema = new mongoose.Schema(
 // ============================================================
 // Indexes
 // ============================================================
-caregiverSchema.index({ userId: 1 });
 caregiverSchema.index({ assignedElders: 1 });
 caregiverSchema.index({ isAvailable: 1 });
 

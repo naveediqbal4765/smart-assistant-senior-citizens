@@ -132,7 +132,6 @@ const volunteerSchema = new mongoose.Schema(
 // ============================================================
 // Indexes
 // ============================================================
-volunteerSchema.index({ userId: 1 });
 volunteerSchema.index({ "currentLocation.coordinates": "2dsphere" });
 volunteerSchema.index({ skills: 1 });
 volunteerSchema.index({ availabilityDays: 1 });

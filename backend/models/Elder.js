@@ -123,7 +123,6 @@ const elderSchema = new mongoose.Schema(
 // ============================================================
 // Indexes
 // ============================================================
-elderSchema.index({ userId: 1 });
 elderSchema.index({ "currentLocation.coordinates": "2dsphere" });
 elderSchema.index({ assignedCaregivers: 1 });
 
