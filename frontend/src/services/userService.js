@@ -34,6 +34,17 @@ api.interceptors.response.use(
   }
 );
 
+// Helper function to extract error message
+const getErrorMessage = (error) => {
+  if (error.response?.data?.message) {
+    return error.response.data.message;
+  }
+  if (error.message) {
+    return error.message;
+  }
+  return "An error occurred";
+};
+
 /**
  * Get user profile
  * @returns {Promise} User profile data
@@ -43,7 +54,9 @@ export const getProfile = async () => {
     const response = await api.get("/users/profile");
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to fetch profile" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 
@@ -57,7 +70,9 @@ export const updateProfile = async (profileData) => {
     const response = await api.put("/users/profile", profileData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to update profile" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 
@@ -75,7 +90,9 @@ export const changePassword = async (currentPassword, newPassword) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to change password" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 
@@ -91,7 +108,9 @@ export const deleteAccount = async (password) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to delete account" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 
@@ -122,7 +141,9 @@ export const uploadProfilePicture = async (file, onProgress) => {
 
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to upload profile picture" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 
@@ -136,7 +157,9 @@ export const getUserById = async (userId) => {
     const response = await api.get(`/users/${userId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Failed to fetch user" };
+    const errorMessage = getErrorMessage(error);
+    const err = new Error(errorMessage);
+    throw err;
   }
 };
 

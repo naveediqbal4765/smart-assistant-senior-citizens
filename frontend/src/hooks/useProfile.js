@@ -24,9 +24,17 @@ export const useProfile = () => {
       setProfile(response.data || response);
       return response.data || response;
     } catch (err) {
-      const errorMessage = err?.message || err?.error || "Failed to fetch profile";
+      // Extract error message from Error object
+      let errorMessage = "Failed to fetch profile";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === "string") {
+        errorMessage = err;
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
       setError(errorMessage);
-      console.error("Profile fetch error:", err);
+      console.error("Profile fetch error:", errorMessage, err);
       // Don't throw - just set error state
     } finally {
       setLoading(false);
