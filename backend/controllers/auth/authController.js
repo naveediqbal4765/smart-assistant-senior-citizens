@@ -190,9 +190,9 @@ const signup = async (req, res) => {
     const otp = generateOTP();
     const otpExpiry = getOTPExpiry();
 
-    // Hash OTP before storing (security best practice)
-    const salt = await bcrypt.genSalt(10);
-    newUser.otp = await bcrypt.hash(otp, salt);
+    // Store OTP as plain text (will be cleared after verification)
+    // Note: OTP is temporary and expires in 10 minutes, so hashing adds complexity without much benefit
+    newUser.otp = otp;
     newUser.otpExpiry = otpExpiry;
     newUser.otpPurpose = "email-verification";
     await newUser.save({ validateBeforeSave: false });
@@ -262,9 +262,8 @@ const verifyOTP = async (req, res) => {
       });
     }
 
-    // Compare entered OTP with hashed OTP in database
-    const isOTPValid = await bcrypt.compare(otp, user.otp);
-    if (!isOTPValid) {
+    // Compare entered OTP with stored OTP (plain text comparison)
+    if (otp !== user.otp) {
       return res.status(400).json({
         success: false,
         message: "Invalid OTP. Please check and try again.",
