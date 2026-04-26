@@ -305,7 +305,7 @@ const ElderSignupForm = ({ data, onChange, errors }) => {
                 className="form-input"
                 style={{ textAlign: "left", cursor: "pointer", color: "#6b7280" }}
               >
-                Select conditions... ▾
+                Select conditions... 
               </button>
               {showConditionDropdown && (
                 <div style={{
@@ -334,7 +334,7 @@ const ElderSignupForm = ({ data, onChange, errors }) => {
                         backgroundColor: selectedConditions.includes(c) ? "#e8f5e9" : "transparent",
                       }}
                     >
-                      {selectedConditions.includes(c) ? "✓ " : ""}{c}
+                      {selectedConditions.includes(c) ? "[Check] " : ""}{c}
                     </div>
                   ))}
                 </div>
@@ -370,7 +370,7 @@ const ElderSignupForm = ({ data, onChange, errors }) => {
       <div style={sectionStyle}>
         <p style={questionStyle}>Q3. Allow location access?</p>
         <p style={{ fontSize: "0.88rem", color: "#4a4a4a", marginBottom: "10px", lineHeight: 1.5 }}>
-          ⚠️ Location is required for SOS alerts and fall detection. Without it, emergency features cannot function.
+          [Warning] Location is required for SOS alerts and fall detection. Without it, emergency features cannot function.
         </p>
         <div style={{ display: "flex", gap: "16px" }}>
           <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "1rem", fontWeight: 600, color: "#2d6a4f" }}>
@@ -407,7 +407,7 @@ const ElderSignupForm = ({ data, onChange, errors }) => {
           </label>
         </div>
         {errors?.locationPermission && (
-          <p className="error-msg">⚠️ {errors.locationPermission}</p>
+          <p className="error-msg">[Warning] {errors.locationPermission}</p>
         )}
       </div>
 

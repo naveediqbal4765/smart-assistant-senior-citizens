@@ -73,7 +73,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
           onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
         >
-          👤 {user?.fullName ? user.fullName.split(" ")[0] : "User"}
+          [User] {user?.fullName ? user.fullName.split(" ")[0] : "User"}
         </button>
 
         {/* Profile Dropdown Menu */}
@@ -127,7 +127,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
             >
-              ⚙️ Settings
+              [Settings] Settings
             </button>
 
             <button
@@ -151,7 +151,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
             >
-              👤 My Profile
+              [User] My Profile
             </button>
 
             {/* Logout */}
@@ -176,7 +176,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#ffe0e0")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
             >
-              🚪 Logout
+              [Logout] Logout
             </button>
           </div>
         )}
@@ -215,7 +215,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: COLORS.darkGreen, margin: "0" }}>
-                📞 Contact Us
+                [Phone] Contact Us
               </h2>
               <button
                 onClick={() => setShowContactModal(false)}
@@ -227,7 +227,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
                   color: COLORS.darkGray,
                 }}
               >
-                ✕
+                
               </button>
             </div>
 
@@ -235,7 +235,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Email */}
               <div>
                 <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 8px 0" }}>
-                  📧 Email
+                  [Email] Email
                 </h3>
                 <a
                   href="mailto:smartassistantforseniorcitizen@gmail.com"
@@ -253,7 +253,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Phone */}
               <div>
                 <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 8px 0" }}>
-                  📱 Phone
+                  [Mobile] Phone
                 </h3>
                 <a
                   href="tel:+923399934981"
@@ -271,7 +271,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Support Hours */}
               <div>
                 <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 8px 0" }}>
-                  🕐 Support Hours
+                  [Time] Support Hours
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   Monday - Friday: 9:00 AM - 6:00 PM<br />
@@ -283,7 +283,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Address */}
               <div>
                 <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 8px 0" }}>
-                  📍 Address
+                   Address
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   SZABIST University<br />
@@ -352,7 +352,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: COLORS.darkGreen, margin: "0" }}>
-                ℹ️ About Us
+                [Info] About Us
               </h2>
               <button
                 onClick={() => setShowAboutModal(false)}
@@ -364,7 +364,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
                   color: COLORS.darkGray,
                 }}
               >
-                ✕
+                
               </button>
             </div>
 
@@ -372,7 +372,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Project Overview */}
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: COLORS.mediumGreen, margin: "0 0 8px 0" }}>
-                  🎯 Project Overview
+                  [Target] Project Overview
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   Smart Assistant for Senior Citizens is a comprehensive digital platform designed to empower elderly individuals by connecting them with caregivers and volunteers. Our mission is to enhance the quality of life for seniors through technology, ensuring they receive timely support, health monitoring, and community assistance.
@@ -382,7 +382,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Key Features */}
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: COLORS.mediumGreen, margin: "0 0 8px 0" }}>
-                  ✨ Key Features
+                  [Sparkle] Key Features
                 </h3>
                 <ul style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0", paddingLeft: "20px" }}>
                   <li>Emergency SOS alerts with location sharing</li>
@@ -397,7 +397,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Our Team */}
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: COLORS.mediumGreen, margin: "0 0 8px 0" }}>
-                  👥 Our Team
+                  [People] Our Team
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   Developed by Team SZABIST (Students: 2212470, 2212498 & 2212474) at SZABIST University Islamabad. Our team is passionate about leveraging technology to improve the lives of senior citizens and create a more connected, caring community.
@@ -407,7 +407,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Vision */}
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: COLORS.mediumGreen, margin: "0 0 8px 0" }}>
-                  🌟 Our Vision
+                  [Star] Our Vision
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   To create a world where every senior citizen has access to reliable support, health monitoring, and community assistance through innovative technology. We believe that age should not be a barrier to living independently and safely.
@@ -417,7 +417,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
               {/* Technology */}
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: COLORS.mediumGreen, margin: "0 0 8px 0" }}>
-                  💻 Technology Stack
+                  [Computer] Technology Stack
                 </h3>
                 <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
                   Built with React.js for the frontend, Node.js/Express for the backend, and MongoDB for data storage. Our platform is designed to be responsive, accessible, and secure.

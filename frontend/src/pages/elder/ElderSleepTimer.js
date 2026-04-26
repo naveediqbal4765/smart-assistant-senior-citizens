@@ -26,11 +26,11 @@ const ElderSleepTimer = () => {
   const [selectedSound, setSelectedSound] = useState("rain");
 
   const sounds = [
-    { id: "rain", name: "🌧️ Rain Sounds", description: "Gentle rainfall" },
-    { id: "ocean", name: "🌊 Ocean Waves", description: "Soothing ocean waves" },
-    { id: "forest", name: "🌲 Forest Ambience", description: "Birds and nature sounds" },
-    { id: "white", name: "⚪ White Noise", description: "Calming white noise" },
-    { id: "meditation", name: "🧘 Meditation", description: "Guided meditation" },
+    { id: "rain", name: " Rain Sounds", description: "Gentle rainfall" },
+    { id: "ocean", name: " Ocean Waves", description: "Soothing ocean waves" },
+    { id: "forest", name: " Forest Ambience", description: "Birds and nature sounds" },
+    { id: "white", name: " White Noise", description: "Calming white noise" },
+    { id: "meditation", name: " Meditation", description: "Guided meditation" },
   ];
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const ElderSleepTimer = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>🎵 Sleep Timer</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Music] Sleep Timer</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -199,7 +199,7 @@ const ElderSleepTimer = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
               >
-                ▶️ Start
+                 Start
               </button>
             ) : (
               <button
@@ -216,7 +216,7 @@ const ElderSleepTimer = () => {
                   transition: "all 0.3s ease",
                 }}
               >
-                ⏸️ Pause
+                ⏸ Pause
               </button>
             )}
             <button
@@ -235,7 +235,7 @@ const ElderSleepTimer = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#f0f0f0")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.white)}
             >
-              🔄 Reset
+              [Refresh] Reset
             </button>
           </div>
         </div>

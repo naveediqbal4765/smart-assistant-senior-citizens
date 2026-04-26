@@ -114,7 +114,7 @@ const ResetPasswordPage = () => {
               Enter the 6-digit code sent to {email}
             </p>
 
-            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>⚠️ {error}</div>}
+            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>[Warning] {error}</div>}
 
             <form onSubmit={handleVerifyOTP}>
               <div style={{ marginBottom: "20px" }}>
@@ -133,7 +133,7 @@ const ResetPasswordPage = () => {
               Create a strong password for your account
             </p>
 
-            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>⚠️ {error}</div>}
+            {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>[Warning] {error}</div>}
 
             <form onSubmit={handleResetPassword}>
               <div style={{ marginBottom: "14px" }}>

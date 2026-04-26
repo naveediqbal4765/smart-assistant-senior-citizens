@@ -15,21 +15,21 @@ const TestDashboardsPage = () => {
       name: "Elder Dashboard",
       description: "View health metrics, SOS alerts, and caregiver info",
       color: "#52b788",
-      icon: "👴",
+      icon: "",
     },
     {
       id: "caregiver",
       name: "Caregiver Dashboard",
       description: "Monitor assigned elders and manage schedules",
       color: "#2d6a4f",
-      icon: "🏥",
+      icon: "[Hospital]",
     },
     {
       id: "volunteer",
       name: "Volunteer Dashboard",
       description: "View available tasks and manage availability",
       color: "#1b4332",
-      icon: "🤝",
+      icon: "",
     },
   ];
 
@@ -170,7 +170,7 @@ const TestDashboardsPage = () => {
             }}
           >
             <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#856404", margin: "0 0 10px 0" }}>
-              ⚠️ Testing Mode
+              [Warning] Testing Mode
             </h3>
             <p style={{ fontSize: "14px", color: "#856404", margin: "0" }}>
               This page provides direct access to dashboards for testing purposes. In production, users must authenticate
@@ -188,7 +188,7 @@ const TestDashboardsPage = () => {
               {/* Elder Features */}
               <div>
                 <h4 style={{ fontSize: "16px", fontWeight: 600, color: "#52b788", margin: "0 0 10px 0" }}>
-                  👴 Elder Dashboard
+                   Elder Dashboard
                 </h4>
                 <ul style={{ fontSize: "14px", color: "#666", margin: "0", paddingLeft: "20px" }}>
                   <li>Health metrics display</li>
@@ -202,7 +202,7 @@ const TestDashboardsPage = () => {
               {/* Caregiver Features */}
               <div>
                 <h4 style={{ fontSize: "16px", fontWeight: 600, color: "#2d6a4f", margin: "0 0 10px 0" }}>
-                  🏥 Caregiver Dashboard
+                  [Hospital] Caregiver Dashboard
                 </h4>
                 <ul style={{ fontSize: "14px", color: "#666", margin: "0", paddingLeft: "20px" }}>
                   <li>Assigned elders list</li>
@@ -216,7 +216,7 @@ const TestDashboardsPage = () => {
               {/* Volunteer Features */}
               <div>
                 <h4 style={{ fontSize: "16px", fontWeight: 600, color: "#1b4332", margin: "0 0 10px 0" }}>
-                  🤝 Volunteer Dashboard
+                   Volunteer Dashboard
                 </h4>
                 <ul style={{ fontSize: "14px", color: "#666", margin: "0", paddingLeft: "20px" }}>
                   <li>Available tasks</li>

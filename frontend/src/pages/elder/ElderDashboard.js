@@ -56,9 +56,9 @@ const ElderDashboard = () => {
 
   // Mock data
   const emergencyContacts = [
-    { id: 1, name: "Sarah", relation: "Daughter", phone: "+923001234567", emoji: "👩" },
-    { id: 2, name: "John", relation: "Son", phone: "+923009876543", emoji: "👨" },
-    { id: 3, name: "Dr. Ahmed", relation: "Doctor", phone: "+923005555555", emoji: "👨‍⚕️" },
+    { id: 1, name: "Sarah", relation: "Daughter", phone: "+923001234567", emoji: "" },
+    { id: 2, name: "John", relation: "Son", phone: "+923009876543", emoji: "" },
+    { id: 3, name: "Dr. Ahmed", relation: "Doctor", phone: "+923005555555", emoji: "[Medical]" },
   ];
 
   const todaysMedications = [
@@ -95,7 +95,7 @@ const ElderDashboard = () => {
       const utterance = new SpeechSynthesisUtterance("Emergency SOS activated");
       window.speechSynthesis.speak(utterance);
     }
-    alert("🚨 SOS ACTIVATED! Emergency services and caregivers have been notified. Your location is being shared.");
+    alert("[Alert] SOS ACTIVATED! Emergency services and caregivers have been notified. Your location is being shared.");
   };
 
   const handleMedicationTaken = (medicationId) => {
@@ -173,7 +173,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              🏠 Home
+              [Home] Home
             </button>
 
             <button
@@ -203,7 +203,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              📞 Contact
+              [Phone] Contact
             </button>
 
             <button
@@ -233,7 +233,7 @@ const ElderDashboard = () => {
                 e.target.style.backgroundColor = "transparent";
               }}
             >
-              ℹ️ About Us
+              [Info] About Us
             </button>
           </div>
         </div>
@@ -276,7 +276,7 @@ const ElderDashboard = () => {
           {/* Welcome Section */}
           <div style={{ marginBottom: "30px" }}>
             <h2 style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: 700, color: COLORS.darkGreen, margin: "0 0 10px 0" }}>
-              Welcome, {user?.fullName.split(" ")[0]}! 👋
+              Welcome, {user?.fullName.split(" ")[0]}! 
             </h2>
             <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
               {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
@@ -288,7 +288,7 @@ const ElderDashboard = () => {
               ============================================================ */}
           <div style={{ marginBottom: "30px" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              🛡️ Safety First
+              [Shield] Safety First
             </h3>
 
             {/* Emergency Contacts Speed Dial */}
@@ -342,7 +342,7 @@ const ElderDashboard = () => {
               ============================================================ */}
           <div style={{ marginBottom: "30px" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              🏥 Medical Hub
+              [Hospital] Medical Hub
             </h3>
 
             {/* Live Vitals Monitor */}
@@ -352,15 +352,15 @@ const ElderDashboard = () => {
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.red}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>❤️ {vitals.heartRate}</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>[Heart] {vitals.heartRate}</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Heart Rate (bpm)</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.mediumGreen}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>🫁 {vitals.oxygen}%</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>[Lungs] {vitals.oxygen}%</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Oxygen Level</div>
                 </div>
                 <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>🌡️ {vitals.temperature}°C</div>
+                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>[Temperature] {vitals.temperature}°C</div>
                   <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Temperature</div>
                 </div>
               </div>
@@ -372,7 +372,7 @@ const ElderDashboard = () => {
             {/* Today's Medications */}
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                💊 Today's Medication Schedule
+                [Medication] Today's Medication Schedule
               </h4>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {todaysMedications.map((med) => (
@@ -398,7 +398,7 @@ const ElderDashboard = () => {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       {medicationStates[med.id] && (
-                        <div style={{ fontSize: "20px" }}>✅</div>
+                        <div style={{ fontSize: "20px" }}>[Check]</div>
                       )}
                       <input
                         type="checkbox"
@@ -420,26 +420,26 @@ const ElderDashboard = () => {
             {/* Medical Vault */}
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
               <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                📋 Medical Vault
+                [Tasks] Medical Vault
               </h4>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
                 <button onClick={() => navigate("/elder-lab-reports")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  📄 Lab Reports
+                  [Document] Lab Reports
                 </button>
                 <button onClick={() => navigate("/elder-prescriptions")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  💊 Prescriptions
+                  [Medication] Prescriptions
                 </button>
                 <button onClick={() => navigate("/elder-health-history")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  📊 Health History
+                  [Chart] Health History
                 </button>
               </div>
             </div>
@@ -450,7 +450,7 @@ const ElderDashboard = () => {
               ============================================================ */}
           <div style={{ marginBottom: "30px" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              🚗 Mobility & Help
+              [Car] Mobility & Help
             </h3>
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
@@ -459,25 +459,25 @@ const ElderDashboard = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  📋 Task Request
+                  [Tasks] Task Request
                 </button>
                 <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  🎤 AI Voice Assistant
+                  [Microphone] AI Voice Assistant
                 </button>
                 <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  🚕 Book a Ride
+                  [Taxi] Book a Ride
                 </button>
                 <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  👥 Find Volunteer
+                  [People] Find Volunteer
                 </button>
               </div>
             </div>
@@ -488,7 +488,7 @@ const ElderDashboard = () => {
               ============================================================ */}
           <div style={{ marginBottom: "30px" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              💚 Wellness & Support
+               Wellness & Support
             </h3>
 
             <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
@@ -497,25 +497,25 @@ const ElderDashboard = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  💬 Messages
+                  [Messages] Messages
                 </button>
                 <button onClick={() => navigate("/elder-sleep-timer")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  🎵 Sleep Timer
+                  [Music] Sleep Timer
                 </button>
                 <button onClick={() => navigate("/elder-medication-reminder")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  ⏰ Medication Reminder
+                  [Clock] Medication Reminder
                 </button>
                 <button onClick={() => navigate("/elder-physical-rehabilitation")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  💪 Physical Rehabilitation
+                  [Strength] Physical Rehabilitation
                 </button>
               </div>
             </div>
@@ -579,7 +579,7 @@ const ElderDashboard = () => {
           touchAction: "none"
         }}
       >
-        🆘
+        [SOS]
       </button>
 
       {/* Screen Reader Tab - Bottom Corner */}

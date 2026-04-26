@@ -70,7 +70,7 @@ const ElderSettings = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>⚙️ Settings</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Settings] Settings</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -104,7 +104,7 @@ const ElderSettings = () => {
       <div style={{ flex: 1, padding: "20px", maxWidth: "900px", margin: "0 auto", width: "100%" }}>
         {/* Display Settings */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>🎨 Display Settings</h3>
+          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>[Art] Display Settings</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div>
               <label style={{ display: "block", color: COLORS.darkGreen, fontWeight: 600, marginBottom: "8px", fontSize: "13px" }}>Font Size</label>
@@ -175,7 +175,7 @@ const ElderSettings = () => {
 
         {/* Notification Settings */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>🔔 Notification Settings</h3>
+          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>[Bell] Notification Settings</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
             <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen }}>
               <input
@@ -211,7 +211,7 @@ const ElderSettings = () => {
 
         {/* App Information */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>ℹ️ App Information</h3>
+          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>[Info] App Information</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
             <div style={{ backgroundColor: COLORS.white, padding: "12px", borderRadius: "8px" }}>
               <p style={{ color: COLORS.darkGray, margin: "0 0 4px 0", fontSize: "12px" }}>App Version</p>
@@ -219,7 +219,7 @@ const ElderSettings = () => {
             </div>
             <div style={{ backgroundColor: COLORS.white, padding: "12px", borderRadius: "8px" }}>
               <p style={{ color: COLORS.darkGray, margin: "0 0 4px 0", fontSize: "12px" }}>Last Sync</p>
-              <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "14px", fontWeight: 600 }}>✅ {appInfo.lastSync}</p>
+              <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "14px", fontWeight: 600 }}>[Check] {appInfo.lastSync}</p>
             </div>
             <div style={{ backgroundColor: COLORS.white, padding: "12px", borderRadius: "8px" }}>
               <p style={{ color: COLORS.darkGray, margin: "0 0 4px 0", fontSize: "12px" }}>Last Update</p>
@@ -234,7 +234,7 @@ const ElderSettings = () => {
 
         {/* App Actions */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>🔧 App Actions</h3>
+          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}> App Actions</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
             <button
               onClick={handleCheckUpdates}
@@ -252,7 +252,7 @@ const ElderSettings = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
               onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
             >
-              🔄 Check for Updates
+              [Refresh] Check for Updates
             </button>
             <button
               onClick={handleClearCache}
@@ -270,7 +270,7 @@ const ElderSettings = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#f0f0f0")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
             >
-              🗑️ Clear Cache
+              [Delete] Clear Cache
             </button>
           </div>
         </div>
@@ -294,7 +294,7 @@ const ElderSettings = () => {
             onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
             onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
           >
-            ✅ Save Settings
+            [Check] Save Settings
           </button>
         </div>
       </div>

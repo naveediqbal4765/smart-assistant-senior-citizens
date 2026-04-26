@@ -84,7 +84,7 @@ const ElderHealthHistory = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>📊 Health History</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Chart] Health History</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -118,7 +118,7 @@ const ElderHealthHistory = () => {
       <div style={{ flex: 1, padding: "20px", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
         {/* Heart Rate History */}
         <div style={{ marginBottom: "30px" }}>
-          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>❤️ Heart Rate History</h2>
+          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>[Heart] Heart Rate History</h2>
           <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", marginBottom: "20px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "15px" }}>
               {heartRateHistory.map((record, idx) => {
@@ -140,7 +140,7 @@ const ElderHealthHistory = () => {
 
         {/* Oxygen Level History */}
         <div style={{ marginBottom: "30px" }}>
-          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>🫁 Oxygen Level History</h2>
+          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>[Lungs] Oxygen Level History</h2>
           <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", marginBottom: "20px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "15px" }}>
               {oxygenHistory.map((record, idx) => {
@@ -162,7 +162,7 @@ const ElderHealthHistory = () => {
 
         {/* Temperature History */}
         <div style={{ marginBottom: "30px" }}>
-          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>🌡️ Temperature History</h2>
+          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>[Temperature] Temperature History</h2>
           <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "15px" }}>
               {temperatureHistory.map((record, idx) => {
@@ -184,7 +184,7 @@ const ElderHealthHistory = () => {
 
         {/* Health Summary */}
         <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>📈 Health Summary</h3>
+          <h3 style={{ color: COLORS.darkGreen, margin: "0 0 20px 0", fontSize: "18px", fontWeight: 700 }}>[Up] Health Summary</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px" }}>
             <div style={{ backgroundColor: COLORS.white, padding: "15px", borderRadius: "8px", textAlign: "center" }}>
               <p style={{ color: COLORS.darkGray, margin: "0 0 8px 0", fontSize: "12px" }}>Average Heart Rate</p>
@@ -200,7 +200,7 @@ const ElderHealthHistory = () => {
             </div>
             <div style={{ backgroundColor: COLORS.white, padding: "15px", borderRadius: "8px", textAlign: "center" }}>
               <p style={{ color: COLORS.darkGray, margin: "0 0 8px 0", fontSize: "12px" }}>Health Status</p>
-              <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "24px", fontWeight: 700 }}>✅ Good</p>
+              <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Check] Good</p>
             </div>
           </div>
         </div>

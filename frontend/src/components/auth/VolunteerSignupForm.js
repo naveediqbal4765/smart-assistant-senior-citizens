@@ -122,7 +122,7 @@ const VolunteerSignupForm = ({ data, onChange, errors }) => {
             </label>
           ))}
         </div>
-        {errors?.skills && <p className="error-msg">⚠️ {errors.skills}</p>}
+        {errors?.skills && <p className="error-msg">[Warning] {errors.skills}</p>}
       </div>
 
       {/* Availability Schedule */}
@@ -141,7 +141,7 @@ const VolunteerSignupForm = ({ data, onChange, errors }) => {
             marginBottom: "10px",
           }}
         >
-          {showAvailability ? "▼" : "▶"} Set Your Availability Schedule
+          {showAvailability ? "" : ""} Set Your Availability Schedule
         </button>
 
         {showAvailability && (

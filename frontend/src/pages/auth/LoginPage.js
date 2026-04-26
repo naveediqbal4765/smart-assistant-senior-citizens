@@ -100,7 +100,7 @@ const LoginPage = () => {
 
       const { accessToken, user } = response.data;
       login(accessToken, user, formData.rememberMe);
-      toast.success(`Welcome back, ${user.fullName.split(" ")[0]}! 👋`);
+      toast.success(`Welcome back, ${user.fullName.split(" ")[0]}! `);
 
       const dashboardRoutes = {
         elder: "/dashboard/elder",
@@ -129,7 +129,7 @@ const LoginPage = () => {
   };
 
   const handleOAuth = (provider) => {
-    toast(`${provider} login coming soon! Use email/password for now.`, { icon: "ℹ️" });
+    toast(`${provider} login coming soon! Use email/password for now.`, { icon: "[Info]" });
   };
 
   // ============================================================
@@ -303,7 +303,7 @@ const LoginPage = () => {
                   gap: "8px",
                 }}
               >
-                <span>⚠️</span>
+                <span>[Warning]</span>
                 <span>{errors.general}</span>
               </div>
             )}
@@ -311,7 +311,7 @@ const LoginPage = () => {
             {/* Quick Access Links for Testing */}
             <div style={{ width: "100%", marginBottom: "20px", textAlign: "center" }}>
               <p style={{ fontSize: "12px", color: "#666", margin: "0 0 10px 0", fontFamily: "Montserrat, sans-serif" }}>
-                🧪 Quick access to dashboards (testing):
+                 Quick access to dashboards (testing):
               </p>
               <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
                 <button
@@ -329,7 +329,7 @@ const LoginPage = () => {
                     fontFamily: "Montserrat, sans-serif",
                   }}
                 >
-                  👴 Elder
+                   Elder
                 </button>
                 <button
                   type="button"
@@ -346,7 +346,7 @@ const LoginPage = () => {
                     fontFamily: "Montserrat, sans-serif",
                   }}
                 >
-                  🏥 Caregiver
+                  [Hospital] Caregiver
                 </button>
                 <button
                   type="button"
@@ -363,7 +363,7 @@ const LoginPage = () => {
                     fontFamily: "Montserrat, sans-serif",
                   }}
                 >
-                  🤝 Volunteer
+                   Volunteer
                 </button>
               </div>
             </div>
@@ -418,7 +418,7 @@ const LoginPage = () => {
               />
               {errors.email && (
                 <p style={{ color: "#e63946", fontSize: "13px", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
-                  ⚠️ {errors.email}
+                  [Warning] {errors.email}
                 </p>
               )}
 
@@ -470,7 +470,7 @@ const LoginPage = () => {
               />
               {errors.password && (
                 <p style={{ color: "#e63946", fontSize: "13px", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
-                  ⚠️ {errors.password}
+                  [Warning] {errors.password}
                 </p>
               )}
 

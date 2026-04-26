@@ -185,7 +185,7 @@ const ElderPhysicalRehabilitation = () => {
       context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
       
       // Simulate AI analysis
-      const aiResponse = `✅ Great form! Your ${selectedExercise.name} looks good. ${selectedExercise.aiGuidance}`;
+      const aiResponse = `[Check] Great form! Your ${selectedExercise.name} looks good. ${selectedExercise.aiGuidance}`;
       alert(aiResponse);
       
       // Update progress
@@ -201,7 +201,7 @@ const ElderPhysicalRehabilitation = () => {
       ...prev,
       [exerciseId]: (prev[exerciseId] || 0) + 1
     }));
-    alert("✅ Exercise completed! Great job!");
+    alert("[Check] Exercise completed! Great job!");
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -218,7 +218,7 @@ const ElderPhysicalRehabilitation = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>💪 Physical Rehabilitation</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Strength] Physical Rehabilitation</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -338,7 +338,7 @@ const ElderPhysicalRehabilitation = () => {
                       onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                       onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
                     >
-                      📖 View Details
+                       View Details
                     </button>
                     <button
                       onClick={() => {
@@ -360,14 +360,14 @@ const ElderPhysicalRehabilitation = () => {
                       onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                       onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                     >
-                      📹 Start Exercise
+                       Start Exercise
                     </button>
                   </div>
 
                   {exerciseProgress[exercise.id] && (
                     <div style={{ marginTop: "10px", padding: "8px", backgroundColor: "#e8f5e9", borderRadius: "6px", textAlign: "center" }}>
                       <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "12px", fontWeight: 600 }}>
-                        ✅ Completed {exerciseProgress[exercise.id]} time(s)
+                        [Check] Completed {exerciseProgress[exercise.id]} time(s)
                       </p>
                     </div>
                   )}
@@ -432,7 +432,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Instructions */}
               <div style={{ marginBottom: "20px" }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>📋 Instructions</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Tasks] Instructions</h3>
                 <ol style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.instructions.map((instruction, idx) => (
                     <li key={idx} style={{ marginBottom: "8px" }}>{instruction}</li>
@@ -442,7 +442,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Benefits */}
               <div style={{ marginBottom: "20px" }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>✨ Benefits</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Sparkle] Benefits</h3>
                 <ul style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.benefits.map((benefit, idx) => (
                     <li key={idx} style={{ marginBottom: "6px" }}>{benefit}</li>
@@ -452,7 +452,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Cautions */}
               <div style={{ marginBottom: "20px", backgroundColor: "#fff3e0", padding: "15px", borderRadius: "8px", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>⚠️ Important Cautions</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Warning] Important Cautions</h3>
                 <ul style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.cautions.map((caution, idx) => (
                     <li key={idx} style={{ marginBottom: "6px" }}>{caution}</li>
@@ -462,7 +462,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* AI Guidance */}
               <div style={{ backgroundColor: "#e3f2fd", padding: "15px", borderRadius: "8px", borderLeft: `4px solid ${COLORS.mediumGreen}`, marginBottom: "20px" }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 8px 0", fontSize: "14px", fontWeight: 700 }}>🤖 AI Guidance</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 8px 0", fontSize: "14px", fontWeight: 700 }}> AI Guidance</h3>
                 <p style={{ color: COLORS.darkGray, margin: "0", fontSize: "13px" }}>{selectedExercise.aiGuidance}</p>
               </div>
 
@@ -485,7 +485,7 @@ const ElderPhysicalRehabilitation = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
                 >
-                  📹 Start with Camera
+                   Start with Camera
                 </button>
                 <button
                   onClick={() => markExerciseComplete(selectedExercise.id)}
@@ -504,7 +504,7 @@ const ElderPhysicalRehabilitation = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  ✅ Mark as Complete
+                  [Check] Mark as Complete
                 </button>
               </div>
             </div>
@@ -545,7 +545,7 @@ const ElderPhysicalRehabilitation = () => {
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, margin: "0" }}>
-                📹 {selectedExercise.name} - AI Guided
+                 {selectedExercise.name} - AI Guided
               </h2>
               <button
                 onClick={() => {
@@ -560,7 +560,7 @@ const ElderPhysicalRehabilitation = () => {
                   color: COLORS.darkGray,
                 }}
               >
-                ✕
+                
               </button>
             </div>
 
@@ -587,7 +587,7 @@ const ElderPhysicalRehabilitation = () => {
                   marginBottom: "15px",
                 }}
               >
-                🎥 Start Camera
+                 Start Camera
               </button>
             ) : (
               <>
@@ -623,7 +623,7 @@ const ElderPhysicalRehabilitation = () => {
                       fontSize: "13px",
                     }}
                   >
-                    📸 Capture & Get AI Feedback
+                     Capture & Get AI Feedback
                   </button>
                   <button
                     onClick={() => {
@@ -651,7 +651,7 @@ const ElderPhysicalRehabilitation = () => {
             {/* AI Feedback Section */}
             <div style={{ marginTop: "15px", padding: "12px", backgroundColor: "#f0f0f0", borderRadius: "8px" }}>
               <p style={{ color: COLORS.darkGray, margin: "0", fontSize: "12px" }}>
-                <strong>💡 AI Tip:</strong> {selectedExercise.aiGuidance}
+                <strong>[Idea] AI Tip:</strong> {selectedExercise.aiGuidance}
               </p>
             </div>
           </div>

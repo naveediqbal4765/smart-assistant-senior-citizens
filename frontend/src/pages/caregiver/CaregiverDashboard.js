@@ -74,14 +74,14 @@ const CaregiverDashboard = () => {
           {/* Health Monitoring */}
           <div className="auth-card">
             <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Health Monitoring</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>❤️ Heart Rate: -- bpm</p>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>🫁 Oxygen: -- %</p>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>[Heart] Heart Rate: -- bpm</p>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>[Lungs] Oxygen: -- %</p>
           </div>
 
           {/* Location Tracking */}
           <div className="auth-card">
             <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Location</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>📍 View on Map</p>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}> View on Map</p>
             <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Safe Zone: Home</p>
           </div>
 
@@ -105,7 +105,7 @@ const CaregiverDashboard = () => {
         </div>
 
         <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
-          🚀 Caregiver Dashboard - Module 1 Skeleton
+           Caregiver Dashboard - Module 1 Skeleton
         </p>
         </div>
       </div>

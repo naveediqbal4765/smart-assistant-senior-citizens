@@ -84,7 +84,7 @@ const ForgotPasswordPage = () => {
           Enter your email to receive a password reset code
         </p>
 
-        {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>⚠️ {error}</div>}
+        {error && <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>[Warning] {error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "20px" }}>

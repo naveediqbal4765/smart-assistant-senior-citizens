@@ -88,8 +88,8 @@ const VolunteerDashboard = () => {
           {/* Rewards */}
           <div className="auth-card">
             <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>Rewards</h3>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>⭐ 0 points</p>
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>🏆 0 badges</p>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}> 0 points</p>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}> 0 badges</p>
           </div>
 
           {/* Skills */}
@@ -106,7 +106,7 @@ const VolunteerDashboard = () => {
         </div>
 
         <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
-          🚀 Volunteer Dashboard - Module 1 Skeleton
+           Volunteer Dashboard - Module 1 Skeleton
         </p>
         </div>
       </div>
