@@ -25,19 +25,43 @@ const VolunteerDashboard = () => {
           gap: "clamp(8px, 2vw, 16px)",
           zIndex: 10,
           flexWrap: "wrap",
-          justifyContent: "flex-start",
+          justifyContent: "space-between",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        <img src={Logo} alt="Logo" style={{ height: Math.min(Math.max(32, window.innerWidth * 0.04), 48), width: 'auto' }} />
-        <div style={{ minWidth: "0", flex: "1 1 auto" }}>
-          <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            Smart Assistant
-          </h1>
-          <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            Care for Seniors, By Community
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)" }}>
+          <img src={Logo} alt="Logo" style={{ height: Math.min(Math.max(32, window.innerWidth * 0.04), 48), width: 'auto' }} />
+          <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Smart Assistant
+            </h1>
+            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              Care for Seniors, By Community
+            </p>
+          </div>
         </div>
+
+        {/* Profile Button - Top Right */}
+        <button
+          onClick={() => navigate("/profile")}
+          style={{
+            padding: "10px 16px",
+            backgroundColor: "#52b788",
+            color: "#FFFFFF",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: 600,
+            fontSize: "13px",
+            fontFamily: "Montserrat, sans-serif",
+            transition: "all 0.3s ease",
+            whiteSpace: "nowrap",
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+        >
+          👤 My Profile
+        </button>
       </div>
 
       {/* Main Content */}
