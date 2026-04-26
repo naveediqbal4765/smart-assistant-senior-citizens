@@ -15,7 +15,7 @@ const api = axios.create({
 
 // Add token to requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -29,7 +29,10 @@ api.interceptors.response.use(
     // Only redirect to login on 401 (Unauthorized)
     // Don't redirect on network errors or other status codes
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("user");
       window.location.href = "/login";
     }
     // For all other errors (including network errors), just reject
