@@ -1,119 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
-import BasicInfo from "../../components/profile/BasicInfo";
-import ProfilePicture from "../../components/profile/ProfilePicture";
-import RoleSpecificDetails from "../../components/profile/RoleSpecificDetails";
-import PasswordSection from "../../components/profile/PasswordSection";
-import EmergencyContacts from "../../components/profile/EmergencyContacts";
-import ActivityLogs from "../../components/profile/ActivityLogs";
-import DocumentVault from "../../components/profile/DocumentVault";
-import PrivacyControls from "../../components/profile/PrivacyControls";
-import DeleteAccount from "../../components/profile/DeleteAccount";
-import SaveButton from "../../components/profile/SaveButton";
-import "./ProfilePage.css";
 
-// ---- COLOR SCHEME ----
 const COLORS = {
   darkGreen: "#1C382A",
   mediumGreen: "#52b788",
-  darkMediumGreen: "#2d6a4f",
-  darkestGreen: "#1b4332",
-  lightGreen: "#74c69d",
-  paleGreen: "#A9C6B2",
   veryLightGreen: "#BAE4C7",
   white: "#FFFFFF",
   lightGray: "#f5f5f5",
-  mediumGray: "#f0f0f0",
   darkGray: "#666666",
-  lightDarkGray: "#999999",
-  red: "#e63946",
-  yellow: "#FFC107",
 };
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("basic");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [profileData, setProfileData] = useState({
     fullName: user?.fullName || "",
     email: user?.email || "",
     phone: "",
     address: "",
     dateOfBirth: "",
-    profilePicture: user?.profilePicture || null,
-    // Role-specific fields
+    // Elder specific
     bloodGroup: "",
     allergies: "",
     primaryCaregiver: "",
+    // Caregiver specific
     linkedSeniors: [],
+    // Volunteer specific
     skills: [],
-    availabilityDays: [],
-    availabilityTimeSlots: [],
-    // Privacy
-    privacySettings: {
-      profileVisibility: "private",
-      healthDataSharing: false,
-      locationSharing: false,
-    },
+    serviceRadius: 5,
   });
 
-  const [hasChanges, setHasChanges] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Handle profile data changes
-  const handleProfileChange = (field, value) => {
+  const handleInputChange = (field, value) => {
     setProfileData((prev) => ({
       ...prev,
       [field]: value,
     }));
-    setHasChanges(true);
   };
 
-  // Handle nested object changes (for role-specific data)
-  const handleNestedChange = (parent, field, value) => {
-    setProfileData((prev) => ({
-      ...prev,
-      [parent]: {
-        ...prev[parent],
-        [field]: value,
-      },
-    }));
-    setHasChanges(true);
-  };
-
-  // Save profile changes
-  const handleSaveChanges = async () => {
+  const handleSave = async () => {
     setIsLoading(true);
     try {
-      // TODO: Call API to save profile
-      // const response = await profileService.updateProfile(profileData);
       toast.success("Profile updated successfully!");
-      setHasChanges(false);
     } catch (error) {
-      toast.error(error.message || "Failed to update profile");
+      toast.error("Failed to update profile");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
-
   if (!user) {
-    return null;
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <p>Loading...</p>
+      </div>
+    );
   }
+
+  const tabs = [
+    { id: "basic", label: "Basic Information" },
+    { id: "role", label: "Role Details" },
+    { id: "password", label: "Change Password" },
+    { id: "privacy", label: "Privacy Settings" },
+  ];
 
   return (
     <div style={{ backgroundColor: COLORS.lightGray, minHeight: "100vh", paddingBottom: "40px" }}>
-      {/* ============================================================
-          HEADER
-          ============================================================ */}
+      {/* Header */}
       <div style={{ backgroundColor: COLORS.darkGreen, padding: "30px 20px", color: COLORS.white }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <button
@@ -123,175 +80,424 @@ const ProfilePage = () => {
               border: "none",
               color: COLORS.white,
               cursor: "pointer",
-              fontSize: "18px",
+              fontSize: "16px",
               marginBottom: "15px",
               fontWeight: 600,
             }}
           >
-            ← Back
+            Back
           </button>
           <h1 style={{ fontSize: "32px", fontWeight: 700, margin: "0 0 8px 0" }}>
             My Profile
           </h1>
           <p style={{ fontSize: "14px", color: COLORS.veryLightGreen, margin: "0" }}>
-            Manage your account settings and personal information
+            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)} Profile
           </p>
         </div>
       </div>
 
-      {/* ============================================================
-          MAIN CONTENT
-          ============================================================ */}
+      {/* Main Content */}
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "30px 20px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "250px 1fr", gap: "30px" }}>
-          {/* ============================================================
-              SIDEBAR - TAB NAVIGATION
-              ============================================================ */}
-          <div>
-            <div
-              style={{
-                backgroundColor: COLORS.white,
-                borderRadius: "12px",
-                overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              }}
-            >
-              {[
-                { id: "basic", label: "Basic Information", icon: "👤" },
-                { id: "picture", label: "Profile Picture", icon: "📷" },
-                { id: "role", label: "Role Details", icon: "🎯" },
-                { id: "password", label: "Password", icon: "🔐" },
-                { id: "emergency", label: "Emergency Contacts", icon: "🚨" },
-                { id: "activity", label: "Activity Logs", icon: "📊" },
-                { id: "documents", label: "Document Vault", icon: "📁" },
-                { id: "privacy", label: "Privacy Controls", icon: "🔒" },
-                { id: "delete", label: "Delete Account", icon: "⚠️" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    width: "100%",
-                    padding: "16px",
-                    backgroundColor: activeTab === tab.id ? COLORS.mediumGreen : "transparent",
-                    color: activeTab === tab.id ? COLORS.white : COLORS.darkGreen,
-                    border: "none",
-                    borderBottom: `1px solid ${COLORS.veryLightGreen}`,
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontWeight: activeTab === tab.id ? 600 : 500,
-                    fontSize: "13px",
-                    fontFamily: "Montserrat, sans-serif",
-                    transition: "all 0.3s ease",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.target.style.backgroundColor = COLORS.veryLightGreen;
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.target.style.backgroundColor = "transparent";
-                    }
-                  }}
-                >
-                  <span style={{ fontSize: "16px" }}>{tab.icon}</span>
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+        <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: "30px" }}>
+          {/* Sidebar Tabs */}
+          <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  width: "100%",
+                  padding: "16px",
+                  backgroundColor: activeTab === tab.id ? COLORS.mediumGreen : "transparent",
+                  color: activeTab === tab.id ? COLORS.white : COLORS.darkGreen,
+                  border: "none",
+                  borderBottom: `1px solid ${COLORS.veryLightGreen}`,
+                  textAlign: "left",
+                  cursor: "pointer",
+                  fontWeight: activeTab === tab.id ? 600 : 500,
+                  fontSize: "13px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTab !== tab.id) {
+                    e.target.style.backgroundColor = COLORS.veryLightGreen;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTab !== tab.id) {
+                    e.target.style.backgroundColor = "transparent";
+                  }
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          {/* ============================================================
-              MAIN CONTENT AREA
-              ============================================================ */}
-          <div>
-            <div
-              style={{
-                backgroundColor: COLORS.white,
-                borderRadius: "12px",
-                padding: "30px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              }}
-            >
-              {/* Basic Information Tab */}
-              {activeTab === "basic" && (
-                <BasicInfo
-                  profileData={profileData}
-                  onProfileChange={handleProfileChange}
-                />
-              )}
+          {/* Content Area */}
+          <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", padding: "30px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+            {/* Basic Information Tab */}
+            {activeTab === "basic" && (
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
+                  Basic Information
+                </h2>
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.fullName}
+                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
 
-              {/* Profile Picture Tab */}
-              {activeTab === "picture" && (
-                <ProfilePicture
-                  profileData={profileData}
-                  onProfileChange={handleProfileChange}
-                />
-              )}
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={profileData.email}
+                    disabled
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                      backgroundColor: "#f5f5f5",
+                      cursor: "not-allowed",
+                    }}
+                  />
+                </div>
 
-              {/* Role-Specific Details Tab */}
-              {activeTab === "role" && (
-                <RoleSpecificDetails
-                  role={user?.role}
-                  profileData={profileData}
-                  onProfileChange={handleProfileChange}
-                  onNestedChange={handleNestedChange}
-                />
-              )}
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={profileData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
 
-              {/* Password Tab */}
-              {activeTab === "password" && (
-                <PasswordSection
-                  onPasswordChange={handleProfileChange}
-                />
-              )}
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.address}
+                    onChange={(e) => handleInputChange("address", e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
 
-              {/* Emergency Contacts Tab */}
-              {activeTab === "emergency" && (
-                <EmergencyContacts
-                  profileData={profileData}
-                  onProfileChange={handleProfileChange}
-                />
-              )}
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: COLORS.mediumGreen,
+                    color: COLORS.white,
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    fontFamily: "Montserrat, sans-serif",
+                    opacity: isLoading ? 0.7 : 1,
+                  }}
+                >
+                  {isLoading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            )}
 
-              {/* Activity Logs Tab */}
-              {activeTab === "activity" && (
-                <ActivityLogs />
-              )}
+            {/* Role Details Tab */}
+            {activeTab === "role" && (
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
+                  {user?.role === "elder" && "Medical Information"}
+                  {user?.role === "caregiver" && "Caregiver Details"}
+                  {user?.role === "volunteer" && "Volunteer Information"}
+                </h2>
 
-              {/* Document Vault Tab */}
-              {activeTab === "documents" && (
-                <DocumentVault
-                  profileData={profileData}
-                  onProfileChange={handleProfileChange}
-                />
-              )}
+                {user?.role === "elder" && (
+                  <>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Blood Group
+                      </label>
+                      <input
+                        type="text"
+                        value={profileData.bloodGroup}
+                        onChange={(e) => handleInputChange("bloodGroup", e.target.value)}
+                        placeholder="e.g., O+, A-, B+"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
 
-              {/* Privacy Controls Tab */}
-              {activeTab === "privacy" && (
-                <PrivacyControls
-                  profileData={profileData}
-                  onNestedChange={handleNestedChange}
-                />
-              )}
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Allergies
+                      </label>
+                      <textarea
+                        value={profileData.allergies}
+                        onChange={(e) => handleInputChange("allergies", e.target.value)}
+                        placeholder="List any allergies..."
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                          minHeight: "100px",
+                        }}
+                      />
+                    </div>
 
-              {/* Delete Account Tab */}
-              {activeTab === "delete" && (
-                <DeleteAccount />
-              )}
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Primary Caregiver
+                      </label>
+                      <input
+                        type="text"
+                        value={profileData.primaryCaregiver}
+                        onChange={(e) => handleInputChange("primaryCaregiver", e.target.value)}
+                        placeholder="Name of primary caregiver"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
 
-              {/* Save Button - Show only when there are changes */}
-              {hasChanges && activeTab !== "activity" && activeTab !== "delete" && (
-                <SaveButton
-                  isLoading={isLoading}
-                  onSave={handleSaveChanges}
-                />
-              )}
-            </div>
+                {user?.role === "caregiver" && (
+                  <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                    <p style={{ fontSize: "13px", color: COLORS.darkGray }}>
+                      Linked Seniors: {profileData.linkedSeniors.length}
+                    </p>
+                    <p style={{ fontSize: "13px", color: COLORS.darkGray, marginTop: "10px" }}>
+                      Manage your linked seniors from the dashboard.
+                    </p>
+                  </div>
+                )}
+
+                {user?.role === "volunteer" && (
+                  <>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Skills
+                      </label>
+                      <input
+                        type="text"
+                        value={profileData.skills.join(", ")}
+                        onChange={(e) => handleInputChange("skills", e.target.value.split(", "))}
+                        placeholder="e.g., Grocery Shopping, Tech Support"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Service Radius (km)
+                      </label>
+                      <input
+                        type="number"
+                        value={profileData.serviceRadius}
+                        onChange={(e) => handleInputChange("serviceRadius", parseInt(e.target.value))}
+                        min="1"
+                        max="50"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: COLORS.mediumGreen,
+                    color: COLORS.white,
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    fontFamily: "Montserrat, sans-serif",
+                    opacity: isLoading ? 0.7 : 1,
+                  }}
+                >
+                  {isLoading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            )}
+
+            {/* Password Tab */}
+            {activeTab === "password" && (
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
+                  Change Password
+                </h2>
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Enter current password"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Enter new password"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Confirm Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Confirm new password"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: COLORS.mediumGreen,
+                    color: COLORS.white,
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    fontFamily: "Montserrat, sans-serif",
+                    opacity: isLoading ? 0.7 : 1,
+                  }}
+                >
+                  {isLoading ? "Saving..." : "Update Password"}
+                </button>
+              </div>
+            )}
+
+            {/* Privacy Settings Tab */}
+            {activeTab === "privacy" && (
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
+                  Privacy Settings
+                </h2>
+                <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                  <p style={{ fontSize: "13px", color: COLORS.darkGray }}>
+                    Privacy settings coming soon...
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -59,7 +59,7 @@ const ElderDashboard = () => {
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
           onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
         >
-          👤 My Profile
+          My Profile
         </button>
       </div>
 
