@@ -134,7 +134,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
             <button
               onClick={() => {
                 setShowProfileMenu(false);
-                navigate("/elder-my-profile");
+                navigate("/profile");
               }}
               style={{
                 width: "100%",
