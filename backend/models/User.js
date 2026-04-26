@@ -188,6 +188,31 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    // ---- Privacy Settings ----
+    privacySettings: {
+      profileVisibility: {
+        type: String,
+        enum: ["public", "private", "friends-only"],
+        default: "private",
+      },
+      healthDataSharing: {
+        type: Boolean,
+        default: false,
+      },
+      locationSharing: {
+        type: Boolean,
+        default: false,
+      },
+      emailNotifications: {
+        type: Boolean,
+        default: true,
+      },
+      smsNotifications: {
+        type: Boolean,
+        default: true,
+      },
+    },
+
     // ---- Timestamps ----
     lastLogin: { type: Date },                                // Last successful login time
     passwordChangedAt: { type: Date },                        // When password was last changed

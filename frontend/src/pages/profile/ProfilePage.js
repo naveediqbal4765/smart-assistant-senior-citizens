@@ -491,11 +491,108 @@ const ProfilePage = () => {
                 <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
                   Privacy Settings
                 </h2>
-                <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
-                  <p style={{ fontSize: "13px", color: COLORS.darkGray }}>
-                    Privacy settings coming soon...
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={true}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                      Make my profile visible to other users
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={false}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                      Allow sharing of health data with caregivers
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={false}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                      Allow location sharing
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={true}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                      Receive email notifications
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                    <input
+                      type="checkbox"
+                      defaultChecked={true}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                      Receive SMS notifications
+                    </span>
+                  </label>
+                </div>
+
+                <div style={{ padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px", marginBottom: "20px" }}>
+                  <p style={{ fontSize: "12px", color: COLORS.darkGray, margin: "0" }}>
+                    Your privacy is important to us. These settings control how your information is shared and how you receive notifications.
                   </p>
                 </div>
+
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: COLORS.mediumGreen,
+                    color: COLORS.white,
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    fontFamily: "Montserrat, sans-serif",
+                    opacity: isLoading ? 0.7 : 1,
+                  }}
+                >
+                  {isLoading ? "Saving..." : "Save Privacy Settings"}
+                </button>
               </div>
             )}
           </div>
