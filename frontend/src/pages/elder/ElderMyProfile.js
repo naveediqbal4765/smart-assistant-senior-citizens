@@ -5,6 +5,7 @@ import { useProfile } from "../../hooks/useProfile";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import BasicInfoForm from "../../components/BasicInfoForm";
+import ProfilePictureUpload from "../../components/ProfilePictureUpload";
 import ToastNotification from "../../components/ToastNotification";
 import Logo from "../../assets/images/Logo.png";
 
@@ -155,6 +156,20 @@ const ElderMyProfile = () => {
           error={error}
           success={success}
         />
+
+        {/* Profile Picture Upload */}
+        <div style={{ marginTop: "30px" }}>
+          <ProfilePictureUpload
+            currentImage={profile?.profilePicture}
+            onUploadSuccess={(result) => {
+              console.log("Profile picture uploaded:", result);
+              // Optionally refresh profile data
+            }}
+            onUploadError={(error) => {
+              console.error("Upload error:", error);
+            }}
+          />
+        </div>
 
         {/* Additional Information */}
         {profile && (
