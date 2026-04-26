@@ -1,0 +1,256 @@
+TECH STACK:
+
+13. Tools and Techniques
+-The chosen technology stack is dictated by the project’s core requirements for real-time interactivity using Node js, scalable artificial intelligence integration via LSTM and CNN models, and robust data management through MongoDB.  This approach prioritizes a modular architecture, ensuring that each component from the React based user interface to the machine learning pipelines operates with high performance and clear maintainability. The methodology is designed to guarantee system reliability through Socket.io for SOS broadcasting, seamless feature integration, and a foundation that supports future iterative enhancements like travel monitoring. By utilizing JWT for secure sessions and geospatial indexing for smart volunteer matching, the platform ensures a secure and optimized ecosystem for comprehensive elderly support.
+
+• Frontend Tools: The user interface will be developed using React.js, 
+-powerful JavaScript library for building dynamic and responsive web components. 
+-To ensure high accessibility for seniors, Tailwind CSS will be used for a clean, high-contrast
+UI 
+-WebSpeech API will handle voice-to-text task requests. 
+These tools should support a seamless experience across desktop and mobile browsers with rapid state
+updates and consistent visual styling.
+
+• Backend Tools: The backend will run on Node.js with Express.js, providing a
+fast and scalable environment for managing real-time data flows. 
+-Socket.io will be integrated to handle instant SOS broadcasting and live chat between seniors
+and volunteers. 
+-JWT (JSON Web Tokens) will secure all administrative and user sessions, 
+ensuring that sensitive medical data remains private and protected.
+
+• Database & Storage: MongoDB will serve as the primary database, utilizing its
+flexible NoSQL schema to store diverse data types such as IoT sensor logs, medical
+history documents, and interaction records. This choice allows for efficient scaling
+as the user base grows and provides high performance for location based volunteer
+matching queries through Geospatial Indexing.
+
+• AI Techniques: LSTM networks analyze multi-axial accelerometer data for highprecision fall detection. 
+-MediaPipe-based pose estimation tracks 33 skeletal keypoints to provide real-time corrective feedback during physiotherapy. 
+-Natural Language Processing (NLP) via WebSpeech API enables hands-free navigation and
+automated response generation. 
+-CNNs and OCR automate object recognition and prescription reading. 
+-A Sensor Fusion approach correlates facial analysis with IoT
+heart rate telemetry to detect acute distress. 
+-Random Forest and Collaborative Filtering algorithms automate personalized diet and nutrition planning. 
+-Geospatial Indexing and proximity-based algorithms optimize real-time volunteer matching. 
+This proactive, data-driven ecosystem ensures senior safety and autonomy while minimizing emergency response times.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USER INTERFACE INSTRUCTIONS:
+
+UI for LOGIN AND SIGN UP PAGE ARE ALREADY IN THE FOLDER AS (UserInterface1.png and UserInterface2.png)
+-Use that color combination and design to make other pages
+-The buttons and Fonts should be bold and a little bit big as compared to the normal buttons because elders are gonna use this platform.
+-There should not be any button or option hidden somewhere, everything should be on screen and in a descent way
+-Web-app should be responsive in every device
+-Logo of platform and in the home page (like company motto etc) could be changed after the code is done, so you can use dummy text there
+-All the buttons should be meaning full
+-DO NOT CHANGE THE UI FOR LOGIN PAGE (MAKE AS IT IS)
+-YOU CAN MODIFY UI FOR SIGNUP PAGE ACCORDING TO REQUIREMENTS
+-MAKE  DASHBOARDS FOR ELDER CARE-GIVER AND VOLUNTEER BY TAKING IDEA FROM BOTH (UserInterface1.png and UserInterface2.png)
+ADD NECESSARY BUTTONS AND REQUIRED THINGS (IF NEEDED TO SHOW), WE WILL FURTHER INSTRUCT YOU WHAT AND HOW TO DO IN THOSE DASHBOARDS.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CODE INSTRUCTIONS:
+
+-Don't use any other tech or tool other than tech stack given above
+-All the files and folders should be in manner and in proper MERN structure, so everyone could easily understand which file/folder is located where
+-You'll be given a git Api make a repo there and push the code as soon as it is done
+-Make step by step documentation in a separate md file called "DOCUMENTATION.md"
+-Use comments with each line to make code understandable
+-Don't jumble the code, avoid redundency
+-Make proper names of folders
+-Moudules and features of each module is mentioned in the "Explaination.pdf" file
+-This project should Strictly full fill the needs (features) of each module accurately
+-For database i already created DB in Mongo Atlas if you need secret key and url, here it is(smartAssistant
+EhecvOdyRjtMFgf9)
+-Some suggestions to test the code are also attached in a file called TEST.pdf, just check them if required
+-There should not be any kind of bug in the code, spceciallly in LOGIN, make it secure as possible
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+WORK INSTRUCTIONS:
+
+-You just have to make only one modules for now
+-Instructions for module 1 are as following, (keep in your mind we are gonna work on other modules once the first module is done so be ready):
+
+1.USER AUTHENTICATION AND LOGIN (MODULE)
+• Secure Login or signup (User can also signup via google account, Facebook, and Apple id)-
+• One Time Password email or Password
+• Role selection for elder, volunteer, and caregiver
+• Account recovery and verification -
+• Account deletion
+
+INSTRUCTIONS FOR MODULE 1
+-When user opens the platform the Login Page should be opened
+-UI for login page is already added to the folder named with(UserInterface1.png)
+
+---------------------------------------------------
+LOGIN PAGE:
+
+REQUIREMENTS FOR LOGIN PAGE:
+-LOGIN page includes (Email, Password, Login button, Signup Button, Remember me checkbox, Reset password option and 3 options to link/signup or login with Google, Facebook, and Apple Id)
+
+CASE 1 (IF USER HAS ALREADY AN ACCOUNT)
+-IF user already has an account he will proceed with entering EMAIL and PASSWORD then click on login button.
+-IF user enters WRONG EMAIL or PASSWORD a message should be shown in the text box like ("Entered wrong email or password")
+-User SHOULD NOT BE LOGGEDIN until he enters the correct password.
+
+CASE 2 (IF USER WANTS TO RESET PASSWORD)
+-IF user wants to reset password he will click on the Reset Password option, 
+-If his email is our database a one time password (OTP) should be sent on his email to verify is he actually the right person
+-When he clicks on the RESET PASSWORD option, new container like login should be opened to enter new password
+-There should be two text boxes, one for ENTER NEW PASSWORD, and another one for CONFIRM PASSWORD
+and a button to CONFIRM
+-After confirming the new password the login page should open back, then he will proceed to enter EMAIL and PASSWORD then login.
+
+CASE 3 (IF USER CHOOSE GOOGLE, FACEBOOK OR APPLE ID):
+-If user clicks or tapes on these three options connect to the respective APIs
+-First check if his account is already in our database.
+-IF YES, then login him into home
+-IF NO, then open the signup page, Write his basic data in text boxes if its available
+
+CASE 4 (IF USER CLICK ON SIGNUP BUTTON)
+-If user clicks on SIGNUP button, the move to the signup page
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SIGN UP PAGE:
+-When user clicks on SIGN-UP button, or if the backend brings him to signup page there should be 3 options
+(1. Elder, 2.Caregiver, 3.Volunteer), and one more option of ALREADY AN ACCOUNT! LOGIN(button)? incase he came by mistake
+-UI for singup page is already added to the folder as(UserInterface2.png) You can modify the UI according to the requirements
+
+GENERAL REQUIREMENTS FOR SIGN-UP PAGE:
+SIGNUP PAGE'S general requirements are as following:
+1.Appropriate Profile picture with limited size (eg. 50kb etc)- Client-side compression using browser-image-compression before S3/Cloudinary upload.
+2.Appropriate User name
+3.Email- Use Firebase Auth or Twilio for SMS verification.
+4.Phone number -Use Firebase Auth or Twilio for SMS verification.
+5.Present address- Google Maps Places API for autocomplete + storing Lat/Lng coordinates.
+6.Date of Birth
+7.Password- zod or yup schema validation (min 8 chars, 1 symbol, 1 number).
+8.Confirm Password
+9.National ID number (13 numbers (no more or less))- Use a regex validator ^\d{13}$ and a masked input field.
+
+CASE 1(IF USER CHOOSE ELDER AS ROLE):
+REQUIREMENTS:
+Question 1: Is he lives alone (check box[yes/no])
+(if yes, Boolean flag in MongoDB. If true, trigger a "Priority Monitor" status.)
+-If he lives with family
+(require contact numbers, emails ,names, and his relationship with them, maximum 3 persons, minimum 1-Dynamic form array. Require Name, Phone, and Relation for each.)
+
+Question 2: Does he faces any medical issue (check box[yes/no])
+(If yes, Searchable dropdown (Select2/Radix) + "Other" text area (Conditional Rendering).)
+(If no, then proceed to next one )
+
+Question 3. Location permission
+(If yes,  Browser Geolocation API request with a custom "Explanation Modal.")
+(If no, the SOS and Fall Detection features cannot function.)
+
+- After all this he can click on signup button 
+-IF he miss something, the signup button remains disabled or triggers a validation check. Empty or invalid fields (like a 12-digit CNIC) turn red.
+-IF he doesnt missed something, move to the login page
+-Elder signs up and is assigned a unique "Senior ID" (or use their Email/CNIC).
+The Elder’s dashboard has a "Share Access" button that generates a 6-digit temporary Pairing Code
+The Caregiver signs up and enters this Pairing Code + the Senior's Email.
+The Result: The database creates a "Link" between the two. Now, the Caregiver's dashboard is "authorized" to pull the live telemetry (Heart rate, Location) of that specific Senior.
+
+CASE 2 (IF USER CHOOSE CAREGIVER ROLE):
+REQUIREMENTS:
+1: Relationship to Elder (Mandatory dropdown selection (e.g., Son, Daughter, Spouse, Professional Nurse, Paid Caregiver, Neighbor).)
+2.Target Senior’s ID: Input field for the Elder's Unique ID (Email or CNIC).
+3.6-Digit Pairing Code: Input field for the temporary code generated by the Elder's dashboard.
+4.Verification Logic: The "Signup" button remains disabled until the backend confirms that the Code + Senior ID are a valid match.
+5.Role-Based Access Control (RBAC): Upon successful pairing, the Caregiver is granted "View-Only" or "Action" permissions for the Elder's health data.
+6.Emergency Readiness (The "Response") Push Notification Consent: Mandatory browser/app permission request for notifications.
+(If denied, the Caregiver is alerted that they will not receive real-time SOS pings, rendering the role ineffective.)
+Active Status Toggle: A requirement to confirm they are "Currently Available" to monitor the senior.
+
+CASE 3 (IF USER CHOOSE VOLUNTEER ROLE):
+1. Routine Availability (A multi-select "Days of the Week" picker (Mon–Sun) and a "Time Slot" preference (Morning, Afternoon, Evening, Night).
+Logic: This data is stored in the Volunteer profile as a default_schedule object.
+Reason: This allows the matching algorithm to "rank" volunteers. If an emergency happens on a Tuesday, the system prioritizes those who marked Tuesday as an available day, even before checking their "Live" toggle.
+2.Affiliation: Dropdown for NGO (Edhi, Al-Khidmat, etc.) + NGO ID Number (if applicable).
+Service Setup:
+3.Radius: Slider for service range (1km to 10km).
+4.Skills: Multi-select (Medical, Errands, Physical Help).
+5.Location permission (If yes,  Browser Geolocation API request with a custom "Explanation Modal.")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JUST READ THE BELOW MODULES TO GET YOURSELF READY, WE ARE NOT GONNA IMPLEMENT THEM RIGHT NOW ; Thanks
+
+USER PROFILE MANAGEMENT
+• Granular Privacy Controls
+• Emergency Contact Hierarchy
+• Activity and Interaction Logs
+• Digital Document Vault
+• User Profile Customization
+
+TASK REQUEST MODULE
+• AI Task Prioritization
+• Smart Volunteer Matching
+• Voice-to-text request
+• Live Task Tracking
+• Proof of Completion
+
+COMMUNICATION MODULE
+• Multi-Channel Calling
+• Integrated Messaging
+• Schedule call reminders
+• Group and Family Chats
+• Real-time SOS broadcasting
+
+HEALTH AND MEDICATION
+• Medication Reminders
+• Digital Health Repository
+• Appointment Management
+• IoT Health Telemetry
+• Drug Interaction Engine
+
+WELLNESS AND PHYSICAL REHAB
+• AI-Guided Physiotherapy
+• Meal and Nutrition Tracking
+• Interactive Audio Coaching
+• Real-Time Pose Correction
+• Fitness Goal tracking and Sleep timer
+
+EMERGENCY AND SAFTEY
+• AI fall detection
+• Multi-Modal Distress Analytics
+• Biometric Stress Trigger
+• Temporal Inactivity Gate
+• One-tap SOS button
+
+SOCIAL CIRCLE
+• Generate Auto-replies
+• Event discovery
+• Hobby groups and social forums
+• Community announcements
+• Virtual group activities
+
+VOLUNTEER REWARDS
+• Points and badges
+• Competitive Leaderboards
+• Credentialing System
+• Performance Analytics
+• Professional Skill Validation
+
+SMART TRAVEL ESCORT
+• Context-Aware Route Guidance
+• Companion Booking System
+• Geo-Fencing and Deviation Alerts
+• Mobility-Matched Transport
+• Ride-Hailing Integration
+
+ADAPTIVE ASSISTANCE
+• Voice commands navigation
+• Adaptive Accessibility UI
+• Computer Vision Object Identifier
+• IMU-Based Gesture Control
+• Multi-Modal Screen Reading
+
+EMERGENCY GUIDE
+• Tactical Emergency Checklist
+• Post incident reporting and feedback
+• Context-Aware Incident Handling
+• Proximity-Gated Responder Alerts
+• Incident-Specific Audio Guidance

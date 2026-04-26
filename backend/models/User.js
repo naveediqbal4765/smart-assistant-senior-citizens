@@ -154,6 +154,14 @@ const userSchema = new mongoose.Schema(
     // ---- Remember Me / Session ----
     rememberMe: { type: Boolean, default: false },
 
+    // ---- Password Reset Data ----
+    passwordReset: {
+      otp: { type: String, select: false },                   // 6-digit OTP for password reset
+      expiresAt: { type: Date, select: false },               // OTP expiration time (5 minutes)
+      verified: { type: Boolean, default: false, select: false }, // Has OTP been verified?
+      verificationToken: { type: String, select: false },     // Token for password reset confirmation
+    },
+
     // ---- Role-Specific Data (only one will be populated based on role) ----
     elderData: { type: elderSchema, default: null },
     caregiverData: { type: caregiverSchema, default: null },
