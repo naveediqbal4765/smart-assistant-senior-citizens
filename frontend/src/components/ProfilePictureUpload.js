@@ -57,20 +57,24 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
     try {
       setUploadError(null);
       setUploadSuccess(null);
+      
+      // Call uploadProfilePicture from the hook
       const result = await uploadProfilePicture();
       
-      setUploadSuccess("Profile picture uploaded successfully!");
-      if (onUploadSuccess) {
-        onUploadSuccess(result);
-      }
+      if (result) {
+        setUploadSuccess("Profile picture uploaded successfully!");
+        if (onUploadSuccess) {
+          onUploadSuccess(result);
+        }
 
-      // Clear file after successful upload
-      setTimeout(() => {
-        clearFile();
-        setUploadSuccess(null);
-      }, 2000);
+        // Clear file after successful upload
+        setTimeout(() => {
+          clearFile();
+          setUploadSuccess(null);
+        }, 2000);
+      }
     } catch (err) {
-      const errorMsg = error || "Failed to upload profile picture";
+      const errorMsg = err?.message || error || "Failed to upload profile picture";
       setUploadError(errorMsg);
       if (onUploadError) {
         onUploadError(errorMsg);
