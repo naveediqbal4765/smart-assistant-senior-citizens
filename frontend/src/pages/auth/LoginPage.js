@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
 import PasswordResetModal from "../../components/PasswordResetModal";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 import toast from "react-hot-toast";
 import Logo from "../../assets/images/Logo.png";
 import Background from "../../assets/images/Background.png";
@@ -615,7 +616,26 @@ const LoginPage = () => {
                 <div style={{ flex: 1, height: "1px", backgroundColor: "#1C382A" }} />
               </div>
 
-              {/* OAuth Buttons */}
+              {/* Google Login Button */}
+              <div style={{ marginBottom: "16px" }}>
+                <GoogleLoginButton 
+                  rememberMe={formData.rememberMe}
+                  onSuccess={(user) => {
+                    toast.success(`Welcome back, ${user.fullName}!`);
+                    const dashboardRoutes = {
+                      elder: "/dashboard/elder",
+                      caregiver: "/dashboard/caregiver",
+                      volunteer: "/dashboard/volunteer",
+                    };
+                    navigate(dashboardRoutes[user.role] || "/dashboard/elder");
+                  }}
+                  onError={(error) => {
+                    toast.error(error.message || "Google login failed");
+                  }}
+                />
+              </div>
+
+              {/* OAuth Icon Buttons */}
               <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px" }}>
                 <button
                   type="button"
