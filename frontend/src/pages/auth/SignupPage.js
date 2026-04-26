@@ -5,7 +5,7 @@
 // ============================================================
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
 import Header from "../../components/Header";
@@ -39,29 +39,33 @@ const MEDICAL_CONDITIONS = [
 // ============================================================
 const SignupPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedRole, setSelectedRole] = useState(null);
+  // Get pre-filled data from Google OAuth (if available)
+  const { role: prefilledRole, email: prefilledEmail, fullName: prefilledFullName, profilePicture: prefilledProfilePicture, isOAuthSignup } = location.state || {};
+
+  const [currentStep, setCurrentStep] = useState(prefilledRole ? 2 : 1); // Start at step 2 if role is pre-filled
+  const [selectedRole, setSelectedRole] = useState(prefilledRole || null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [shakeForm, setShakeForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [gpsModalOpen, setGpsModalOpen] = useState(false);
   const [gpsModalType, setGpsModalType] = useState(null); // "elder" or "volunteer"
 
-  // General form data
+  // General form data - pre-fill with OAuth data if available
   const [formData, setFormData] = useState({
     // General fields
-    fullName: "",
-    email: "",
+    fullName: prefilledFullName || "",
+    email: prefilledEmail || "",
     phone: "",
     password: "",
     confirmPassword: "",
-    profilePicture: null,
+    profilePicture: prefilledProfilePicture || null,
     dateOfBirth: "",
     address: "",
     nationalId: "",
-    role: "",
+    role: prefilledRole || "",
 
     // Elder-specific
     livesAlone: null,
