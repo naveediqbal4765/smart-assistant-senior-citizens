@@ -184,9 +184,6 @@ const userSchema = new mongoose.Schema(
 // ---- Geospatial Index for volunteer proximity matching ----
 userSchema.index({ location: "2dsphere" });
 
-// ---- Index on email for fast lookups ----
-userSchema.index({ email: 1 });
-
 // ---- Index on role for filtering ----
 userSchema.index({ role: 1 });
 

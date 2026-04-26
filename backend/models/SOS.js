@@ -108,7 +108,6 @@ sosSchema.index({ elderId: 1 });
 sosSchema.index({ status: 1 });
 sosSchema.index({ "location.coordinates": "2dsphere" });
 sosSchema.index({ createdAt: -1 });
-sosSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 // ============================================================
 // Model
