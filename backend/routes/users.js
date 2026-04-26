@@ -8,6 +8,21 @@ const { protect } = require("../middleware/auth");
 
 const router = express.Router();
 
+// Helper function to get public profile data
+const getPublicProfile = (user) => {
+  return {
+    _id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    phone: user.phone,
+    role: user.role,
+    profilePicture: user.profilePicture,
+    address: user.address,
+    dateOfBirth: user.dateOfBirth,
+    createdAt: user.createdAt,
+  };
+};
+
 // ============================================================
 // GET /users/profile - Get Current User Profile
 // ============================================================
@@ -24,7 +39,7 @@ router.get("/profile", protect, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: user.getPublicProfile(),
+      data: getPublicProfile(user),
     });
   } catch (error) {
     console.error("Get profile error:", error);
@@ -63,7 +78,7 @@ router.put("/profile", protect, async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      data: user.getPublicProfile(),
+      data: getPublicProfile(user),
     });
   } catch (error) {
     console.error("Update profile error:", error);
@@ -91,7 +106,7 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: user.getPublicProfile(),
+      data: getPublicProfile(user),
     });
   } catch (error) {
     console.error("Get user error:", error);
