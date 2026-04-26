@@ -10,6 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
 import PasswordResetModal from "../../components/PasswordResetModal";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
+import FacebookLoginButton from "../../components/FacebookLoginButton";
 import toast from "react-hot-toast";
 import Logo from "../../assets/images/Logo.png";
 import Background from "../../assets/images/Background.png";
@@ -631,6 +632,25 @@ const LoginPage = () => {
                   }}
                   onError={(error) => {
                     toast.error(error.message || "Google login failed");
+                  }}
+                />
+              </div>
+
+              {/* Facebook Login Button */}
+              <div style={{ marginBottom: "16px" }}>
+                <FacebookLoginButton 
+                  rememberMe={formData.rememberMe}
+                  onSuccess={(user) => {
+                    toast.success(`Welcome back, ${user.fullName}!`);
+                    const dashboardRoutes = {
+                      elder: "/dashboard/elder",
+                      caregiver: "/dashboard/caregiver",
+                      volunteer: "/dashboard/volunteer",
+                    };
+                    navigate(dashboardRoutes[user.role] || "/dashboard/elder");
+                  }}
+                  onError={(error) => {
+                    toast.error(error.message || "Facebook login failed");
                   }}
                 />
               </div>
