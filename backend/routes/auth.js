@@ -673,3 +673,249 @@ router.post("/logout", protect, async (req, res) => {
     });
   }
 });
+
+// ============================================================
+// POST /auth/google - Google OAuth Login
+// ============================================================
+router.post("/google", async (req, res) => {
+  try {
+    const { token, rememberMe } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Google token is required",
+      });
+    }
+
+    // Verify Google token (in production, verify with Google's API)
+    // For now, we'll extract the token payload
+    let googleUser;
+    try {
+      // Decode JWT token (without verification for now)
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error("Invalid token format");
+      }
+      
+      const decoded = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+      googleUser = {
+        googleId: decoded.sub,
+        email: decoded.email,
+        fullName: decoded.name,
+        profilePicture: decoded.picture,
+      };
+    } catch (error) {
+      console.error("Token decode error:", error);
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Google token",
+      });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ 
+      $or: [
+        { email: googleUser.email },
+        { googleId: googleUser.googleId }
+      ]
+    });
+
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      // Create new user
+      user = new User({
+        email: googleUser.email,
+        fullName: googleUser.fullName,
+        googleId: googleUser.googleId,
+        profilePicture: googleUser.profilePicture,
+        isVerified: true, // Google verified
+        password: null, // No password for OAuth users
+      });
+
+      // Create Elder profile by default
+      const Elder = require("../models/Elder");
+      const elder = new Elder({
+        userId: user._id,
+        email: googleUser.email,
+      });
+      await elder.save();
+
+      await user.save();
+    } else {
+      // Link Google account if not already linked
+      if (!user.googleId) {
+        user.googleId = googleUser.googleId;
+        await user.save();
+      }
+    }
+
+    // Generate tokens
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    // Handle remember me
+    let rememberMeToken = null;
+    if (rememberMe) {
+      rememberMeToken = generateRememberMeToken();
+      user.rememberMeToken = rememberMeToken;
+      user.rememberMeExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      await user.save();
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      data: {
+        accessToken,
+        refreshToken,
+        rememberMeToken,
+        expiresIn: "15m",
+        user: {
+          userId: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          role: "elder",
+          profilePicture: user.profilePicture,
+          isNewUser,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Google login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Google login failed",
+      error: error.message,
+    });
+  }
+});
+
+// ============================================================
+// POST /auth/facebook - Facebook OAuth Login
+// ============================================================
+router.post("/facebook", async (req, res) => {
+  try {
+    const { token, rememberMe } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Facebook token is required",
+      });
+    }
+
+    // Verify Facebook token (in production, verify with Facebook's API)
+    // For now, we'll extract the token payload
+    let facebookUser;
+    try {
+      // Decode JWT token (without verification for now)
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error("Invalid token format");
+      }
+      
+      const decoded = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+      facebookUser = {
+        facebookId: decoded.sub || decoded.id,
+        email: decoded.email,
+        fullName: decoded.name,
+        profilePicture: decoded.picture,
+      };
+    } catch (error) {
+      console.error("Token decode error:", error);
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Facebook token",
+      });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ 
+      $or: [
+        { email: facebookUser.email },
+        { facebookId: facebookUser.facebookId }
+      ]
+    });
+
+    let isNewUser = false;
+
+    if (!user) {
+      isNewUser = true;
+      // Create new user
+      user = new User({
+        email: facebookUser.email,
+        fullName: facebookUser.fullName,
+        facebookId: facebookUser.facebookId,
+        profilePicture: facebookUser.profilePicture,
+        isVerified: true, // Facebook verified
+        password: null, // No password for OAuth users
+      });
+
+      // Create Elder profile by default
+      const Elder = require("../models/Elder");
+      const elder = new Elder({
+        userId: user._id,
+        email: facebookUser.email,
+      });
+      await elder.save();
+
+      await user.save();
+    } else {
+      // Link Facebook account if not already linked
+      if (!user.facebookId) {
+        user.facebookId = facebookUser.facebookId;
+        await user.save();
+      }
+    }
+
+    // Generate tokens
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    // Handle remember me
+    let rememberMeToken = null;
+    if (rememberMe) {
+      rememberMeToken = generateRememberMeToken();
+      user.rememberMeToken = rememberMeToken;
+      user.rememberMeExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      await user.save();
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Facebook login successful",
+      data: {
+        accessToken,
+        refreshToken,
+        rememberMeToken,
+        expiresIn: "15m",
+        user: {
+          userId: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          role: "elder",
+          profilePicture: user.profilePicture,
+          isNewUser,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Facebook login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Facebook login failed",
+      error: error.message,
+    });
+  }
+});
