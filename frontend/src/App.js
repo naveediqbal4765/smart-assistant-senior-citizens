@@ -21,6 +21,9 @@ import VerifyOTPPage from "./pages/auth/VerifyOTPPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
+// ---- Module 2: User Profile Management ----
+import ProfilePage from "./pages/profile/ProfilePage";
+
 // Elder Pages
 import ElderDashboard from "./pages/elder/ElderDashboard";
 import ElderMessages from "./pages/elder/ElderMessages";
@@ -84,6 +87,9 @@ function App() {
           <Route path="/verify-otp" element={<VerifyOTPPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+          {/* ---- Module 2: User Profile Management ---- */}
+          <Route path="/profile" element={<ProfilePage />} />
 
           {/* ---- Protected Dashboard Routes (require login + correct role) ---- */}
 

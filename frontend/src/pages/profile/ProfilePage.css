@@ -1,0 +1,248 @@
+/* ============================================================
+   PROFILE PAGE STYLES
+   ============================================================ */
+
+.profile-page {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.profile-header {
+  background-color: #1C382A;
+  padding: 30px 20px;
+  color: #FFFFFF;
+}
+
+.profile-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+.profile-header p {
+  font-size: 14px;
+  color: #BAE4C7;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 30px;
+}
+
+/* ============================================================
+   SIDEBAR NAVIGATION
+   ============================================================ */
+
+.profile-sidebar {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-tab-button {
+  width: 100%;
+  padding: 16px;
+  background-color: transparent;
+  color: #1C382A;
+  border: none;
+  border-bottom: 1px solid #BAE4C7;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-tab-button:hover {
+  background-color: #BAE4C7;
+}
+
+.profile-tab-button.active {
+  background-color: #52b788;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.profile-tab-icon {
+  font-size: 16px;
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.profile-content {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section {
+  margin-bottom: 30px;
+}
+
+.profile-section:last-child {
+  margin-bottom: 0;
+}
+
+.profile-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C382A;
+  margin-bottom: 20px;
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
+
+.profile-form-group {
+  margin-bottom: 20px;
+}
+
+.profile-form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1C382A;
+  margin-bottom: 8px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.profile-form-group input,
+.profile-form-group textarea,
+.profile-form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #BAE4C7;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.profile-form-group input:focus,
+.profile-form-group textarea:focus,
+.profile-form-group select:focus {
+  outline: none;
+  border-color: #52b788;
+  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
+}
+
+.profile-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.profile-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.profile-button-primary {
+  background-color: #52b788;
+  color: #FFFFFF;
+}
+
+.profile-button-primary:hover {
+  background-color: #2d6a4f;
+}
+
+.profile-button-secondary {
+  background-color: #BAE4C7;
+  color: #1C382A;
+}
+
+.profile-button-secondary:hover {
+  background-color: #74c69d;
+}
+
+.profile-button-danger {
+  background-color: #e63946;
+  color: #FFFFFF;
+}
+
+.profile-button-danger:hover {
+  background-color: #d62828;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-header h1 {
+    font-size: 24px;
+  }
+
+  .profile-content {
+    padding: 20px;
+  }
+
+  .profile-form-group {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 15px 10px;
+  }
+
+  .profile-header {
+    padding: 20px 15px;
+  }
+
+  .profile-header h1 {
+    font-size: 20px;
+  }
+
+  .profile-content {
+    padding: 15px;
+  }
+
+  .profile-tab-button {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .profile-section-title {
+    font-size: 16px;
+  }
+}
