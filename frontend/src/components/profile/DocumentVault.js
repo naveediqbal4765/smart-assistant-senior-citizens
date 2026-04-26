@@ -18,7 +18,7 @@ const DocumentVault = ({ profileData, onProfileChange }) => {
         borderRadius: "8px",
         padding: "20px",
         textAlign: "center",
-        color: COLORS.darkGreen,,
+        color: COLORS.darkGreen,
       }}>
         <p>Upload and manage your important documents...</p>
         <button style={{

@@ -17,7 +17,7 @@ const PrivacyControls = ({ profileData, onNestedChange }) => {
         border: `2px solid ${COLORS.veryLightGreen}`,
         borderRadius: "8px",
         padding: "20px",
-        color: COLORS.darkGreen,,
+        color: COLORS.darkGreen,
       }}>
         <div style={{ marginBottom: "15px" }}>
           <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
