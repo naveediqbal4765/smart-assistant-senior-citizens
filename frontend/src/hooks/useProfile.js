@@ -21,12 +21,13 @@ export const useProfile = () => {
     setError(null);
     try {
       const response = await userService.getProfile();
-      setProfile(response.data);
-      return response.data;
+      setProfile(response.data || response);
+      return response.data || response;
     } catch (err) {
-      const errorMessage = err.message || "Failed to fetch profile";
+      const errorMessage = err?.message || err?.error || "Failed to fetch profile";
       setError(errorMessage);
-      throw err;
+      console.error("Profile fetch error:", err);
+      // Don't throw - just set error state
     } finally {
       setLoading(false);
     }

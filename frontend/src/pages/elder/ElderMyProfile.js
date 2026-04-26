@@ -72,6 +72,32 @@ const ElderMyProfile = () => {
     );
   }
 
+  if (error && !profile) {
+    return (
+      <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", maxWidth: "500px" }}>
+          <div style={{ fontSize: "48px", marginBottom: "20px" }}>⚠️</div>
+          <p style={{ fontSize: "16px", color: COLORS.red, fontWeight: 600, marginBottom: "20px" }}>{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: "12px 24px",
+              backgroundColor: COLORS.mediumGreen,
+              color: COLORS.white,
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "14px",
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.dashboardBg }}>
       {/* Toast Notification */}
