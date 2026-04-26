@@ -73,7 +73,7 @@ const Navbar = ({ screenReaderEnabled, onScreenReaderToggle }) => {
           onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
           onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
         >
-          👤 {user?.fullName.split(" ")[0]}
+          👤 {user?.fullName ? user.fullName.split(" ")[0] : "User"}
         </button>
 
         {/* Profile Dropdown Menu */}
