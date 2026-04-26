@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
+import PasswordResetModal from "../../components/PasswordResetModal";
 import toast from "react-hot-toast";
 import Logo from "../../assets/images/Logo.png";
 import Background from "../../assets/images/Background.png";
@@ -52,6 +53,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [shakeForm, setShakeForm] = useState(false);
+  const [showPasswordResetModal, setShowPasswordResetModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -584,7 +586,7 @@ const LoginPage = () => {
 
                 <button
                   type="button"
-                  onClick={() => navigate("/forgot-password")}
+                  onClick={() => setShowPasswordResetModal(true)}
                   style={{
                     background: "none",
                     border: "none",
@@ -677,6 +679,16 @@ const LoginPage = () => {
           75% { transform: translateX(10px); }
         }
       `}</style>
+
+      {/* Password Reset Modal */}
+      <PasswordResetModal 
+        isOpen={showPasswordResetModal} 
+        onClose={() => setShowPasswordResetModal(false)}
+        onSuccess={() => {
+          toast.success("Password reset successfully! Please log in with your new password.");
+          setShowPasswordResetModal(false);
+        }}
+      />
     </div>
   );
 };

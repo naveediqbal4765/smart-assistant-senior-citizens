@@ -137,31 +137,6 @@ Phase 1 focuses on implementing core authentication features that are missing fr
   - [ ] 5.3.5 Store JWT and redirect
   - [ ] 5.3.6 Add error handling
 
-### SECTION 6: OAUTH INTEGRATIONS - APPLE
-
-- [ ] **6.1** Setup Apple OAuth
-  - [ ] 6.1.1 Create Apple Developer account
-  - [ ] 6.1.2 Get Service ID and Team ID
-  - [ ] 6.1.3 Get Client Secret
-  - [ ] 6.1.4 Add to .env file
-  - [ ] 6.1.5 Install apple-signin-js
-
-- [ ] **6.2** Implement Apple login backend
-  - [ ] 6.2.1 Create Apple OAuth endpoint
-  - [ ] 6.2.2 Verify Apple token
-  - [ ] 6.2.3 Check if user exists
-  - [ ] 6.2.4 Create user if not exists
-  - [ ] 6.2.5 Generate JWT token
-  - [ ] 6.2.6 Return user data and token
-
-- [ ] **6.3** Implement Apple login frontend
-  - [ ] 6.3.1 Install apple-signin-js
-  - [ ] 6.3.2 Add Apple button to login page
-  - [ ] 6.3.3 Handle Apple token response
-  - [ ] 6.3.4 Send token to backend
-  - [ ] 6.3.5 Store JWT and redirect
-  - [ ] 6.3.6 Add error handling
-
 ### SECTION 7: ERROR HANDLING & VALIDATION
 
 - [ ] **7.1** Improve login error handling
