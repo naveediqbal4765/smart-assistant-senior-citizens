@@ -20,10 +20,11 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);         // JWT access token
   const [isLoading, setIsLoading] = useState(true); // Loading state during auth check
 
-  // ---- Load user from localStorage on app start ----
+  // ---- Load user from localStorage/sessionStorage on app start ----
   useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
-    const storedUser = localStorage.getItem("user");
+    // Check localStorage first, then sessionStorage
+    const storedToken = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+    const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
 
     if (storedToken && storedUser) {
       try {
@@ -34,6 +35,8 @@ export const AuthProvider = ({ children }) => {
         // Clear corrupted data
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("user");
       }
     }
     setIsLoading(false); // Done checking stored auth
