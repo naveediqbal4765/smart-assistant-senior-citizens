@@ -126,7 +126,8 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["elder", "caregiver", "volunteer"],
-      required: [true, "Role is required"],
+      required: false, // Optional for OAuth users - set after role selection
+      default: null,
     },
 
     // ---- OAuth Provider Info ----

@@ -927,3 +927,57 @@ router.post("/facebook", async (req, res) => {
     });
   }
 });
+
+// ============================================================
+// POST /auth/set-role - Set User Role After OAuth Signup
+// ============================================================
+router.post("/set-role", async (req, res) => {
+  try {
+    const { userId, role } = req.body;
+
+    if (!userId || !role) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and role are required",
+      });
+    }
+
+    if (!["elder", "caregiver", "volunteer"].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be elder, caregiver, or volunteer",
+      });
+    }
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update user role
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Role set successfully",
+      data: {
+        userId: user._id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Set role error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error setting role",
+      error: error.message,
+    });
+  }
+});
