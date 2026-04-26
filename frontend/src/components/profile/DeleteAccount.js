@@ -18,7 +18,7 @@ const DeleteAccount = () => {
         border: `2px solid ${COLORS.red}`,
         borderRadius: "8px",
         padding: "20px",
-        color: COLORS.red",
+        color: COLORS.red,,
       }}>
         <p style={{ fontWeight: 600, marginBottom: "10px" }}>
           This action cannot be undone. All your data will be permanently deleted.

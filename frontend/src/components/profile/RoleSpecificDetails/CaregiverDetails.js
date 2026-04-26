@@ -21,7 +21,7 @@ const CaregiverDetails = ({ profileData, onProfileChange }) => {
         borderRadius: "8px",
         padding: "20px",
         textAlign: "center",
-        color: COLORS.darkGreen",
+        color: COLORS.darkGreen,,
         fontSize: "14px",
       }}>
         <p style={{ margin: "0 0 15px 0" }}>
