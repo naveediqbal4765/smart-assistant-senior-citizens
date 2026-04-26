@@ -33,13 +33,15 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
 
     // Load Facebook SDK
     window.fbAsyncInit = function () {
-      FB.init({
-        appId: process.env.REACT_APP_FACEBOOK_APP_ID,
-        xfbml: true,
-        version: "v18.0",
-      });
+      if (window.FB) {
+        window.FB.init({
+          appId: process.env.REACT_APP_FACEBOOK_APP_ID,
+          xfbml: true,
+          version: "v18.0",
+        });
 
-      setFacebookSDKLoaded(true);
+        setFacebookSDKLoaded(true);
+      }
     };
 
     // Load the SDK script
