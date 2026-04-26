@@ -1,0 +1,213 @@
+TECH STACK:
+
+13. Tools and Techniques
+-The chosen technology stack is dictated by the project’s core requirements for real-time interactivity using Node js, scalable artificial intelligence integration via LSTM and CNN models, and robust data management through MongoDB.  This approach prioritizes a modular architecture, ensuring that each component from the React based user interface to the machine learning pipelines operates with high performance and clear maintainability. The methodology is designed to guarantee system reliability through Socket.io for SOS broadcasting, seamless feature integration, and a foundation that supports future iterative enhancements like travel monitoring. By utilizing JWT for secure sessions and geospatial indexing for smart volunteer matching, the platform ensures a secure and optimized ecosystem for comprehensive elderly support.
+
+• Frontend Tools: The user interface will be developed using React.js, 
+-powerful JavaScript library for building dynamic and responsive web components. 
+-To ensure high accessibility for seniors, Tailwind CSS will be used for a clean, high-contrast
+UI 
+-WebSpeech API will handle voice-to-text task requests. 
+These tools should support a seamless experience across desktop and mobile browsers with rapid state
+updates and consistent visual styling.
+
+• Backend Tools: The backend will run on Node.js with Express.js, providing a
+fast and scalable environment for managing real-time data flows. 
+-Socket.io will be integrated to handle instant SOS broadcasting and live chat between seniors
+and volunteers. 
+-JWT (JSON Web Tokens) will secure all administrative and user sessions, 
+ensuring that sensitive medical data remains private and protected.
+
+• Database & Storage: MongoDB will serve as the primary database, utilizing its
+flexible NoSQL schema to store diverse data types such as IoT sensor logs, medical
+history documents, and interaction records. This choice allows for efficient scaling
+as the user base grows and provides high performance for location based volunteer
+matching queries through Geospatial Indexing.
+
+• AI Techniques: LSTM networks analyze multi-axial accelerometer data for highprecision fall detection. 
+-MediaPipe-based pose estimation tracks 33 skeletal keypoints to provide real-time corrective feedback during physiotherapy. 
+-Natural Language Processing (NLP) via WebSpeech API enables hands-free navigation and
+automated response generation. 
+-CNNs and OCR automate object recognition and prescription reading. 
+-A Sensor Fusion approach correlates facial analysis with IoT
+heart rate telemetry to detect acute distress. 
+-Random Forest and Collaborative Filtering algorithms automate personalized diet and nutrition planning. 
+-Geospatial Indexing and proximity-based algorithms optimize real-time volunteer matching. 
+This proactive, data-driven ecosystem ensures senior safety and autonomy while minimizing emergency response times.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USER INTERFACE INSTRUCTIONS:
+
+UI for LOGIN AND SIGN UP PAGE ARE ALREADY IN THE FOLDER AS (UserInterface1.png and UserInterface2.png)
+-Use that color combination and design to make other pages
+-The buttons and Fonts should be bold and a little bit big as compared to the normal buttons because elders are gonna use this platform.
+-There should not be any button or option hidden somewhere, everything should be on screen and in a descent way
+-Web-app should be responsive in every device
+-Logo of platform and in the home page (like company motto etc) could be changed after the code is done, so you can use dummy text there
+-All the buttons should be meaning full
+-DO NOT CHANGE THE UI FOR LOGIN PAGE (MAKE AS IT IS)
+-YOU CAN MODIFY UI FOR SIGNUP PAGE ACCORDING TO REQUIREMENTS
+-MAKE  DASHBOARDS FOR ELDER CARE-GIVER AND VOLUNTEER BY TAKING IDEA FROM BOTH (UserInterface1.png and UserInterface2.png)
+ADD NECESSARY BUTTONS AND REQUIRED THINGS (IF NEEDED TO SHOW), WE WILL FURTHER INSTRUCT YOU WHAT AND HOW TO DO IN THOSE DASHBOARDS.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CODE INSTRUCTIONS:
+
+-Don't use any other tech or tool other than tech stack given above
+-All the files and folders should be in manner and in proper MERN structure, so everyone could easily understand which file/folder is located where
+-You'll be given a git Api make a repo there and push the code as soon as it is done
+-Make step by step documentation in a separate md file called "DOCUMENTATION.md"
+-Use comments with each line to make code understandable
+-Don't jumble the code, avoid redundency
+-Make proper names of folders
+-Moudules and features of each module is mentioned in the "Explaination.pdf" file
+-This project should Strictly full fill the needs (features) of each module accurately
+-For database i already created DB in Mongo Atlas if you need secret key and url, here it is(smartAssistant
+EhecvOdyRjtMFgf9)
+-Some suggestions to test the code are also attached in a file called TEST.pdf, just check them if required
+-There should not be any kind of bug in the code, spceciallly in LOGIN, make it secure as possible
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+WORK INSTRUCTIONS:
+
+-You just have to make only one modules for now
+-Instructions for module 2 are as following, (keep in your mind we are gonna work on other modules once this module is done so be ready):
+
+USER PROFILE MANAGEMENT
+• Granular Privacy Controls
+• Emergency Contact Hierarchy
+• Activity and Interaction Logs
+• Digital Document Vault
+• User Profile Customization
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**USER PROFILE MANAGEMENT PAGE**
+
+REQUIREMENTS FOR PROFILE PAGE:(Editable Profile Picture, Text Fields (Name, Phone, Address, Date of Birth),Role-Specific Details section, an Update Password section, a Save Changes button and Delete Account.)
+
+
+
+**Case 01**:UPDATING BASIC INFORMATION
+
+* If the user modifies their Name, Phone Number, or Address, they must click the "Save Changes" button to commit data to the database.
+* The system validates the Phone Number format; if the input contains letters or an incorrect digit count, 
+
+a message appears: "Please enter a valid phone number."
+
+* Upon a successful update, a temporary "Profile Updated Successfully" toast notification appears at the top of the screen.
+
+
+
+**CASE 02**:ROLE-BASED PROFILE CUSTOMIZATION
+
+* **Senior Users:** The profile includes a "Medical Emergency Information" section for Blood Group, Allergies, and Primary Caregiver Contact.
+* **Caregiver Users:** The profile displays a "Linked Seniors" list with options to add or remove senior accounts they are currently monitoring.
+* **Volunteer Users**: The profile features a "Availability Toggle" and a "Skills" section (e.g., "Grocery Shopping," "Tech Support") that dictates which tasks they see in the community module.
+
+
+
+**CASE 03**:PASSWORD SENSITIVITY \& SECURITY
+
+* If the user wants to change their password from within the profile, they must first enter their "Current Password" for verification.
+* If the "Current Password" is incorrect, the system prevents the update and displays: "Verification failed: Incorrect current password."
+* After entering the "New Password" and "Confirm New Password," the system logs the user out of all other active sessions for security.
+
+
+
+**Case 04:**PROFILE PICTURE UPLOAD
+
+* If the user clicks the profile image placeholder, the system opens the device’s file explorer or gallery.
+* The system checks the file size; if the image exceeds 5MB, it displays: File too large; please upload an image under 5MB.
+* If the file format is unsupported (e.g., .exe or .pdf), it prompts the user to Please upload a valid image file (.jpg, .png).
+
+
+
+**Case 05:**ACCOUNT DELETION
+
+* If the user clicks "Delete Account," a pop-up confirmation modal appears asking: "Are you sure? This action cannot be undone."
+* To confirm, the user must type "DELETE" or enter their password one final time.
+* Upon confirmation, all user-specific data is wiped from the active database, and the user is redirected back to the Welcome/Signup screen.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JUST READ THE BELOW MODULES TO GET YOURSELF READY, WE ARE NOT GONNA IMPLEMENT THEM RIGHT NOW ; Thanks
+
+USER PROFILE MANAGEMENT
+• Granular Privacy Controls
+• Emergency Contact Hierarchy
+• Activity and Interaction Logs
+• Digital Document Vault
+• User Profile Customization
+
+TASK REQUEST MODULE
+• AI Task Prioritization
+• Smart Volunteer Matching
+• Voice-to-text request
+• Live Task Tracking
+• Proof of Completion
+
+COMMUNICATION MODULE
+• Multi-Channel Calling
+• Integrated Messaging
+• Schedule call reminders
+• Group and Family Chats
+• Real-time SOS broadcasting
+
+HEALTH AND MEDICATION
+• Medication Reminders
+• Digital Health Repository
+• Appointment Management
+• IoT Health Telemetry
+• Drug Interaction Engine
+
+WELLNESS AND PHYSICAL REHAB
+• AI-Guided Physiotherapy
+• Meal and Nutrition Tracking
+• Interactive Audio Coaching
+• Real-Time Pose Correction
+• Fitness Goal tracking and Sleep timer
+
+EMERGENCY AND SAFTEY
+• AI fall detection
+• Multi-Modal Distress Analytics
+• Biometric Stress Trigger
+• Temporal Inactivity Gate
+• One-tap SOS button
+
+SOCIAL CIRCLE
+• Generate Auto-replies
+• Event discovery
+• Hobby groups and social forums
+• Community announcements
+• Virtual group activities
+
+VOLUNTEER REWARDS
+• Points and badges
+• Competitive Leaderboards
+• Credentialing System
+• Performance Analytics
+• Professional Skill Validation
+
+SMART TRAVEL ESCORT
+• Context-Aware Route Guidance
+• Companion Booking System
+• Geo-Fencing and Deviation Alerts
+• Mobility-Matched Transport
+• Ride-Hailing Integration
+
+ADAPTIVE ASSISTANCE
+• Voice commands navigation
+• Adaptive Accessibility UI
+• Computer Vision Object Identifier
+• IMU-Based Gesture Control
+• Multi-Modal Screen Reading
+
+EMERGENCY GUIDE
+• Tactical Emergency Checklist
+• Post incident reporting and feedback
+• Context-Aware Incident Handling
+• Proximity-Gated Responder Alerts
+• Incident-Specific Audio Guidance
