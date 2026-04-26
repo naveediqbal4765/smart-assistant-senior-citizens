@@ -129,7 +129,7 @@ const LoginPage = () => {
   };
 
   const handleOAuth = (provider) => {
-    toast(`${provider} login coming soon! Use email/password for now.`, { icon: "[Info]" });
+    toast(`${provider} login coming soon! Use email/password for now.`, { icon: "Info" });
   };
 
   // ============================================================
@@ -303,7 +303,7 @@ const LoginPage = () => {
                   gap: "8px",
                 }}
               >
-                <span>[Warning]</span>
+                <span>Warning</span>
                 <span>{errors.general}</span>
               </div>
             )}
@@ -346,7 +346,7 @@ const LoginPage = () => {
                     fontFamily: "Montserrat, sans-serif",
                   }}
                 >
-                  [Hospital] Caregiver
+                  Hospital Caregiver
                 </button>
                 <button
                   type="button"
@@ -418,7 +418,7 @@ const LoginPage = () => {
               />
               {errors.email && (
                 <p style={{ color: "#e63946", fontSize: "13px", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
-                  [Warning] {errors.email}
+                  Warning {errors.email}
                 </p>
               )}
 
@@ -470,7 +470,7 @@ const LoginPage = () => {
               />
               {errors.password && (
                 <p style={{ color: "#e63946", fontSize: "13px", fontWeight: 600, marginTop: "-12px", marginBottom: "8px" }}>
-                  [Warning] {errors.password}
+                  Warning {errors.password}
                 </p>
               )}
 

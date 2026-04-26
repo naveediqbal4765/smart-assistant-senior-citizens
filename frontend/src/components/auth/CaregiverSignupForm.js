@@ -44,7 +44,7 @@ const CaregiverSignupForm = ({ data, onChange, errors }) => {
           <option>Friend</option>
           <option>Other</option>
         </select>
-        {errors?.relationshipToElder && <p className="error-msg">[Warning] {errors.relationshipToElder}</p>}
+        {errors?.relationshipToElder && <p className="error-msg">Warning {errors.relationshipToElder}</p>}
       </div>
 
       {/* Elder's Email for Pairing */}
@@ -61,7 +61,7 @@ const CaregiverSignupForm = ({ data, onChange, errors }) => {
         <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "6px" }}>
           Enter the email of the elder you want to monitor
         </p>
-        {errors?.linkedElderEmail && <p className="error-msg">[Warning] {errors.linkedElderEmail}</p>}
+        {errors?.linkedElderEmail && <p className="error-msg">Warning {errors.linkedElderEmail}</p>}
       </div>
 
       {/* 6-Digit Pairing Code */}
@@ -80,7 +80,7 @@ const CaregiverSignupForm = ({ data, onChange, errors }) => {
         <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "6px" }}>
           Ask the elder to share their 6-digit pairing code from their dashboard
         </p>
-        {errors?.pairingCode && <p className="error-msg">[Warning] {errors.pairingCode}</p>}
+        {errors?.pairingCode && <p className="error-msg">Warning {errors.pairingCode}</p>}
       </div>
 
       {/* Push Notification Consent */}
@@ -97,7 +97,7 @@ const CaregiverSignupForm = ({ data, onChange, errors }) => {
           Enable push notifications for SOS alerts
         </label>
         <p style={{ fontSize: "0.85rem", color: "#e63946", marginTop: "8px", fontWeight: 600 }}>
-          [Warning] Without notifications, you won't receive real-time SOS alerts from the elder
+          Warning Without notifications, you won't receive real-time SOS alerts from the elder
         </p>
       </div>
 

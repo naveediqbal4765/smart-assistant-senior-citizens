@@ -50,7 +50,7 @@ const ElderMedicationReminder = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Clock] Medication Reminder</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>Clock Medication Reminder</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -85,7 +85,7 @@ const ElderMedicationReminder = () => {
         {/* Upcoming Medications Alert */}
         {upcomingMeds.length > 0 && (
           <div style={{ backgroundColor: "#fff3e0", border: `2px solid ${COLORS.yellow}`, borderRadius: "12px", padding: "20px", marginBottom: "30px" }}>
-            <h3 style={{ color: COLORS.darkGreen, margin: "0 0 10px 0", fontSize: "18px" }}>[Warning] Upcoming Medications</h3>
+            <h3 style={{ color: COLORS.darkGreen, margin: "0 0 10px 0", fontSize: "18px" }}>Warning Upcoming Medications</h3>
             <p style={{ color: COLORS.darkGray, margin: "0", fontSize: "14px" }}>
               You have {upcomingMeds.length} medication(s) to take today. Please take them on time!
             </p>
@@ -114,7 +114,7 @@ const ElderMedicationReminder = () => {
                     {med.dosage}
                   </p>
                 </div>
-                {med.taken && <span style={{ fontSize: "24px" }}>[Check]</span>}
+                {med.taken && <span style={{ fontSize: "24px" }}>Check</span>}
               </div>
 
               <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", padding: "12px", marginBottom: "15px" }}>
@@ -151,7 +151,7 @@ const ElderMedicationReminder = () => {
                 onMouseEnter={(e) => !med.taken && (e.target.style.backgroundColor = "#f0f0f0")}
                 onMouseLeave={(e) => !med.taken && (e.target.style.backgroundColor = COLORS.white)}
               >
-                {med.taken ? "[Check] Taken" : "Mark as Taken"}
+                {med.taken ? "Check Taken" : "Mark as Taken"}
               </button>
             </div>
           ))}

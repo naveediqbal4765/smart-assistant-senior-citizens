@@ -97,7 +97,7 @@
 }
 
 .form-error::before {
-  content: "[!]";
+  content: "!";
 }
 
 /* Hint Message */

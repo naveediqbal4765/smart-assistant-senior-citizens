@@ -44,10 +44,10 @@ const ToastNotification = ({ message, type = "info", duration = 3000, onClose })
     <div className={`toast toast-${type}`}>
       <div className="toast-content">
         <span className="toast-icon">
-          {type === "success" && "[Check]"}
-          {type === "error" && "[Cross]"}
-          {type === "warning" && "[Warning]"}
-          {type === "info" && "[Info]"}
+          {type === "success" && "Check"}
+          {type === "error" && "Cross"}
+          {type === "warning" && "Warning"}
+          {type === "info" && "Info"}
         </span>
         <span className="toast-message">{message}</span>
       </div>

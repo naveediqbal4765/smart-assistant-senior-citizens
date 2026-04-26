@@ -185,7 +185,7 @@ const ElderPhysicalRehabilitation = () => {
       context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
       
       // Simulate AI analysis
-      const aiResponse = `[Check] Great form! Your ${selectedExercise.name} looks good. ${selectedExercise.aiGuidance}`;
+      const aiResponse = `Check Great form! Your ${selectedExercise.name} looks good. ${selectedExercise.aiGuidance}`;
       alert(aiResponse);
       
       // Update progress
@@ -201,7 +201,7 @@ const ElderPhysicalRehabilitation = () => {
       ...prev,
       [exerciseId]: (prev[exerciseId] || 0) + 1
     }));
-    alert("[Check] Exercise completed! Great job!");
+    alert("Check Exercise completed! Great job!");
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -218,7 +218,7 @@ const ElderPhysicalRehabilitation = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Strength] Physical Rehabilitation</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>Strength Physical Rehabilitation</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -367,7 +367,7 @@ const ElderPhysicalRehabilitation = () => {
                   {exerciseProgress[exercise.id] && (
                     <div style={{ marginTop: "10px", padding: "8px", backgroundColor: "#e8f5e9", borderRadius: "6px", textAlign: "center" }}>
                       <p style={{ color: COLORS.mediumGreen, margin: "0", fontSize: "12px", fontWeight: 600 }}>
-                        [Check] Completed {exerciseProgress[exercise.id]} time(s)
+                        Check Completed {exerciseProgress[exercise.id]} time(s)
                       </p>
                     </div>
                   )}
@@ -432,7 +432,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Instructions */}
               <div style={{ marginBottom: "20px" }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Tasks] Instructions</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>Tasks Instructions</h3>
                 <ol style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.instructions.map((instruction, idx) => (
                     <li key={idx} style={{ marginBottom: "8px" }}>{instruction}</li>
@@ -442,7 +442,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Benefits */}
               <div style={{ marginBottom: "20px" }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Sparkle] Benefits</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>Sparkle Benefits</h3>
                 <ul style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.benefits.map((benefit, idx) => (
                     <li key={idx} style={{ marginBottom: "6px" }}>{benefit}</li>
@@ -452,7 +452,7 @@ const ElderPhysicalRehabilitation = () => {
 
               {/* Cautions */}
               <div style={{ marginBottom: "20px", backgroundColor: "#fff3e0", padding: "15px", borderRadius: "8px", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>[Warning] Important Cautions</h3>
+                <h3 style={{ color: COLORS.darkGreen, margin: "0 0 12px 0", fontSize: "16px", fontWeight: 700 }}>Warning Important Cautions</h3>
                 <ul style={{ color: COLORS.darkGray, margin: "0", paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
                   {selectedExercise.cautions.map((caution, idx) => (
                     <li key={idx} style={{ marginBottom: "6px" }}>{caution}</li>
@@ -504,7 +504,7 @@ const ElderPhysicalRehabilitation = () => {
                   onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
                 >
-                  [Check] Mark as Complete
+                  Check Mark as Complete
                 </button>
               </div>
             </div>
@@ -651,7 +651,7 @@ const ElderPhysicalRehabilitation = () => {
             {/* AI Feedback Section */}
             <div style={{ marginTop: "15px", padding: "12px", backgroundColor: "#f0f0f0", borderRadius: "8px" }}>
               <p style={{ color: COLORS.darkGray, margin: "0", fontSize: "12px" }}>
-                <strong>[Idea] AI Tip:</strong> {selectedExercise.aiGuidance}
+                <strong>Idea AI Tip:</strong> {selectedExercise.aiGuidance}
               </p>
             </div>
           </div>

@@ -122,7 +122,7 @@ const VolunteerSignupForm = ({ data, onChange, errors }) => {
             </label>
           ))}
         </div>
-        {errors?.skills && <p className="error-msg">[Warning] {errors.skills}</p>}
+        {errors?.skills && <p className="error-msg">Warning {errors.skills}</p>}
       </div>
 
       {/* Availability Schedule */}

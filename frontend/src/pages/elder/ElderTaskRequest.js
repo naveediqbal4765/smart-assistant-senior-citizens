@@ -65,11 +65,11 @@ const ElderTaskRequest = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case "completed":
-        return "[Check]";
+        return "Check";
       case "in-progress":
-        return "[Loading]";
+        return "Loading";
       default:
-        return "[Hourglass]";
+        return "Hourglass";
     }
   };
 
@@ -81,7 +81,7 @@ const ElderTaskRequest = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Tasks] Task Request</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>Tasks Task Request</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 

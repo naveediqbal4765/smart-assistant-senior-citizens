@@ -22,9 +22,9 @@ const ElderPrescriptions = () => {
   const navigate = useNavigate();
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
   const [prescriptions, setPrescriptions] = useState([
-    { id: 1, name: "Aspirin", dosage: "500mg", frequency: "Twice daily", doctor: "Dr. Ahmed", date: "2024-03-15", expiryDate: "2025-03-15", image: "[Document]" },
-    { id: 2, name: "Blood Pressure Med", dosage: "10mg", frequency: "Once daily", doctor: "Dr. Sarah", date: "2024-02-20", expiryDate: "2025-02-20", image: "[Document]" },
-    { id: 3, name: "Vitamin D", dosage: "1000 IU", frequency: "Once daily", doctor: "Dr. Ahmed", date: "2024-01-10", expiryDate: "2025-01-10", image: "[Document]" },
+    { id: 1, name: "Aspirin", dosage: "500mg", frequency: "Twice daily", doctor: "Dr. Ahmed", date: "2024-03-15", expiryDate: "2025-03-15", image: "Document" },
+    { id: 2, name: "Blood Pressure Med", dosage: "10mg", frequency: "Once daily", doctor: "Dr. Sarah", date: "2024-02-20", expiryDate: "2025-02-20", image: "Document" },
+    { id: 3, name: "Vitamin D", dosage: "1000 IU", frequency: "Once daily", doctor: "Dr. Ahmed", date: "2024-01-10", expiryDate: "2025-01-10", image: "Document" },
   ]);
   const [showCameraModal, setShowCameraModal] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
@@ -119,7 +119,7 @@ Please keep this document safe.
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Medication] Prescriptions</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>Medication Prescriptions</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -169,7 +169,7 @@ Please keep this document safe.
             onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
             onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
           >
-            [Camera] Scan Prescription
+            Camera Scan Prescription
           </button>
           <button
             style={{
@@ -240,7 +240,7 @@ Please keep this document safe.
 
               {isExpired(prescription.expiryDate) && (
                 <div style={{ backgroundColor: "#ffebee", border: `1px solid ${COLORS.red}`, borderRadius: "6px", padding: "8px", marginBottom: "15px", fontSize: "12px", color: COLORS.red, fontWeight: 600 }}>
-                  [Warning] This prescription has expired
+                  Warning This prescription has expired
                 </div>
               )}
 
@@ -301,7 +301,7 @@ Please keep this document safe.
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, margin: "0" }}>
-                [Camera] Scan Prescription
+                Camera Scan Prescription
               </h2>
               <button
                 onClick={() => {

@@ -106,7 +106,7 @@ const VerifyOTPPage = () => {
 
         {error && (
           <div style={{ backgroundColor: "#fde8ea", border: "1.5px solid #e63946", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", color: "#c1121f", fontSize: "0.9rem", fontWeight: 600 }}>
-            [Warning] {error}
+            Warning {error}
           </div>
         )}
 

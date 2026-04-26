@@ -110,7 +110,7 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
           </div>
         ) : (
           <div className="image-placeholder">
-            <span className="placeholder-icon">[Camera]</span>
+            <span className="placeholder-icon">Camera</span>
             <p className="placeholder-text">No picture yet</p>
           </div>
         )}
@@ -119,7 +119,7 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
       {/* Error Message */}
       {(uploadError || error) && (
         <div className="upload-error-message">
-          <span className="error-icon">[Cross]</span>
+          <span className="error-icon">Cross</span>
           <span className="error-text">{uploadError || error}</span>
         </div>
       )}
@@ -127,7 +127,7 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
       {/* Success Message */}
       {(uploadSuccess || success) && (
         <div className="upload-success-message">
-          <span className="success-icon">[Check]</span>
+          <span className="success-icon">Check</span>
           <span className="success-text">{uploadSuccess || success}</span>
         </div>
       )}
@@ -155,7 +155,7 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
       {file && !uploading && (
         <div className="file-info">
           <div className="file-details">
-            <span className="file-icon">[Document]</span>
+            <span className="file-icon">Document</span>
             <div className="file-text">
               <p className="file-name">{file.name}</p>
               <p className="file-size">
@@ -185,7 +185,7 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
               onClick={handleUpload}
               disabled={uploading}
             >
-              {uploading ? `Uploading... ${progress}%` : "[Check] Upload Picture"}
+              {uploading ? `Uploading... ${progress}%` : "Check Upload Picture"}
             </button>
             <button
               type="button"
@@ -203,10 +203,10 @@ const ProfilePictureUpload = ({ currentImage = null, onUploadSuccess, onUploadEr
       <div className="upload-requirements">
         <h4 className="requirements-title">Requirements:</h4>
         <ul className="requirements-list">
-          <li>[Check] Maximum file size: 5MB</li>
-          <li>[Check] Supported formats: JPG, PNG</li>
-          <li>[Check] Recommended size: 500x500px or larger</li>
-          <li>[Check] Square images work best</li>
+          <li>Check Maximum file size: 5MB</li>
+          <li>Check Supported formats: JPG, PNG</li>
+          <li>Check Recommended size: 500x500px or larger</li>
+          <li>Check Square images work best</li>
         </ul>
       </div>
     </div>

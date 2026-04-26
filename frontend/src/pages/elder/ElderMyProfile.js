@@ -65,7 +65,7 @@ const ElderMyProfile = () => {
     return (
       <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "48px", marginBottom: "20px" }}>[Loading]</div>
+          <div style={{ fontSize: "48px", marginBottom: "20px" }}>Loading</div>
           <p style={{ fontSize: "16px", color: COLORS.darkGreen, fontWeight: 600 }}>Loading your profile...</p>
         </div>
       </div>
@@ -76,7 +76,7 @@ const ElderMyProfile = () => {
     return (
       <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center", maxWidth: "500px" }}>
-          <div style={{ fontSize: "48px", marginBottom: "20px" }}>[Warning]</div>
+          <div style={{ fontSize: "48px", marginBottom: "20px" }}>Warning</div>
           <p style={{ fontSize: "16px", color: COLORS.red, fontWeight: 600, marginBottom: "20px" }}>{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -258,7 +258,7 @@ const ElderMyProfile = () => {
             onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
             onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
           >
-            [Settings] Settings
+            Settings Settings
           </button>
           <button
             onClick={() => navigate("/elder-password-change")}
@@ -276,7 +276,7 @@ const ElderMyProfile = () => {
             onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
             onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
           >
-            [Lock] Change Password
+            Lock Change Password
           </button>
           <button
             onClick={() => navigate("/elder-dashboard")}
@@ -294,7 +294,7 @@ const ElderMyProfile = () => {
             onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen, e.target.style.color = COLORS.white)}
             onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen, e.target.style.color = COLORS.darkGreen)}
           >
-            [Home] Back to Dashboard
+            Home Back to Dashboard
           </button>
         </div>
       </div>

@@ -62,7 +62,7 @@ const ElderSupport = () => {
           <button onClick={() => navigate("/elder-dashboard")} style={{ background: "none", border: "none", color: COLORS.white, cursor: "pointer", fontSize: "20px" }}>
             Back
           </button>
-          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>[Phone] Support & Help</h1>
+          <h1 style={{ color: COLORS.white, margin: "0", fontSize: "24px", fontWeight: 700 }}>Phone Support & Help</h1>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
       <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
@@ -96,7 +96,7 @@ const ElderSupport = () => {
       <div style={{ flex: 1, padding: "20px", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
         {/* Emergency Contacts */}
         <div style={{ marginBottom: "40px" }}>
-          <h2 style={{ color: COLORS.red, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>[Alert] Emergency Contacts</h2>
+          <h2 style={{ color: COLORS.red, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>Alert Emergency Contacts</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "15px" }}>
             {emergencyContacts.map((contact, idx) => (
               <div key={idx} style={{ backgroundColor: "#ffebee", border: `2px solid ${COLORS.red}`, borderRadius: "12px", padding: "15px" }}>
@@ -120,7 +120,7 @@ const ElderSupport = () => {
                     fontSize: "13px",
                   }}
                 >
-                  [Phone] {contact.phone}
+                  Phone {contact.phone}
                 </button>
               </div>
             ))}
@@ -129,7 +129,7 @@ const ElderSupport = () => {
 
         {/* Community Volunteers */}
         <div>
-          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>[People] Community Volunteers</h2>
+          <h2 style={{ color: COLORS.darkGreen, marginBottom: "15px", fontSize: "20px", fontWeight: 700 }}>People Community Volunteers</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
             {communityVolunteers.map((volunteer) => (
               <div
@@ -185,7 +185,7 @@ const ElderSupport = () => {
                     onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
                     onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
                   >
-                    [Phone] Call
+                    Phone Call
                   </button>
                   <button
                     onClick={() => handleEmail(volunteer.email)}
@@ -204,7 +204,7 @@ const ElderSupport = () => {
                     onMouseEnter={(e) => (e.target.style.backgroundColor = "#f0f0f0")}
                     onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.veryLightGreen)}
                   >
-                    [Email] Email
+                    Email Email
                   </button>
                 </div>
 

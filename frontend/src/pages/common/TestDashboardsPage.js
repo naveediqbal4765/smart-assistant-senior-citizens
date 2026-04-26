@@ -22,7 +22,7 @@ const TestDashboardsPage = () => {
       name: "Caregiver Dashboard",
       description: "Monitor assigned elders and manage schedules",
       color: "#2d6a4f",
-      icon: "[Hospital]",
+      icon: "Hospital",
     },
     {
       id: "volunteer",
@@ -170,7 +170,7 @@ const TestDashboardsPage = () => {
             }}
           >
             <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#856404", margin: "0 0 10px 0" }}>
-              [Warning] Testing Mode
+              Warning Testing Mode
             </h3>
             <p style={{ fontSize: "14px", color: "#856404", margin: "0" }}>
               This page provides direct access to dashboards for testing purposes. In production, users must authenticate
@@ -202,7 +202,7 @@ const TestDashboardsPage = () => {
               {/* Caregiver Features */}
               <div>
                 <h4 style={{ fontSize: "16px", fontWeight: 600, color: "#2d6a4f", margin: "0 0 10px 0" }}>
-                  [Hospital] Caregiver Dashboard
+                  Hospital Caregiver Dashboard
                 </h4>
                 <ul style={{ fontSize: "14px", color: "#666", margin: "0", paddingLeft: "20px" }}>
                   <li>Assigned elders list</li>

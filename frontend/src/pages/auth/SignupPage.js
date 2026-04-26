@@ -606,7 +606,7 @@ const SignupPage = () => {
                       fontFamily: "Montserrat, sans-serif",
                     }}
                   >
-                    [Hospital] Caregiver
+                    Hospital Caregiver
                   </button>
                   <button
                     type="button"
@@ -700,7 +700,7 @@ const SignupPage = () => {
                     e.target.style.transform = "translateY(0)";
                   }}
                 >
-                  [Medical] Caregiver
+                  Medical Caregiver
                 </button>
 
                 <button
@@ -958,7 +958,7 @@ const SignupPage = () => {
                     gap: "8px",
                   }}
                 >
-                  <span>[Warning]</span>
+                  <span>Warning</span>
                   <span>{errors.general}</span>
                 </div>
               )}
@@ -1019,7 +1019,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.fullName && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.fullName}</p>}
+                {errors.fullName && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.fullName}</p>}
 
                 {/* Email */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1050,7 +1050,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.email && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.email}</p>}
+                {errors.email && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.email}</p>}
 
                 {/* Phone */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1081,7 +1081,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.phone && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.phone}</p>}
+                {errors.phone && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.phone}</p>}
 
                 {/* Date of Birth */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1111,7 +1111,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.dateOfBirth && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.dateOfBirth}</p>}
+                {errors.dateOfBirth && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.dateOfBirth}</p>}
 
                 {/* Address */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1142,7 +1142,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.address && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.address}</p>}
+                {errors.address && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.address}</p>}
 
                 {/* National ID */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1174,7 +1174,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.nationalId && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.nationalId}</p>}
+                {errors.nationalId && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.nationalId}</p>}
 
                 {/* Password */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1205,7 +1205,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.password && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.password}</p>}
+                {errors.password && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.password}</p>}
 
                 {/* Confirm Password */}
                 <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1236,7 +1236,7 @@ const SignupPage = () => {
                   onFocus={(e) => (e.target.style.boxShadow = "0 0 0 3px #1C382A40")}
                   onBlur={(e) => (e.target.style.boxShadow = "none")}
                 />
-                {errors.confirmPassword && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>[Warning] {errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginTop: "-10px", marginBottom: "6px" }}>Warning {errors.confirmPassword}</p>}
 
                 {/* Next Button */}
                 <button
@@ -1502,7 +1502,7 @@ const SignupPage = () => {
                   gap: "8px",
                 }}
               >
-                <span>[Warning]</span>
+                <span>Warning</span>
                 <span>{errors.general}</span>
               </div>
             )}
@@ -1541,7 +1541,7 @@ const SignupPage = () => {
                       <span style={{ fontSize: "14px", color: "#1C382A" }}>No</span>
                     </label>
                   </div>
-                  {errors.livesAlone && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.livesAlone}</p>}
+                  {errors.livesAlone && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.livesAlone}</p>}
 
                   {/* Emergency Contacts (if not lives alone) */}
                   {formData.livesAlone === false && (
@@ -1637,7 +1637,7 @@ const SignupPage = () => {
                           + Add Contact
                         </button>
                       )}
-                      {errors.emergencyContacts && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.emergencyContacts}</p>}
+                      {errors.emergencyContacts && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.emergencyContacts}</p>}
                     </>
                   )}
 
@@ -1669,7 +1669,7 @@ const SignupPage = () => {
                       <span style={{ fontSize: "14px", color: "#1C382A" }}>No</span>
                     </label>
                   </div>
-                  {errors.hasMedicalIssues && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.hasMedicalIssues}</p>}
+                  {errors.hasMedicalIssues && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.hasMedicalIssues}</p>}
 
                   {/* Medical Conditions Dropdown (if yes) */}
                   {formData.hasMedicalIssues === true && (
@@ -1773,7 +1773,7 @@ const SignupPage = () => {
                             />
                           </div>
                           <p style={{ fontSize: "12px", color: "#666", marginTop: "-12px", marginBottom: "16px" }}>
-                            [Idea] Tip: Separate multiple conditions with commas (e.g., "Diabetes, Arthritis")
+                            Idea Tip: Separate multiple conditions with commas (e.g., "Diabetes, Arthritis")
                           </p>
                         </>
                       )}
@@ -1815,7 +1815,7 @@ const SignupPage = () => {
                         }
                       }}
                     >
-                      [Check] Allow
+                      Check Allow
                     </button>
                     <button
                       type="button"
@@ -1850,7 +1850,7 @@ const SignupPage = () => {
                        Disallow
                     </button>
                   </div>
-                  {errors.locationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.locationPermission}</p>}
+                  {errors.locationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.locationPermission}</p>}
                 </>
               )}
 
@@ -1890,7 +1890,7 @@ const SignupPage = () => {
                     <option value="Neighbor">Neighbor</option>
                     <option value="Other">Other</option>
                   </select>
-                  {errors.relationshipToElder && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.relationshipToElder}</p>}
+                  {errors.relationshipToElder && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.relationshipToElder}</p>}
 
                   {/* Custom Relationship (if Other selected) */}
                   {formData.relationshipToElder === "Other" && (
@@ -1945,7 +1945,7 @@ const SignupPage = () => {
                       boxSizing: "border-box",
                     }}
                   />
-                  {errors.linkedElderEmail && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.linkedElderEmail}</p>}
+                  {errors.linkedElderEmail && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.linkedElderEmail}</p>}
 
                   {/* Pairing Code */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "6px" }}>
@@ -1972,7 +1972,7 @@ const SignupPage = () => {
                       boxSizing: "border-box",
                     }}
                   />
-                  {errors.pairingCode && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.pairingCode}</p>}
+                  {errors.pairingCode && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.pairingCode}</p>}
 
                   {/* Notifications */}
                   <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "20px" }}>
@@ -1985,7 +1985,7 @@ const SignupPage = () => {
                     />
                     <span style={{ fontSize: "14px", color: "#1C382A", fontWeight: 600 }}>Enable push notifications for SOS alerts *</span>
                   </label>
-                  {errors.notificationsEnabled && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.notificationsEnabled}</p>}
+                  {errors.notificationsEnabled && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.notificationsEnabled}</p>}
 
                   {/* Available Status */}
                   <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", marginBottom: "20px" }}>
@@ -2035,7 +2035,7 @@ const SignupPage = () => {
                     <option value="Independent">Independent Volunteer</option>
                     <option value="Other">Other</option>
                   </select>
-                  {errors.affiliation && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.affiliation}</p>}
+                  {errors.affiliation && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.affiliation}</p>}
 
                   {/* Custom Affiliation (if Other selected) */}
                   {formData.affiliation === "Other" && (
@@ -2126,7 +2126,7 @@ const SignupPage = () => {
                       </label>
                     ))}
                   </div>
-                  {errors.skills && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.skills}</p>}
+                  {errors.skills && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.skills}</p>}
 
                   {/* Availability Days */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
@@ -2145,7 +2145,7 @@ const SignupPage = () => {
                       </label>
                     ))}
                   </div>
-                  {errors.availabilityDays && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.availabilityDays}</p>}
+                  {errors.availabilityDays && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.availabilityDays}</p>}
 
                   {/* Availability Time Slots */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
@@ -2164,7 +2164,7 @@ const SignupPage = () => {
                       </label>
                     ))}
                   </div>
-                  {errors.availabilityTimeSlots && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.availabilityTimeSlots}</p>}
+                  {errors.availabilityTimeSlots && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.availabilityTimeSlots}</p>}
 
                   {/* Location Permission */}
                   <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 600, fontSize: "14px", color: "#1C382A", marginBottom: "12px" }}>
@@ -2201,7 +2201,7 @@ const SignupPage = () => {
                         }
                       }}
                     >
-                      [Check] Allow
+                      Check Allow
                     </button>
                     <button
                       type="button"
@@ -2236,7 +2236,7 @@ const SignupPage = () => {
                        Disallow
                     </button>
                   </div>
-                  {errors.volunteerLocationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>[Warning] {errors.volunteerLocationPermission}</p>}
+                  {errors.volunteerLocationPermission && <p style={{ color: "#e63946", fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Warning {errors.volunteerLocationPermission}</p>}
                 </>
               )}
 
