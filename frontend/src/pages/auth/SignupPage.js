@@ -543,7 +543,7 @@ const SignupPage = () => {
               }}
             >
               <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                <img src={Logo} alt="Logo" style={{ height: 70, width: \'auto\' }} />
+                <img src={Logo} alt="Logo" style={{ height: 70, width: 'auto' }} />
               </div>
               <h2
                 style={{
@@ -899,7 +899,7 @@ const SignupPage = () => {
               }}
             >
               <div style={{ display: "flex", justifyContent: "center", marginBottom: "15px" }}>
-                <img src={Logo} alt="Logo" style={{ height: 60, width: \'auto\' }} />
+                <img src={Logo} alt="Logo" style={{ height: 60, width: 'auto' }} />
               </div>
               <h2
                 style={{
@@ -1441,7 +1441,7 @@ const SignupPage = () => {
             }}
           >
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "15px" }}>
-              <img src={Logo} alt="Logo" style={{ height: 60, width: \'auto\' }} />
+              <img src={Logo} alt="Logo" style={{ height: 60, width: 'auto' }} />
             </div>
             <h2
               style={{
