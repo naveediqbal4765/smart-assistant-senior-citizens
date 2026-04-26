@@ -1056,3 +1056,67 @@ router.post("/change-password", protect, async (req, res) => {
     });
   }
 });
+
+// ============================================================
+// DELETE ACCOUNT - Protected Route
+// ============================================================
+router.post("/delete-account", protect, async (req, res) => {
+  try {
+    const { password } = req.body;
+    const userId = req.user._id;
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide your password to confirm deletion",
+      });
+    }
+
+    // Get user with password field
+    const user = await User.findById(userId).select("+password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Verify password
+    const isPasswordCorrect = await user.comparePassword(password);
+
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        success: false,
+        message: "Verification failed: Incorrect password",
+      });
+    }
+
+    // Delete role-specific profiles
+    if (user.role === "elder") {
+      await Elder.deleteMany({ userId: user._id });
+    } else if (user.role === "caregiver") {
+      await Caregiver.deleteMany({ userId: user._id });
+    } else if (user.role === "volunteer") {
+      await Volunteer.deleteMany({ userId: user._id });
+    }
+
+    // Delete user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Account deleted successfully. All your data has been removed from our system.",
+      data: {
+        accountDeleted: true,
+      },
+    });
+  } catch (error) {
+    console.error("Delete account error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting account",
+      error: error.message,
+    });
+  }
+});

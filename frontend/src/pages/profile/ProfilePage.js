@@ -22,6 +22,8 @@ const ProfilePage = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [passwordVerified, setPasswordVerified] = useState(false);
   const [currentPasswordInput, setCurrentPasswordInput] = useState("");
+  const [deleteConfirmPassword, setDeleteConfirmPassword] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const [profileData, setProfileData] = useState({
     // Basic Info
@@ -31,21 +33,31 @@ const ProfilePage = () => {
     address: "",
     dateOfBirth: "",
     profilePicture: user?.profilePicture || null,
+    
     // Elder specific
-    bloodGroup: "",
-    allergies: "",
-    primaryCaregiver: "",
+    livesAlone: null,
+    hasMedicalIssues: null,
+    medicalConditions: [],
+    locationPermission: false,
+    emergencyContacts: [],
+    
     // Caregiver specific
-    linkedSeniors: [],
     relationshipToElder: "",
+    linkedElderEmail: "",
+    notificationsEnabled: false,
+    
     // Volunteer specific
-    skills: [],
-    serviceRadius: 5,
     affiliation: "",
+    skills: [],
+    availabilityDays: [],
+    serviceRadius: 5,
+    volunteerLocationPermission: false,
+    
     // Password
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    
     // Privacy
     privacySettings: {
       profileVisibility: "private",
@@ -55,6 +67,32 @@ const ProfilePage = () => {
       smsNotifications: true,
     },
   });
+
+  const medicalConditionsList = [
+    "Diabetes",
+    "Hypertension",
+    "Heart Disease",
+    "Asthma",
+    "Arthritis",
+    "Alzheimer's",
+    "Parkinson's",
+    "Cancer",
+    "Kidney Disease",
+    "Liver Disease",
+  ];
+
+  const skillsList = [
+    "Grocery Shopping",
+    "Tech Support",
+    "Cooking",
+    "Cleaning",
+    "Transportation",
+    "Companionship",
+    "Medical Assistance",
+    "Pet Care",
+  ];
+
+  const availabilityDaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   const handleInputChange = (field, value) => {
     setProfileData((prev) => ({
@@ -72,6 +110,24 @@ const ProfilePage = () => {
         [field]: value,
       },
     }));
+    setHasChanges(true);
+  };
+
+  const handleArrayChange = (field, value) => {
+    setProfileData((prev) => {
+      const currentArray = prev[field] || [];
+      if (currentArray.includes(value)) {
+        return {
+          ...prev,
+          [field]: currentArray.filter((item) => item !== value),
+        };
+      } else {
+        return {
+          ...prev,
+          [field]: [...currentArray, value],
+        };
+      }
+    });
     setHasChanges(true);
   };
 
@@ -95,51 +151,51 @@ const ProfilePage = () => {
       toast.error("Please enter your current password");
       return;
     }
-    // TODO: Call API to verify password
-    // For now, just set verified
     setPasswordVerified(true);
     toast.success("Password verified");
   };
 
-  const handleSaveChanges = async () => {
-    // Validate password change if in password tab
-    if (activeTab === "password") {
-      if (!passwordVerified) {
-        toast.error("Please verify your current password first");
-        return;
-      }
-      if (!profileData.newPassword || !profileData.confirmPassword) {
-        toast.error("Please enter new password and confirm it");
-        return;
-      }
-      if (profileData.newPassword !== profileData.confirmPassword) {
-        toast.error("New passwords do not match");
-        return;
-      }
-      if (profileData.newPassword.length < 8) {
-        toast.error("Password must be at least 8 characters");
-        return;
-      }
+  const handleDeleteAccount = async () => {
+    if (!deleteConfirmPassword) {
+      toast.error("Please enter your password to confirm deletion");
+      return;
     }
+    
+    setIsLoading(true);
+    try {
+      // TODO: Call API to delete account
+      // const response = await profileAPI.deleteAccount(deleteConfirmPassword);
+      toast.success("Account deleted successfully");
+      logout();
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.message || "Failed to delete account");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  const handleSaveChanges = async () => {
     setIsLoading(true);
     try {
       // TODO: Call API to save profile changes
       // const response = await profileAPI.updateProfile(profileData);
       toast.success("Profile updated successfully!");
       setHasChanges(false);
-      setPasswordVerified(false);
-      setCurrentPasswordInput("");
-      setProfileData((prev) => ({
-        ...prev,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      }));
     } catch (error) {
       toast.error(error.message || "Failed to update profile");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      logout();
+      navigate("/login");
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error("Failed to logout");
     }
   };
 
@@ -153,10 +209,8 @@ const ProfilePage = () => {
 
   const tabs = [
     { id: "basic", label: "Personal Information" },
-    { id: "picture", label: "Profile Picture" },
     { id: "role", label: "Role Details" },
-    { id: "password", label: "Change Password" },
-    { id: "privacy", label: "Privacy Settings" },
+    { id: "privacy", label: "Privacy & Security" },
   ];
 
   return (
@@ -235,6 +289,66 @@ const ProfilePage = () => {
                   Personal Information
                 </h2>
 
+                {/* Profile Picture */}
+                <div style={{ marginBottom: "30px", textAlign: "center", paddingBottom: "30px", borderBottom: `2px solid ${COLORS.veryLightGreen}` }}>
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
+                    Profile Picture
+                  </h3>
+                  <div
+                    style={{
+                      width: "120px",
+                      height: "120px",
+                      borderRadius: "50%",
+                      backgroundColor: COLORS.lightGray,
+                      margin: "0 auto 15px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                      border: `3px solid ${COLORS.mediumGreen}`,
+                    }}
+                  >
+                    {profileData.profilePicture ? (
+                      <img
+                        src={profileData.profilePicture}
+                        alt="Profile"
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: "40px" }}>👤</span>
+                    )}
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfilePictureChange}
+                    style={{ display: "none" }}
+                  />
+
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      padding: "10px 20px",
+                      backgroundColor: COLORS.mediumGreen,
+                      color: COLORS.white,
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "12px",
+                      fontFamily: "Montserrat, sans-serif",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                    onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  >
+                    Upload Picture
+                  </button>
+                </div>
+
+                {/* Personal Info Fields */}
                 <div style={{ marginBottom: "20px" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
                     Full Name
@@ -340,74 +454,35 @@ const ProfilePage = () => {
                     }}
                   />
                 </div>
-              </div>
-            )}
 
-            {/* Profile Picture Tab */}
-            {activeTab === "picture" && (
-              <div>
-                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
-                  Profile Picture
-                </h2>
-
-                <div style={{ marginBottom: "20px", textAlign: "center" }}>
-                  <div
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      borderRadius: "50%",
-                      backgroundColor: COLORS.lightGray,
-                      margin: "0 auto 20px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      overflow: "hidden",
-                      border: `3px solid ${COLORS.mediumGreen}`,
-                    }}
-                  >
-                    {profileData.profilePicture ? (
-                      <img
-                        src={profileData.profilePicture}
-                        alt="Profile"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    ) : (
-                      <span style={{ fontSize: "50px" }}>👤</span>
-                    )}
-                  </div>
-
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePictureChange}
-                    style={{ display: "none" }}
-                  />
-
+                {/* Save Button for Personal Info */}
+                {hasChanges && (
                   <button
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={handleSaveChanges}
+                    disabled={isLoading}
                     style={{
                       padding: "12px 24px",
                       backgroundColor: COLORS.mediumGreen,
                       color: COLORS.white,
                       border: "none",
                       borderRadius: "8px",
-                      cursor: "pointer",
+                      cursor: isLoading ? "not-allowed" : "pointer",
                       fontWeight: 600,
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
+                      opacity: isLoading ? 0.7 : 1,
                       transition: "all 0.3s ease",
                     }}
-                    onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
-                    onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                    onMouseEnter={(e) => {
+                      if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+                    }}
                   >
-                    Upload New Picture
+                    {isLoading ? "Saving..." : "Save Personal Info"}
                   </button>
-
-                  <p style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "15px" }}>
-                    Recommended: Square image, at least 400x400px
-                  </p>
-                </div>
+                )}
               </div>
             )}
 
@@ -415,42 +490,105 @@ const ProfilePage = () => {
             {activeTab === "role" && (
               <div>
                 <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
-                  {user?.role === "elder" && "Medical Information"}
-                  {user?.role === "caregiver" && "Caregiver Details"}
+                  {user?.role === "elder" && "Medical & Living Information"}
+                  {user?.role === "caregiver" && "Caregiver Information"}
                   {user?.role === "volunteer" && "Volunteer Information"}
                 </h2>
 
+                {/* Elder Role Details */}
                 {user?.role === "elder" && (
                   <>
                     <div style={{ marginBottom: "20px" }}>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Blood Group
+                        Do you live alone?
                       </label>
-                      <input
-                        type="text"
-                        value={profileData.bloodGroup}
-                        onChange={(e) => handleInputChange("bloodGroup", e.target.value)}
-                        placeholder="e.g., O+, A-, B+"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                        }}
-                      />
+                      <div style={{ display: "flex", gap: "15px" }}>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                          <input
+                            type="radio"
+                            name="livesAlone"
+                            checked={profileData.livesAlone === true}
+                            onChange={() => handleInputChange("livesAlone", true)}
+                          />
+                          <span style={{ fontSize: "13px", color: COLORS.darkGreen }}>Yes</span>
+                        </label>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                          <input
+                            type="radio"
+                            name="livesAlone"
+                            checked={profileData.livesAlone === false}
+                            onChange={() => handleInputChange("livesAlone", false)}
+                          />
+                          <span style={{ fontSize: "13px", color: COLORS.darkGreen }}>No</span>
+                        </label>
+                      </div>
                     </div>
 
                     <div style={{ marginBottom: "20px" }}>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Allergies
+                        Do you have any medical issues?
+                      </label>
+                      <div style={{ display: "flex", gap: "15px" }}>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                          <input
+                            type="radio"
+                            name="hasMedicalIssues"
+                            checked={profileData.hasMedicalIssues === true}
+                            onChange={() => handleInputChange("hasMedicalIssues", true)}
+                          />
+                          <span style={{ fontSize: "13px", color: COLORS.darkGreen }}>Yes</span>
+                        </label>
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                          <input
+                            type="radio"
+                            name="hasMedicalIssues"
+                            checked={profileData.hasMedicalIssues === false}
+                            onChange={() => handleInputChange("hasMedicalIssues", false)}
+                          />
+                          <span style={{ fontSize: "13px", color: COLORS.darkGreen }}>No</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {profileData.hasMedicalIssues && (
+                      <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                        <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "12px" }}>
+                          Select your medical conditions:
+                        </label>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
+                          {medicalConditionsList.map((condition) => (
+                            <label key={condition} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                              <input
+                                type="checkbox"
+                                checked={profileData.medicalConditions.includes(condition)}
+                                onChange={() => handleArrayChange("medicalConditions", condition)}
+                              />
+                              <span style={{ fontSize: "12px", color: COLORS.darkGreen }}>{condition}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={profileData.locationPermission}
+                          onChange={(e) => handleInputChange("locationPermission", e.target.checked)}
+                        />
+                        <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                          Allow location sharing for SOS calls
+                        </span>
+                      </label>
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Emergency Contacts
                       </label>
                       <textarea
-                        value={profileData.allergies}
-                        onChange={(e) => handleInputChange("allergies", e.target.value)}
-                        placeholder="List any allergies..."
+                        placeholder="Add emergency contact names and phone numbers"
                         style={{
                           width: "100%",
                           padding: "12px",
@@ -459,34 +597,14 @@ const ProfilePage = () => {
                           fontSize: "13px",
                           fontFamily: "Montserrat, sans-serif",
                           boxSizing: "border-box",
-                          minHeight: "100px",
-                        }}
-                      />
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Primary Caregiver
-                      </label>
-                      <input
-                        type="text"
-                        value={profileData.primaryCaregiver}
-                        onChange={(e) => handleInputChange("primaryCaregiver", e.target.value)}
-                        placeholder="Name of primary caregiver"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
+                          minHeight: "80px",
                         }}
                       />
                     </div>
                   </>
                 )}
 
+                {/* Caregiver Role Details */}
                 {user?.role === "caregiver" && (
                   <>
                     <div style={{ marginBottom: "20px" }}>
@@ -510,17 +628,43 @@ const ProfilePage = () => {
                       />
                     </div>
 
-                    <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
-                      <p style={{ fontSize: "13px", color: COLORS.darkGray, margin: "0" }}>
-                        Linked Seniors: {profileData.linkedSeniors.length}
-                      </p>
-                      <p style={{ fontSize: "13px", color: COLORS.darkGray, marginTop: "10px" }}>
-                        Manage your linked seniors from the dashboard.
-                      </p>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Linked Elder Email
+                      </label>
+                      <input
+                        type="email"
+                        value={profileData.linkedElderEmail}
+                        onChange={(e) => handleInputChange("linkedElderEmail", e.target.value)}
+                        placeholder="Enter elder's email"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={profileData.notificationsEnabled}
+                          onChange={(e) => handleInputChange("notificationsEnabled", e.target.checked)}
+                        />
+                        <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                          Enable notifications
+                        </span>
+                      </label>
                     </div>
                   </>
                 )}
 
+                {/* Volunteer Role Details */}
                 {user?.role === "volunteer" && (
                   <>
                     <div style={{ marginBottom: "20px" }}>
@@ -545,24 +689,21 @@ const ProfilePage = () => {
                     </div>
 
                     <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "12px" }}>
                         Skills
                       </label>
-                      <input
-                        type="text"
-                        value={profileData.skills.join(", ")}
-                        onChange={(e) => handleInputChange("skills", e.target.value.split(", "))}
-                        placeholder="e.g., Grocery Shopping, Tech Support"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                        }}
-                      />
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
+                        {skillsList.map((skill) => (
+                          <label key={skill} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                            <input
+                              type="checkbox"
+                              checked={profileData.skills.includes(skill)}
+                              onChange={() => handleArrayChange("skills", skill)}
+                            />
+                            <span style={{ fontSize: "12px", color: COLORS.darkGreen }}>{skill}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
 
                     <div style={{ marginBottom: "20px" }}>
@@ -586,162 +727,89 @@ const ProfilePage = () => {
                         }}
                       />
                     </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "12px" }}>
+                        Available Days
+                      </label>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
+                        {availabilityDaysList.map((day) => (
+                          <label key={day} style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                            <input
+                              type="checkbox"
+                              checked={profileData.availabilityDays.includes(day)}
+                              onChange={() => handleArrayChange("availabilityDays", day)}
+                            />
+                            <span style={{ fontSize: "12px", color: COLORS.darkGreen }}>{day}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={profileData.volunteerLocationPermission}
+                          onChange={(e) => handleInputChange("volunteerLocationPermission", e.target.checked)}
+                        />
+                        <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                          Allow location sharing
+                        </span>
+                      </label>
+                    </div>
                   </>
+                )}
+
+                {/* Save Button for Role Details */}
+                {hasChanges && (
+                  <button
+                    onClick={handleSaveChanges}
+                    disabled={isLoading}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: COLORS.mediumGreen,
+                      color: COLORS.white,
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      opacity: isLoading ? 0.7 : 1,
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+                    }}
+                  >
+                    {isLoading ? "Saving..." : "Save Role Details"}
+                  </button>
                 )}
               </div>
             )}
 
-            {/* Change Password Tab */}
-            {activeTab === "password" && (
-              <div>
-                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
-                  Change Password
-                </h2>
-
-                {!passwordVerified ? (
-                  <>
-                    <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
-                      <p style={{ fontSize: "13px", color: COLORS.darkGray, margin: "0 0 15px 0" }}>
-                        For security, please verify your current password first.
-                      </p>
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Current Password
-                      </label>
-                      <input
-                        type="password"
-                        value={currentPasswordInput}
-                        onChange={(e) => setCurrentPasswordInput(e.target.value)}
-                        placeholder="Enter your current password"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                        }}
-                      />
-                    </div>
-
-                    <button
-                      onClick={handleVerifyPassword}
-                      style={{
-                        padding: "12px 24px",
-                        backgroundColor: COLORS.mediumGreen,
-                        color: COLORS.white,
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        fontSize: "13px",
-                        fontFamily: "Montserrat, sans-serif",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
-                      onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
-                    >
-                      Verify Password
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#d4edda", borderRadius: "8px", border: `2px solid #28a745` }}>
-                      <p style={{ fontSize: "13px", color: "#155724", margin: "0" }}>
-                        Password verified successfully. You can now change your password.
-                      </p>
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        value={profileData.newPassword}
-                        onChange={(e) => handleInputChange("newPassword", e.target.value)}
-                        placeholder="Enter new password (min 8 characters)"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                        }}
-                      />
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Confirm Password
-                      </label>
-                      <input
-                        type="password"
-                        value={profileData.confirmPassword}
-                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                        placeholder="Confirm new password"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                        }}
-                      />
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        setPasswordVerified(false);
-                        setCurrentPasswordInput("");
-                      }}
-                      style={{
-                        padding: "12px 24px",
-                        backgroundColor: COLORS.darkGray,
-                        color: COLORS.white,
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        fontSize: "13px",
-                        fontFamily: "Montserrat, sans-serif",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => (e.target.style.backgroundColor = "#555")}
-                      onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGray)}
-                    >
-                      Change Password
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* Privacy Settings Tab */}
+            {/* Privacy & Security Tab */}
             {activeTab === "privacy" && (
               <div>
                 <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
-                  Privacy Settings
+                  Privacy & Security
                 </h2>
 
-                <div style={{ marginBottom: "20px" }}>
+                {/* Privacy Settings */}
+                <div style={{ marginBottom: "30px", paddingBottom: "30px", borderBottom: `2px solid ${COLORS.veryLightGreen}` }}>
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
+                    Privacy Settings
+                  </h3>
+
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
                       checked={profileData.privacySettings.profileVisibility === "public"}
                       onChange={(e) => handleNestedChange("privacySettings", "profileVisibility", e.target.checked ? "public" : "private")}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
                     />
                     <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                       Make my profile visible to other users
@@ -753,11 +821,6 @@ const ProfilePage = () => {
                       type="checkbox"
                       checked={profileData.privacySettings.healthDataSharing}
                       onChange={(e) => handleNestedChange("privacySettings", "healthDataSharing", e.target.checked)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
                     />
                     <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                       Allow sharing of health data with caregivers
@@ -769,11 +832,6 @@ const ProfilePage = () => {
                       type="checkbox"
                       checked={profileData.privacySettings.locationSharing}
                       onChange={(e) => handleNestedChange("privacySettings", "locationSharing", e.target.checked)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
                     />
                     <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                       Allow location sharing
@@ -785,11 +843,6 @@ const ProfilePage = () => {
                       type="checkbox"
                       checked={profileData.privacySettings.emailNotifications}
                       onChange={(e) => handleNestedChange("privacySettings", "emailNotifications", e.target.checked)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
                     />
                     <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                       Receive email notifications
@@ -801,11 +854,6 @@ const ProfilePage = () => {
                       type="checkbox"
                       checked={profileData.privacySettings.smsNotifications}
                       onChange={(e) => handleNestedChange("privacySettings", "smsNotifications", e.target.checked)}
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        cursor: "pointer",
-                      }}
                     />
                     <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                       Receive SMS notifications
@@ -813,46 +861,258 @@ const ProfilePage = () => {
                   </label>
                 </div>
 
-                <div style={{ padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
-                  <p style={{ fontSize: "12px", color: COLORS.darkGray, margin: "0" }}>
-                    Your privacy is important to us. These settings control how your information is shared and how you receive notifications.
-                  </p>
+                {/* Change Password */}
+                <div style={{ marginBottom: "30px", paddingBottom: "30px", borderBottom: `2px solid ${COLORS.veryLightGreen}` }}>
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
+                    Change Password
+                  </h3>
+
+                  {!passwordVerified ? (
+                    <>
+                      <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                        <p style={{ fontSize: "13px", color: COLORS.darkGray, margin: "0" }}>
+                          For security, please verify your current password first.
+                        </p>
+                      </div>
+
+                      <div style={{ marginBottom: "20px" }}>
+                        <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                          Current Password
+                        </label>
+                        <input
+                          type="password"
+                          value={currentPasswordInput}
+                          onChange={(e) => setCurrentPasswordInput(e.target.value)}
+                          placeholder="Enter your current password"
+                          style={{
+                            width: "100%",
+                            padding: "12px",
+                            border: `2px solid ${COLORS.veryLightGreen}`,
+                            borderRadius: "8px",
+                            fontSize: "13px",
+                            fontFamily: "Montserrat, sans-serif",
+                            boxSizing: "border-box",
+                          }}
+                        />
+                      </div>
+
+                      <button
+                        onClick={handleVerifyPassword}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: COLORS.mediumGreen,
+                          color: COLORS.white,
+                          border: "none",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          fontFamily: "Montserrat, sans-serif",
+                          transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                        onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                      >
+                        Verify Password
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#d4edda", borderRadius: "8px", border: `2px solid #28a745` }}>
+                        <p style={{ fontSize: "13px", color: "#155724", margin: "0" }}>
+                          Password verified. You can now change your password.
+                        </p>
+                      </div>
+
+                      <div style={{ marginBottom: "20px" }}>
+                        <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                          New Password
+                        </label>
+                        <input
+                          type="password"
+                          value={profileData.newPassword}
+                          onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                          placeholder="Enter new password (min 8 characters)"
+                          style={{
+                            width: "100%",
+                            padding: "12px",
+                            border: `2px solid ${COLORS.veryLightGreen}`,
+                            borderRadius: "8px",
+                            fontSize: "13px",
+                            fontFamily: "Montserrat, sans-serif",
+                            boxSizing: "border-box",
+                          }}
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: "20px" }}>
+                        <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                          Confirm Password
+                        </label>
+                        <input
+                          type="password"
+                          value={profileData.confirmPassword}
+                          onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                          placeholder="Confirm new password"
+                          style={{
+                            width: "100%",
+                            padding: "12px",
+                            border: `2px solid ${COLORS.veryLightGreen}`,
+                            borderRadius: "8px",
+                            fontSize: "13px",
+                            fontFamily: "Montserrat, sans-serif",
+                            boxSizing: "border-box",
+                          }}
+                        />
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setPasswordVerified(false);
+                          setCurrentPasswordInput("");
+                        }}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: COLORS.darkGray,
+                          color: COLORS.white,
+                          border: "none",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          fontFamily: "Montserrat, sans-serif",
+                          transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = "#555")}
+                        onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGray)}
+                      >
+                        Change Password
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {/* Delete Account */}
+                <div>
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.red, marginBottom: "15px" }}>
+                    Delete Account
+                  </h3>
+
+                  {!showDeleteConfirm ? (
+                    <div style={{ padding: "15px", backgroundColor: "#ffe0e0", borderRadius: "8px", border: `2px solid ${COLORS.red}` }}>
+                      <p style={{ fontSize: "13px", color: COLORS.red, margin: "0 0 15px 0" }}>
+                        Warning: Deleting your account will permanently remove all your data from our system. This action cannot be undone.
+                      </p>
+                      <button
+                        onClick={() => setShowDeleteConfirm(true)}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: COLORS.red,
+                          color: COLORS.white,
+                          border: "none",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          fontFamily: "Montserrat, sans-serif",
+                          transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+                        onMouseLeave={(e) => (e.target.style.opacity = "1")}
+                      >
+                        Delete My Account
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ padding: "15px", backgroundColor: "#ffe0e0", borderRadius: "8px", border: `2px solid ${COLORS.red}` }}>
+                      <p style={{ fontSize: "13px", color: COLORS.red, marginBottom: "15px" }}>
+                        Enter your password to confirm account deletion:
+                      </p>
+                      <input
+                        type="password"
+                        value={deleteConfirmPassword}
+                        onChange={(e) => setDeleteConfirmPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.red}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                          marginBottom: "15px",
+                        }}
+                      />
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <button
+                          onClick={handleDeleteAccount}
+                          disabled={isLoading}
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: COLORS.red,
+                            color: COLORS.white,
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: isLoading ? "not-allowed" : "pointer",
+                            fontWeight: 600,
+                            fontSize: "12px",
+                            fontFamily: "Montserrat, sans-serif",
+                            opacity: isLoading ? 0.7 : 1,
+                          }}
+                        >
+                          {isLoading ? "Deleting..." : "Confirm Delete"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowDeleteConfirm(false);
+                            setDeleteConfirmPassword("");
+                          }}
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: COLORS.darkGray,
+                            color: COLORS.white,
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: 600,
+                            fontSize: "12px",
+                            fontFamily: "Montserrat, sans-serif",
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Save Changes Button - Outside all sections */}
-        {hasChanges && (
-          <div style={{ marginTop: "30px", textAlign: "right" }}>
-            <button
-              onClick={handleSaveChanges}
-              disabled={isLoading}
-              style={{
-                padding: "14px 32px",
-                backgroundColor: COLORS.mediumGreen,
-                color: COLORS.white,
-                border: "none",
-                borderRadius: "8px",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                fontWeight: 600,
-                fontSize: "14px",
-                fontFamily: "Montserrat, sans-serif",
-                opacity: isLoading ? 0.7 : 1,
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
-              }}
-              onMouseLeave={(e) => {
-                if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
-              }}
-            >
-              {isLoading ? "Saving..." : "Save All Changes"}
-            </button>
-          </div>
-        )}
+        {/* Logout Button - Bottom Center */}
+        <div style={{ marginTop: "40px", textAlign: "center" }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              padding: "12px 32px",
+              backgroundColor: COLORS.red,
+              color: COLORS.white,
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "14px",
+              fontFamily: "Montserrat, sans-serif",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+            onMouseLeave={(e) => (e.target.style.opacity = "1")}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );
