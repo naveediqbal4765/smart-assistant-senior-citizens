@@ -94,14 +94,19 @@ const LoginPage = () => {
     setErrors({});
 
     try {
-      const response = await authAPI.login({
+      // Use the Remember Me endpoint if checkbox is checked
+      const endpoint = formData.rememberMe ? "/auth/login-with-remember-me" : "/auth/login";
+      
+      const response = await authAPI.post(endpoint, {
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
         rememberMe: formData.rememberMe,
       });
 
-      const { accessToken, user } = response.data;
-      login(accessToken, user, formData.rememberMe);
+      const { token, rememberMeToken, user } = response.data.data;
+      
+      // Pass Remember Me token to login function
+      login(token, user, rememberMeToken, formData.rememberMe);
       toast.success(`Welcome back, ${user.fullName.split(" ")[0]}! `);
 
       const dashboardRoutes = {
