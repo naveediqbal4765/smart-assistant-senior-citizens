@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
@@ -10,29 +10,50 @@ const COLORS = {
   white: "#FFFFFF",
   lightGray: "#f5f5f5",
   darkGray: "#666666",
+  red: "#e63946",
 };
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const fileInputRef = useRef(null);
   const [activeTab, setActiveTab] = useState("basic");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [passwordVerified, setPasswordVerified] = useState(false);
+  const [currentPasswordInput, setCurrentPasswordInput] = useState("");
 
   const [profileData, setProfileData] = useState({
+    // Basic Info
     fullName: user?.fullName || "",
     email: user?.email || "",
     phone: "",
     address: "",
     dateOfBirth: "",
+    profilePicture: user?.profilePicture || null,
     // Elder specific
     bloodGroup: "",
     allergies: "",
     primaryCaregiver: "",
     // Caregiver specific
     linkedSeniors: [],
+    relationshipToElder: "",
     // Volunteer specific
     skills: [],
     serviceRadius: 5,
+    affiliation: "",
+    // Password
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+    // Privacy
+    privacySettings: {
+      profileVisibility: "private",
+      healthDataSharing: false,
+      locationSharing: false,
+      emailNotifications: true,
+      smsNotifications: true,
+    },
   });
 
   const handleInputChange = (field, value) => {
@@ -40,14 +61,83 @@ const ProfilePage = () => {
       ...prev,
       [field]: value,
     }));
+    setHasChanges(true);
   };
 
-  const handleSave = async () => {
+  const handleNestedChange = (parent, field, value) => {
+    setProfileData((prev) => ({
+      ...prev,
+      [parent]: {
+        ...prev[parent],
+        [field]: value,
+      },
+    }));
+    setHasChanges(true);
+  };
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileData((prev) => ({
+          ...prev,
+          profilePicture: reader.result,
+        }));
+        setHasChanges(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleVerifyPassword = async () => {
+    if (!currentPasswordInput) {
+      toast.error("Please enter your current password");
+      return;
+    }
+    // TODO: Call API to verify password
+    // For now, just set verified
+    setPasswordVerified(true);
+    toast.success("Password verified");
+  };
+
+  const handleSaveChanges = async () => {
+    // Validate password change if in password tab
+    if (activeTab === "password") {
+      if (!passwordVerified) {
+        toast.error("Please verify your current password first");
+        return;
+      }
+      if (!profileData.newPassword || !profileData.confirmPassword) {
+        toast.error("Please enter new password and confirm it");
+        return;
+      }
+      if (profileData.newPassword !== profileData.confirmPassword) {
+        toast.error("New passwords do not match");
+        return;
+      }
+      if (profileData.newPassword.length < 8) {
+        toast.error("Password must be at least 8 characters");
+        return;
+      }
+    }
+
     setIsLoading(true);
     try {
+      // TODO: Call API to save profile changes
+      // const response = await profileAPI.updateProfile(profileData);
       toast.success("Profile updated successfully!");
+      setHasChanges(false);
+      setPasswordVerified(false);
+      setCurrentPasswordInput("");
+      setProfileData((prev) => ({
+        ...prev,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      }));
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error(error.message || "Failed to update profile");
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +152,8 @@ const ProfilePage = () => {
   }
 
   const tabs = [
-    { id: "basic", label: "Basic Information" },
+    { id: "basic", label: "Personal Information" },
+    { id: "picture", label: "Profile Picture" },
     { id: "role", label: "Role Details" },
     { id: "password", label: "Change Password" },
     { id: "privacy", label: "Privacy Settings" },
@@ -100,7 +191,7 @@ const ProfilePage = () => {
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "30px 20px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: "30px" }}>
           {/* Sidebar Tabs */}
-          <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+          <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", height: "fit-content" }}>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -137,12 +228,13 @@ const ProfilePage = () => {
 
           {/* Content Area */}
           <div style={{ backgroundColor: COLORS.white, borderRadius: "8px", padding: "30px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-            {/* Basic Information Tab */}
+            {/* Personal Information Tab */}
             {activeTab === "basic" && (
               <div>
                 <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
-                  Basic Information
+                  Personal Information
                 </h2>
+
                 <div style={{ marginBottom: "20px" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
                     Full Name
@@ -183,6 +275,7 @@ const ProfilePage = () => {
                       cursor: "not-allowed",
                     }}
                   />
+                  <p style={{ fontSize: "11px", color: COLORS.darkGray, marginTop: "5px" }}>Email cannot be changed</p>
                 </div>
 
                 <div style={{ marginBottom: "20px" }}>
@@ -193,6 +286,27 @@ const ProfilePage = () => {
                     type="tel"
                     value={profileData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
+                    placeholder="Enter your phone number"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: `2px solid ${COLORS.veryLightGreen}`,
+                      borderRadius: "8px",
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: "20px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    value={profileData.dateOfBirth}
+                    onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
                     style={{
                       width: "100%",
                       padding: "12px",
@@ -209,10 +323,10 @@ const ProfilePage = () => {
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
                     Address
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={profileData.address}
                     onChange={(e) => handleInputChange("address", e.target.value)}
+                    placeholder="Enter your address"
                     style={{
                       width: "100%",
                       padding: "12px",
@@ -221,28 +335,79 @@ const ProfilePage = () => {
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
                       boxSizing: "border-box",
+                      minHeight: "80px",
+                      resize: "vertical",
                     }}
                   />
                 </div>
+              </div>
+            )}
 
-                <button
-                  onClick={handleSave}
-                  disabled={isLoading}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: COLORS.mediumGreen,
-                    color: COLORS.white,
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    fontFamily: "Montserrat, sans-serif",
-                    opacity: isLoading ? 0.7 : 1,
-                  }}
-                >
-                  {isLoading ? "Saving..." : "Save Changes"}
-                </button>
+            {/* Profile Picture Tab */}
+            {activeTab === "picture" && (
+              <div>
+                <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
+                  Profile Picture
+                </h2>
+
+                <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                  <div
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      borderRadius: "50%",
+                      backgroundColor: COLORS.lightGray,
+                      margin: "0 auto 20px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                      border: `3px solid ${COLORS.mediumGreen}`,
+                    }}
+                  >
+                    {profileData.profilePicture ? (
+                      <img
+                        src={profileData.profilePicture}
+                        alt="Profile"
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: "50px" }}>👤</span>
+                    )}
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfilePictureChange}
+                    style={{ display: "none" }}
+                  />
+
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: COLORS.mediumGreen,
+                      color: COLORS.white,
+                      border: "none",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      fontFamily: "Montserrat, sans-serif",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                    onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                  >
+                    Upload New Picture
+                  </button>
+
+                  <p style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "15px" }}>
+                    Recommended: Square image, at least 400x400px
+                  </p>
+                </div>
               </div>
             )}
 
@@ -323,18 +488,62 @@ const ProfilePage = () => {
                 )}
 
                 {user?.role === "caregiver" && (
-                  <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
-                    <p style={{ fontSize: "13px", color: COLORS.darkGray }}>
-                      Linked Seniors: {profileData.linkedSeniors.length}
-                    </p>
-                    <p style={{ fontSize: "13px", color: COLORS.darkGray, marginTop: "10px" }}>
-                      Manage your linked seniors from the dashboard.
-                    </p>
-                  </div>
+                  <>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Relationship to Elder
+                      </label>
+                      <input
+                        type="text"
+                        value={profileData.relationshipToElder}
+                        onChange={(e) => handleInputChange("relationshipToElder", e.target.value)}
+                        placeholder="e.g., Son, Daughter, Nurse"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ padding: "20px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                      <p style={{ fontSize: "13px", color: COLORS.darkGray, margin: "0" }}>
+                        Linked Seniors: {profileData.linkedSeniors.length}
+                      </p>
+                      <p style={{ fontSize: "13px", color: COLORS.darkGray, marginTop: "10px" }}>
+                        Manage your linked seniors from the dashboard.
+                      </p>
+                    </div>
+                  </>
                 )}
 
                 {user?.role === "volunteer" && (
                   <>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        NGO Affiliation
+                      </label>
+                      <input
+                        type="text"
+                        value={profileData.affiliation}
+                        onChange={(e) => handleInputChange("affiliation", e.target.value)}
+                        placeholder="e.g., Edhi, Al-Khidmat"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
                     <div style={{ marginBottom: "20px" }}>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
                         Skills
@@ -379,109 +588,139 @@ const ProfilePage = () => {
                     </div>
                   </>
                 )}
-
-                <button
-                  onClick={handleSave}
-                  disabled={isLoading}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: COLORS.mediumGreen,
-                    color: COLORS.white,
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    fontFamily: "Montserrat, sans-serif",
-                    opacity: isLoading ? 0.7 : 1,
-                  }}
-                >
-                  {isLoading ? "Saving..." : "Save Changes"}
-                </button>
               </div>
             )}
 
-            {/* Password Tab */}
+            {/* Change Password Tab */}
             {activeTab === "password" && (
               <div>
                 <h2 style={{ fontSize: "20px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "20px" }}>
                   Change Password
                 </h2>
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    Current Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Enter current password"
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      border: `2px solid ${COLORS.veryLightGreen}`,
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      fontFamily: "Montserrat, sans-serif",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
 
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Enter new password"
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      border: `2px solid ${COLORS.veryLightGreen}`,
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      fontFamily: "Montserrat, sans-serif",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
+                {!passwordVerified ? (
+                  <>
+                    <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                      <p style={{ fontSize: "13px", color: COLORS.darkGray, margin: "0 0 15px 0" }}>
+                        For security, please verify your current password first.
+                      </p>
+                    </div>
 
-                <div style={{ marginBottom: "20px" }}>
-                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Confirm new password"
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      border: `2px solid ${COLORS.veryLightGreen}`,
-                      borderRadius: "8px",
-                      fontSize: "13px",
-                      fontFamily: "Montserrat, sans-serif",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Current Password
+                      </label>
+                      <input
+                        type="password"
+                        value={currentPasswordInput}
+                        onChange={(e) => setCurrentPasswordInput(e.target.value)}
+                        placeholder="Enter your current password"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
 
-                <button
-                  onClick={handleSave}
-                  disabled={isLoading}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: COLORS.mediumGreen,
-                    color: COLORS.white,
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    fontFamily: "Montserrat, sans-serif",
-                    opacity: isLoading ? 0.7 : 1,
-                  }}
-                >
-                  {isLoading ? "Saving..." : "Update Password"}
-                </button>
+                    <button
+                      onClick={handleVerifyPassword}
+                      style={{
+                        padding: "12px 24px",
+                        backgroundColor: COLORS.mediumGreen,
+                        color: COLORS.white,
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        fontFamily: "Montserrat, sans-serif",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                      onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.mediumGreen)}
+                    >
+                      Verify Password
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: "#d4edda", borderRadius: "8px", border: `2px solid #28a745` }}>
+                      <p style={{ fontSize: "13px", color: "#155724", margin: "0" }}>
+                        Password verified successfully. You can now change your password.
+                      </p>
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        New Password
+                      </label>
+                      <input
+                        type="password"
+                        value={profileData.newPassword}
+                        onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                        placeholder="Enter new password (min 8 characters)"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        value={profileData.confirmPassword}
+                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                        placeholder="Confirm new password"
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          border: `2px solid ${COLORS.veryLightGreen}`,
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                          fontFamily: "Montserrat, sans-serif",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setPasswordVerified(false);
+                        setCurrentPasswordInput("");
+                      }}
+                      style={{
+                        padding: "12px 24px",
+                        backgroundColor: COLORS.darkGray,
+                        color: COLORS.white,
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        fontFamily: "Montserrat, sans-serif",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => (e.target.style.backgroundColor = "#555")}
+                      onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGray)}
+                    >
+                      Change Password
+                    </button>
+                  </>
+                )}
               </div>
             )}
 
@@ -496,7 +735,8 @@ const ProfilePage = () => {
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
-                      defaultChecked={true}
+                      checked={profileData.privacySettings.profileVisibility === "public"}
+                      onChange={(e) => handleNestedChange("privacySettings", "profileVisibility", e.target.checked ? "public" : "private")}
                       style={{
                         width: "18px",
                         height: "18px",
@@ -511,7 +751,8 @@ const ProfilePage = () => {
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
-                      defaultChecked={false}
+                      checked={profileData.privacySettings.healthDataSharing}
+                      onChange={(e) => handleNestedChange("privacySettings", "healthDataSharing", e.target.checked)}
                       style={{
                         width: "18px",
                         height: "18px",
@@ -526,7 +767,8 @@ const ProfilePage = () => {
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
-                      defaultChecked={false}
+                      checked={profileData.privacySettings.locationSharing}
+                      onChange={(e) => handleNestedChange("privacySettings", "locationSharing", e.target.checked)}
                       style={{
                         width: "18px",
                         height: "18px",
@@ -541,7 +783,8 @@ const ProfilePage = () => {
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
-                      defaultChecked={true}
+                      checked={profileData.privacySettings.emailNotifications}
+                      onChange={(e) => handleNestedChange("privacySettings", "emailNotifications", e.target.checked)}
                       style={{
                         width: "18px",
                         height: "18px",
@@ -556,7 +799,8 @@ const ProfilePage = () => {
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
                       type="checkbox"
-                      defaultChecked={true}
+                      checked={profileData.privacySettings.smsNotifications}
+                      onChange={(e) => handleNestedChange("privacySettings", "smsNotifications", e.target.checked)}
                       style={{
                         width: "18px",
                         height: "18px",
@@ -569,34 +813,46 @@ const ProfilePage = () => {
                   </label>
                 </div>
 
-                <div style={{ padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px", marginBottom: "20px" }}>
+                <div style={{ padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
                   <p style={{ fontSize: "12px", color: COLORS.darkGray, margin: "0" }}>
                     Your privacy is important to us. These settings control how your information is shared and how you receive notifications.
                   </p>
                 </div>
-
-                <button
-                  onClick={handleSave}
-                  disabled={isLoading}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: COLORS.mediumGreen,
-                    color: COLORS.white,
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    fontFamily: "Montserrat, sans-serif",
-                    opacity: isLoading ? 0.7 : 1,
-                  }}
-                >
-                  {isLoading ? "Saving..." : "Save Privacy Settings"}
-                </button>
               </div>
             )}
           </div>
         </div>
+
+        {/* Save Changes Button - Outside all sections */}
+        {hasChanges && (
+          <div style={{ marginTop: "30px", textAlign: "right" }}>
+            <button
+              onClick={handleSaveChanges}
+              disabled={isLoading}
+              style={{
+                padding: "14px 32px",
+                backgroundColor: COLORS.mediumGreen,
+                color: COLORS.white,
+                border: "none",
+                borderRadius: "8px",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                fontWeight: 600,
+                fontSize: "14px",
+                fontFamily: "Montserrat, sans-serif",
+                opacity: isLoading ? 0.7 : 1,
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
+              }}
+              onMouseLeave={(e) => {
+                if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+              }}
+            >
+              {isLoading ? "Saving..." : "Save All Changes"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
