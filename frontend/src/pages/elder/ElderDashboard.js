@@ -1,610 +1,124 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
 import Logo from "../../assets/images/Logo.png";
 
-// ---- COLOR SCHEME ----
-const COLORS = {
-  darkGreen: "#1C382A",
-  mediumGreen: "#52b788",
-  darkMediumGreen: "#2d6a4f",
-  darkestGreen: "#1b4332",
-  lightGreen: "#74c69d",
-  paleGreen: "#A9C6B2",
-  veryLightGreen: "#BAE4C7",
-  white: "#FFFFFF",
-  lightGray: "#f5f5f5",
-  mediumGray: "#f0f0f0",
-  darkGray: "#666666",
-  lightDarkGray: "#999999",
-  red: "#e63946",
-  yellow: "#FFC107",
-  dashboardBg: "#E2FFEB",
-  cardBg: "#BAE4C7",
-};
+// ---- SVG Logo: Green cross with red heart ----
+const AppLogo = ({ size = 80 }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="30" y="10" width="40" height="80" rx="8" fill="#52b788" />
+    <rect x="10" y="30" width="80" height="40" rx="8" fill="#52b788" />
+    <rect x="34" y="14" width="32" height="72" rx="6" fill="#74c69d" />
+    <rect x="14" y="34" width="72" height="32" rx="6" fill="#74c69d" />
+    <circle cx="50" cy="50" r="18" fill="white" />
+    <path
+      d="M50 58 C50 58 38 50 38 43 C38 39 41 36 44.5 36 C46.5 36 48.5 37.2 50 39 C51.5 37.2 53.5 36 55.5 36 C59 36 62 39 62 43 C62 50 50 58 50 58Z"
+      fill="#e63946"
+    />
+  </svg>
+);
 
 const ElderDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
-  const [medicationStates, setMedicationStates] = useState({});
-  const [sosPos, setSosPos] = useState({ x: 20, y: 20 });
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragStart = (e) => {
-    setIsDragging(true);
-  };
-
-  const handleDrag = (e) => {
-    if (isDragging) {
-      const x = e.clientX || (e.touches && e.touches[0].clientX);
-      const y = e.clientY || (e.touches && e.touches[0].clientY);
-      if (x && y) {
-        setSosPos({
-          x: window.innerWidth - x - 60,
-          y: window.innerHeight - y - 60
-        });
-      }
-    }
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-  };
-
-  // Mock data
-  const emergencyContacts = [
-    { id: 1, name: "Sarah", relation: "Daughter", phone: "+923001234567", emoji: "" },
-    { id: 2, name: "John", relation: "Son", phone: "+923009876543", emoji: "" },
-    { id: 3, name: "Dr. Ahmed", relation: "Doctor", phone: "+923005555555", emoji: "Medical" },
-  ];
-
-  const todaysMedications = [
-    { id: 1, name: "Aspirin", time: "08:00 AM", taken: true },
-    { id: 2, name: "Blood Pressure Med", time: "12:00 PM", taken: false },
-    { id: 3, name: "Vitamin D", time: "06:00 PM", taken: false },
-  ];
-
-  const vitals = {
-    heartRate: 72,
-    oxygen: 98,
-    temperature: 36.5,
-    lastUpdated: "Just now",
-  };
-
-  const handleScreenReaderToggle = () => {
-    setScreenReaderEnabled(!screenReaderEnabled);
-    if (!screenReaderEnabled) {
-      const utterance = new SpeechSynthesisUtterance("Screen reader enabled");
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  const handleEmergencyCall = (contact) => {
-    if (screenReaderEnabled) {
-      const utterance = new SpeechSynthesisUtterance(`Calling ${contact.name}`);
-      window.speechSynthesis.speak(utterance);
-    }
-    alert(`Calling ${contact.name} at ${contact.phone}`);
-  };
-
-  const handleSOS = () => {
-    if (screenReaderEnabled) {
-      const utterance = new SpeechSynthesisUtterance("Emergency SOS activated");
-      window.speechSynthesis.speak(utterance);
-    }
-    alert("Alert SOS ACTIVATED! Emergency services and caregivers have been notified. Your location is being shared.");
-  };
-
-  const handleMedicationTaken = (medicationId) => {
-    setMedicationStates(prev => ({
-      ...prev,
-      [medicationId]: !prev[medicationId]
-    }));
-  };
 
   return (
-    <div 
-      style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: COLORS.dashboardBg, position: "relative", overflowX: "hidden" }}
-      onMouseMove={handleDrag}
-      onTouchMove={handleDrag}
-      onMouseUp={handleDragEnd}
-      onTouchEnd={handleDragEnd}
-    >
-      {/* ============================================================
-          INTEGRATED HEADER WITH NAVBAR ON RIGHT
-          ============================================================ */}
+    <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* Header */}
       <div
         style={{
           position: "sticky",
           top: 0,
-          backgroundColor: COLORS.darkGreen,
-          padding: "clamp(10px, 2vw, 20px) clamp(10px, 4vw, 40px)",
+          backgroundColor: "#1C382A",
+          padding: "clamp(12px, 2vw, 20px) clamp(16px, 4vw, 40px)",
           display: "flex",
           alignItems: "center",
           gap: "clamp(8px, 2vw, 16px)",
           zIndex: 10,
           flexWrap: "wrap",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        {/* Left Side: Logo + Title + Navigation */}
-        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", flex: "1 1 auto", minWidth: "0" }}>
-          <img 
-            src={Logo} 
-            alt="Logo" 
-            style={{ width: 'auto', height: 'clamp(32px, 4vw, 48px)', objectFit: 'contain' }} 
-          />
-          <div style={{ minWidth: "0", flex: "0 1 auto" }}>
-            <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(14px, 3vw, 22px)", color: COLORS.white, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              Smart Assistant
-            </h1>
-            <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(9px, 1.5vw, 13px)", color: COLORS.veryLightGreen, margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              Care for Seniors, By Community
-            </p>
-          </div>
-
-          {/* Navigation Links - Responsive */}
-          <div style={{ display: window.innerWidth > 768 ? "flex" : "none", gap: "12px", alignItems: "center", marginLeft: "20px" }}>
-            <button
-              onClick={() => navigate("/elder-dashboard")}
-              style={{
-                background: "none",
-                border: "none",
-                color: COLORS.white,
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "13px",
-                fontFamily: "Montserrat, sans-serif",
-                transition: "all 0.3s ease",
-                padding: "6px 10px",
-                borderRadius: "6px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = COLORS.mediumGreen;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              Home Home
-            </button>
-
-            <button
-              onClick={() => {
-                const event = new CustomEvent('openContactModal');
-                window.dispatchEvent(event);
-              }}
-              style={{
-                background: "none",
-                border: "none",
-                color: COLORS.white,
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "13px",
-                fontFamily: "Montserrat, sans-serif",
-                transition: "all 0.3s ease",
-                padding: "6px 10px",
-                borderRadius: "6px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = COLORS.mediumGreen;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              Phone Contact
-            </button>
-
-            <button
-              onClick={() => {
-                const event = new CustomEvent('openAboutModal');
-                window.dispatchEvent(event);
-              }}
-              style={{
-                background: "none",
-                border: "none",
-                color: COLORS.white,
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "13px",
-                fontFamily: "Montserrat, sans-serif",
-                transition: "all 0.3s ease",
-                padding: "6px 10px",
-                borderRadius: "6px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = COLORS.mediumGreen;
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              Info About Us
-            </button>
-          </div>
-        </div>
-
-        {/* Right Side: Screen Reader + Profile */}
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          {/* Profile Dropdown - NOW ON RIGHT */}
-      <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}> 
-        <button 
-          onClick={handleScreenReaderToggle} 
-          style={{ 
-            backgroundColor: screenReaderEnabled ? "#52b788" : "#1C382A", 
-            color: "#FFFFFF", 
-            padding: "10px 20px", 
-            borderRadius: "30px", 
-            border: "none", 
-            cursor: "pointer", 
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)", 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "8px", 
-            fontSize: "12px", 
-            fontWeight: 600, 
-            transition: "all 0.3s ease" 
-          }} 
-        > 
-          <span style={{ width: "10px", height: "10px", backgroundColor: screenReaderEnabled ? "#fff" : "#ff4d4d", borderRadius: "50%", display: "inline-block" }}></span> 
-          {screenReaderEnabled ? "Screen Reader On" : "Screen Reader Off"} 
-        </button> 
-      </div>
-          <Navbar screenReaderEnabled={screenReaderEnabled} onScreenReaderToggle={handleScreenReaderToggle} />
+        <AppLogo size={Math.min(Math.max(32, window.innerWidth * 0.04), 48)} />
+        <div style={{ minWidth: "0", flex: "1 1 auto" }}>
+          <h1 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "clamp(16px, 3vw, 22px)", color: "#FFFFFF", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            Smart Assistant
+          </h1>
+          <p style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 400, fontSize: "clamp(10px, 1.5vw, 13px)", color: "#BAE4C7", margin: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            Care for Seniors, By Community
+          </p>
         </div>
       </div>
 
-      {/* ============================================================
-          MAIN CONTENT
-          ============================================================ */}
-      <div style={{ flex: 1, padding: "clamp(10px, 3vw, 20px)", overflowY: "auto" }}>
+      {/* Main Content */}
+      <div className="page-bg min-h-screen p-6" style={{ flex: 1 }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          {/* Welcome Section */}
-          <div style={{ marginBottom: "30px" }}>
-            <h2 style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: 700, color: COLORS.darkGreen, margin: "0 0 10px 0" }}>
-              Welcome, {user?.fullName.split(" ")[0]}! 
-            </h2>
-            <p style={{ fontSize: "14px", color: COLORS.darkGray, margin: "0" }}>
-              {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
-            </p>
-          </div>
-
-          {/* ============================================================
-              1. SAFETY FIRST LAYER
-              ============================================================ */}
-          <div style={{ marginBottom: "30px" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              Shield Safety First
-            </h3>
-
-            {/* Emergency Contacts Speed Dial */}
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                Emergency Contacts (One-Tap Calling)
-              </h4>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: "15px" }}>
-                {emergencyContacts.map((contact) => (
-                  <button
-                    key={contact.id}
-                    onClick={() => handleEmergencyCall(contact)}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "10px",
-                      padding: "15px",
-                      backgroundColor: COLORS.veryLightGreen,
-                      border: "none",
-                      borderRadius: "12px",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = COLORS.dashboardBg;
-                      e.currentTarget.style.transform = "scale(1.05)";
-                      e.currentTarget.style.color = COLORS.darkGreen;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = COLORS.veryLightGreen;
-                      e.currentTarget.style.transform = "scale(1)";
-                      e.currentTarget.style.color = "inherit";
-                    }}
-                  >
-                    <div style={{ fontSize: "32px" }}>{contact.emoji}</div>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: COLORS.darkGreen, textAlign: "center" }}>
-                      {contact.name}
-                    </div>
-                    <div style={{ fontSize: "10px", color: COLORS.darkGreen, textAlign: "center" }}>
-                      {contact.relation}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* ============================================================
-              2. MEDICAL HUB
-              ============================================================ */}
-          <div style={{ marginBottom: "30px" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              Hospital Medical Hub
-            </h3>
-
-            {/* Live Vitals Monitor */}
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                Live Vitals Monitor
-              </h4>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.red}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.red }}>Heart {vitals.heartRate}</div>
-                  <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Heart Rate (bpm)</div>
-                </div>
-                <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.mediumGreen}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.mediumGreen }}>Lungs {vitals.oxygen}%</div>
-                  <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Oxygen Level</div>
-                </div>
-                <div style={{ backgroundColor: COLORS.mediumGray, padding: "15px", borderRadius: "8px", textAlign: "center", borderLeft: `4px solid ${COLORS.yellow}` }}>
-                  <div style={{ fontSize: "24px", fontWeight: 700, color: COLORS.yellow }}>Temperature {vitals.temperature}°C</div>
-                  <div style={{ fontSize: "12px", color: COLORS.darkGray, marginTop: "5px" }}>Temperature</div>
-                </div>
-              </div>
-              <p style={{ fontSize: "11px", color: COLORS.lightDarkGray, marginTop: "10px", textAlign: "center" }}>
-                Last updated: {vitals.lastUpdated}
-              </p>
-            </div>
-
-            {/* Today's Medications */}
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                Medication Today's Medication Schedule
-              </h4>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {todaysMedications.map((med) => (
-                  <div
-                    key={med.id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "12px",
-                      backgroundColor: medicationStates[med.id] ? "#e8f5e9" : "#fff3e0",
-                      borderRadius: "8px",
-                      borderLeft: `4px solid ${medicationStates[med.id] ? COLORS.mediumGreen : COLORS.yellow}`,
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen }}>
-                        {med.name}
-                      </div>
-                      <div style={{ fontSize: "12px", color: COLORS.darkGray }}>
-                        {med.time}
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      {medicationStates[med.id] && (
-                        <div style={{ fontSize: "20px" }}>Check</div>
-                      )}
-                      <input
-                        type="checkbox"
-                        checked={medicationStates[med.id] || false}
-                        onChange={() => handleMedicationTaken(med.id)}
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          cursor: "pointer",
-                          accentColor: COLORS.mediumGreen,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Medical Vault */}
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", marginBottom: "15px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <h4 style={{ fontSize: "14px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "15px" }}>
-                Tasks Medical Vault
-              </h4>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px" }}>
-                <button onClick={() => navigate("/elder-lab-reports")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Document Lab Reports
-                </button>
-                <button onClick={() => navigate("/elder-prescriptions")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Medication Prescriptions
-                </button>
-                <button onClick={() => navigate("/elder-health-history")} style={{ padding: "12px", backgroundColor: COLORS.darkGreen, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "12px", color: COLORS.white, transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Chart Health History
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ============================================================
-              3. MOBILITY & HELP LAYER
-              ============================================================ */}
-          <div style={{ marginBottom: "30px" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-              Car Mobility & Help
-            </h3>
-
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button onClick={() => navigate("/elder-task-request")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Tasks Task Request
-                </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Microphone AI Voice Assistant
-                </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Taxi Book a Ride
-                </button>
-                <button style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  People Find Volunteer
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ============================================================
-              4. COMMUNICATION & UTILITY LAYER
-              ============================================================ */}
-          <div style={{ marginBottom: "30px" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "15px" }}>
-               Wellness & Support
-            </h3>
-
-            <div style={{ backgroundColor: COLORS.cardBg, borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
-                <button onClick={() => navigate("/elder-messages")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Messages Messages
-                </button>
-                <button onClick={() => navigate("/elder-sleep-timer")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Music Sleep Timer
-                </button>
-                <button onClick={() => navigate("/elder-medication-reminder")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Clock Medication Reminder
-                </button>
-                <button onClick={() => navigate("/elder-physical-rehabilitation")} style={{ padding: "20px", backgroundColor: COLORS.darkGreen, color: COLORS.white, border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: 600, fontSize: "14px", transition: "all 0.3s ease" }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = COLORS.darkMediumGreen)}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = COLORS.darkGreen)}
-                >
-                  Strength Physical Rehabilitation
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Logout Button */}
-          <div style={{ marginBottom: "30px", textAlign: "center" }}>
-            <button
-              onClick={() => {
-                logout();
-                navigate("/login");
-              }}
-              style={{
-                padding: "12px 30px",
-                backgroundColor: COLORS.red,
-                color: COLORS.white,
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontWeight: 600,
-                fontSize: "14px",
-                fontFamily: "Montserrat, sans-serif",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => (e.target.style.opacity = "0.9")}
-              onMouseLeave={(e) => (e.target.style.opacity = "1")}
-            >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+            <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#1b4332" }}>
+              Elder Dashboard
+            </h1>
+            <button onClick={() => { logout(); navigate("/login"); }} className="btn-primary" style={{ width: "auto" }}>
               Logout
             </button>
           </div>
+
+          {/* Dashboard Skeleton - Placeholder Cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
+            {/* Card 1 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 1
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 2
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 3
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 4
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+
+            {/* Card 5 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 5
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+
+            {/* Card 6 */}
+            <div className="auth-card">
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
+                Feature 6
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+            </div>
+          </div>
+
+          <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
+            Elder Dashboard - Module Skeleton
+          </p>
         </div>
-      </div>
-
-      {/* ============================================================
-          DRAGGABLE SOS BUTTON
-          ============================================================ */}
-      <button
-        onClick={handleSOS}
-        onMouseDown={handleDragStart}
-        onTouchStart={handleDragStart}
-        style={{
-          position: "fixed",
-          bottom: `${sosPos.y}px`,
-          right: `${sosPos.x}px`,
-          width: "clamp(80px, 15vw, 120px)",
-          height: "clamp(80px, 15vw, 120px)",
-          borderRadius: "50%",
-          backgroundColor: COLORS.red,
-          color: COLORS.white,
-          border: `4px solid ${COLORS.white}`,
-          fontSize: "clamp(24px, 5vw, 48px)",
-          fontWeight: 700,
-          cursor: "move",
-          boxShadow: "0 8px 24px rgba(230, 57, 70, 0.4)",
-          zIndex: 100,
-          transition: isDragging ? "none" : "all 0.3s ease",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          userSelect: "none",
-          touchAction: "none"
-        }}
-      >
-        SOS
-      </button>
-
-      {/* Screen Reader Tab - Bottom Corner */}
-      <div style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: 90 }}>
-        <button 
-          onClick={handleScreenReaderToggle}
-          style={{ 
-            backgroundColor: screenReaderEnabled ? COLORS.mediumGreen : COLORS.darkGreen, 
-            color: COLORS.white, 
-            padding: "10px 20px", 
-            borderRadius: "30px", 
-            border: "none", 
-            cursor: "pointer", 
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            fontSize: "12px",
-            fontWeight: 600,
-            transition: "all 0.3s ease"
-          }}
-        >
-          <span style={{ width: '10px', height: '10px', backgroundColor: screenReaderEnabled ? '#fff' : '#ff4d4d', borderRadius: '50%', display: 'inline-block' }}></span>
-          {screenReaderEnabled ? "Screen Reader On" : "Screen Reader Off"}
-        </button>
       </div>
 
       {/* Footer */}
