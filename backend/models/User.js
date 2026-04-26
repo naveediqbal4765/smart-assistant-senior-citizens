@@ -153,6 +153,9 @@ const userSchema = new mongoose.Schema(
 
     // ---- Remember Me / Session ----
     rememberMe: { type: Boolean, default: false },
+    rememberMeToken: { type: String, select: false },          // Secure token for "Remember Me"
+    rememberMeExpiry: { type: Date, select: false },           // Token expiration (30 days)
+    rememberMeLastUsed: { type: Date, select: false },         // Last time token was used (for refresh)
 
     // ---- Password Reset Data ----
     passwordReset: {

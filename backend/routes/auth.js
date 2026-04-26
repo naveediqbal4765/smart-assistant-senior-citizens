@@ -9,6 +9,10 @@ const Elder = require("../models/Elder");
 const Caregiver = require("../models/Caregiver");
 const Volunteer = require("../models/Volunteer");
 const { protect } = require("../middleware/auth");
+const {
+  generateRememberMeToken,
+  getRememberMeExpiration,
+} = require("../src/utils/rememberMeService");
 
 const router = express.Router();
 
@@ -451,3 +455,181 @@ router.post("/resend-otp", async (req, res) => {
 });
 
 module.exports = router;
+
+// ============================================================
+// POST /auth/login-with-remember-me - Login with Remember Me
+// ============================================================
+router.post("/login-with-remember-me", async (req, res) => {
+  try {
+    const { email, password, rememberMe } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide email and password",
+      });
+    }
+
+    // Check for user
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    // Check if verified
+    if (!user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email first",
+      });
+    }
+
+    // Check password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    // Generate JWT token
+    const token = generateToken(user._id, user.email, user.role);
+
+    // Generate Remember Me token if requested
+    let rememberMeToken = null;
+    if (rememberMe) {
+      rememberMeToken = generateRememberMeToken();
+      user.rememberMeToken = rememberMeToken;
+      user.rememberMeExpiry = getRememberMeExpiration();
+      user.rememberMeLastUsed = new Date();
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: {
+        token,
+        rememberMeToken: rememberMe ? rememberMeToken : null,
+        user: {
+          userId: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Login with remember me error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error logging in",
+      error: error.message,
+    });
+  }
+});
+
+// ============================================================
+// POST /auth/verify-remember-me - Verify Remember Me Token
+// ============================================================
+router.post("/verify-remember-me", async (req, res) => {
+  try {
+    const { rememberMeToken } = req.body;
+
+    if (!rememberMeToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Remember Me token is required",
+      });
+    }
+
+    // Find user with this remember me token
+    const user = await User.findOne({ rememberMeToken }).select("+rememberMeExpiry +rememberMeLastUsed");
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Remember Me token",
+      });
+    }
+
+    // Check if token is expired
+    if (new Date() > user.rememberMeExpiry) {
+      // Clear expired token
+      user.rememberMeToken = null;
+      user.rememberMeExpiry = null;
+      user.rememberMeLastUsed = null;
+      await user.save();
+
+      return res.status(401).json({
+        success: false,
+        message: "Remember Me token expired",
+      });
+    }
+
+    // Generate new JWT token
+    const token = generateToken(user._id, user.email, user.role);
+
+    // Update last used time and extend expiration
+    user.rememberMeLastUsed = new Date();
+    user.rememberMeExpiry = getRememberMeExpiration();
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Auto-login successful",
+      data: {
+        token,
+        user: {
+          userId: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Verify remember me error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error verifying Remember Me token",
+      error: error.message,
+    });
+  }
+});
+
+// ============================================================
+// POST /auth/logout - Logout User (Clear Remember Me Token)
+// ============================================================
+router.post("/logout", protect, async (req, res) => {
+  try {
+    // Clear remember me token for this user
+    const user = await User.findById(req.user.userId);
+    if (user) {
+      user.rememberMeToken = null;
+      user.rememberMeExpiry = null;
+      user.rememberMeLastUsed = null;
+      await user.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error logging out",
+      error: error.message,
+    });
+  }
+});
