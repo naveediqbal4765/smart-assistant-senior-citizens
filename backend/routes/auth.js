@@ -734,7 +734,8 @@ router.post("/google", async (req, res) => {
 
     if (!user) {
       isNewUser = true;
-      // Create new user
+      // Create new user WITHOUT role-specific profile
+      // User will complete role selection in step 2
       user = new User({
         email: googleUser.email,
         fullName: googleUser.fullName,
@@ -742,20 +743,8 @@ router.post("/google", async (req, res) => {
         profilePicture: googleUser.profilePicture,
         isVerified: true, // Google verified
         password: null, // No password for OAuth users
+        // role will be set in step 2 after user selects
       });
-
-      // Create Elder profile by default
-      const Elder = require("../models/Elder");
-      const elder = new Elder({
-        userId: user._id,
-        email: googleUser.email,
-        livesAlone: false, // Default value for OAuth users
-        emergencyContacts: [],
-        medicalConditions: [],
-        hasMedicalIssues: false,
-        locationPermission: false,
-      });
-      await elder.save();
 
       await user.save();
     } else {
