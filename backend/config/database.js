@@ -20,6 +20,7 @@ const connectDB = async () => {
       socketTimeoutMS: 45000,
       retryWrites: true,
       w: 'majority',
+      dbName: 'smartassistant', // Explicitly set database name
     });
 
     const dbName = conn.connection.name;
