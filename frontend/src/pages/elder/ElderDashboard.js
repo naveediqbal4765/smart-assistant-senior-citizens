@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
@@ -9,6 +9,7 @@ import Logo from "../../assets/images/Logo.png";
 const ElderDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [showTaskRequestModal, setShowTaskRequestModal] = useState(false);
 
   return (
     <div style={{ fontFamily: "Montserrat, sans-serif", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
