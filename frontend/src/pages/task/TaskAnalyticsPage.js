@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import * as MageIcons from "mage-icons-react";
 
 // ============================================================
 // TaskAnalyticsPage.js - Task Analytics & Statistics Dashboard
