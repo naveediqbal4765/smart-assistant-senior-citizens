@@ -72,13 +72,13 @@ const ElderDashboard = () => {
             </h1>
           </div>
 
-          {/* Module 3: Task Request System */}
+          {/* Module 3: Task Request System - Main Card */}
           <div style={{ marginBottom: "40px" }}>
             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "20px" }}>
-              📋 Module 3: Task Request System
+              Task Request
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
-              {/* Task Request */}
+              {/* Create Task Request */}
               <button
                 onClick={() => navigate("/elder-task-request")}
                 style={{
@@ -97,8 +97,7 @@ const ElderDashboard = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
               >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📝</div>
-                Create Task Request
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>Create Task Request</div>
               </button>
 
               {/* Task History */}
@@ -120,8 +119,7 @@ const ElderDashboard = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
               >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📜</div>
-                Task History
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>Task History</div>
               </button>
 
               {/* Notifications */}
@@ -143,8 +141,7 @@ const ElderDashboard = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
               >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>🔔</div>
-                Notifications
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>Notifications</div>
               </button>
 
               {/* Volunteer Ratings */}
@@ -166,8 +163,7 @@ const ElderDashboard = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
               >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>⭐</div>
-                Volunteer Ratings
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>Volunteer Ratings</div>
               </button>
 
               {/* Analytics */}
@@ -189,14 +185,13 @@ const ElderDashboard = () => {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
               >
-                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📊</div>
-                Task Analytics
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>Task Analytics</div>
               </button>
             </div>
           </div>
 
           <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
-            Elder Dashboard - Module Skeleton
+            Elder Dashboard
           </p>
         </div>
       </div>

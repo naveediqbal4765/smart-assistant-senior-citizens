@@ -364,14 +364,14 @@ const ElderTaskRequest = () => {
               cursor: "pointer",
               fontSize: "16px",
               marginBottom: "15px",
-              fontWeight: 600,
+              fontWeight: 400,
               fontFamily: "Montserrat, sans-serif",
             }}
           >
-            ← Back to Dashboard
+            Back to Dashboard
           </button>
           <h1 style={{ fontSize: "32px", fontWeight: 700, margin: "0 0 8px 0" }}>
-            📋 Task Request System
+            Task Request System
           </h1>
           <p style={{ fontSize: "14px", color: COLORS.veryLightGreen, margin: "0" }}>
             Create, manage, and track your task requests

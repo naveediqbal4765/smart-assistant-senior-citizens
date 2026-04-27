@@ -23,6 +23,7 @@ const TaskForm = ({ onSubmit, onCancel, initialData = null, isEditing = false })
       title: "",
       description: "",
       category: "groceries",
+      customCategory: "",
       priority: "medium",
       date: "",
       time: "",

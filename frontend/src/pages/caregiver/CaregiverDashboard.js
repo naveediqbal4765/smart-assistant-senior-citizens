@@ -121,7 +121,7 @@ const CaregiverDashboard = () => {
         {/* Module 3: Task Request System */}
         <div style={{ marginTop: "40px" }}>
           <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "20px" }}>
-            📋 Module 3: Task Management
+            Task Request
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
             {/* Task Management */}
@@ -143,8 +143,7 @@ const CaregiverDashboard = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
             >
-              <div style={{ fontSize: "24px", marginBottom: "8px" }}>👨‍⚕️</div>
-              Manage Tasks
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>Manage Tasks</div>
             </button>
 
             {/* Notifications */}
@@ -166,8 +165,7 @@ const CaregiverDashboard = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
             >
-              <div style={{ fontSize: "24px", marginBottom: "8px" }}>🔔</div>
-              Notifications
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>Notifications</div>
             </button>
 
             {/* Analytics */}
@@ -189,8 +187,7 @@ const CaregiverDashboard = () => {
               onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
               onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
             >
-              <div style={{ fontSize: "24px", marginBottom: "8px" }}>📊</div>
-              Analytics
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>Analytics</div>
             </button>
           </div>
         </div>
