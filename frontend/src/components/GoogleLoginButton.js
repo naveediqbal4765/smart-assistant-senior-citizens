@@ -102,6 +102,12 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
         throw new Error("No credential received from Google");
       }
 
+      // Get CSRF token from meta tag or localStorage
+      let csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      if (!csrfToken) {
+        csrfToken = localStorage.getItem("csrfToken") || "";
+      }
+
       // Send token to backend
       const result = await fetch(
         `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/auth/google`,
@@ -109,7 +115,9 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
           },
+          credentials: "include",
           body: JSON.stringify({
             token: response.credential,
             rememberMe,
