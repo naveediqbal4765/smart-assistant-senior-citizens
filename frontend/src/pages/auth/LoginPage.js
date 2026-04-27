@@ -317,7 +317,7 @@ const LoginPage = () => {
               </div>
             )}
 
-            {/* Quick Access Links for Testing - Dashboards */}
+            {/* Quick Access Links for Testing */}
             <div style={{ width: "100%", marginBottom: "20px", textAlign: "center" }}>
               <p style={{ fontSize: "12px", color: "#666", margin: "0 0 10px 0", fontFamily: "Montserrat, sans-serif" }}>
                  Quick access to dashboards (testing):
@@ -373,108 +373,6 @@ const LoginPage = () => {
                   }}
                 >
                    Volunteer
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Access Links for Testing - User Profiles */}
-            <div style={{ width: "100%", marginBottom: "20px", textAlign: "center" }}>
-              <p style={{ fontSize: "12px", color: "#666", margin: "0 0 10px 0", fontFamily: "Montserrat, sans-serif" }}>
-                 Quick access to user profiles (testing):
-              </p>
-              <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Set Elder role in context and localStorage
-                    const mockUser = {
-                      userId: "test-elder",
-                      email: "elder@test.com",
-                      fullName: "Test Elder",
-                      role: "elder",
-                      profilePicture: null,
-                    };
-                    localStorage.setItem("user", JSON.stringify(mockUser));
-                    sessionStorage.setItem("user", JSON.stringify(mockUser));
-                    localStorage.setItem("accessToken", "test-token");
-                    sessionStorage.setItem("accessToken", "test-token");
-                    navigate("/profile");
-                  }}
-                  style={{
-                    padding: "8px 12px",
-                    backgroundColor: "#52b788",
-                    color: "#FFFFFF",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                  }}
-                >
-                   Elder Profile
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Set Caregiver role in context and localStorage
-                    const mockUser = {
-                      userId: "test-caregiver",
-                      email: "caregiver@test.com",
-                      fullName: "Test Caregiver",
-                      role: "caregiver",
-                      profilePicture: null,
-                    };
-                    localStorage.setItem("user", JSON.stringify(mockUser));
-                    sessionStorage.setItem("user", JSON.stringify(mockUser));
-                    localStorage.setItem("accessToken", "test-token");
-                    sessionStorage.setItem("accessToken", "test-token");
-                    navigate("/profile");
-                  }}
-                  style={{
-                    padding: "8px 12px",
-                    backgroundColor: "#2d6a4f",
-                    color: "#FFFFFF",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                  }}
-                >
-                  Caregiver Profile
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Set Volunteer role in context and localStorage
-                    const mockUser = {
-                      userId: "test-volunteer",
-                      email: "volunteer@test.com",
-                      fullName: "Test Volunteer",
-                      role: "volunteer",
-                      profilePicture: null,
-                    };
-                    localStorage.setItem("user", JSON.stringify(mockUser));
-                    sessionStorage.setItem("user", JSON.stringify(mockUser));
-                    localStorage.setItem("accessToken", "test-token");
-                    sessionStorage.setItem("accessToken", "test-token");
-                    navigate("/profile");
-                  }}
-                  style={{
-                    padding: "8px 12px",
-                    backgroundColor: "#1b4332",
-                    color: "#FFFFFF",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    fontFamily: "Montserrat, sans-serif",
-                  }}
-                >
-                   Volunteer Profile
                 </button>
               </div>
             </div>
