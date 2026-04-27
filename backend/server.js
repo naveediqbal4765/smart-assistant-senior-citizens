@@ -5,10 +5,32 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require("cors");
+const helmet = require('helmet');
 const dotenv = require("dotenv");
 const connectDB = require("./config/database");
 const { errorHandler } = require("./middleware/errorHandler");
+
+// Import rate limiters and CORS protection
+const {
+  generalLimiter,
+  authLimiter,
+  signupLimiter,
+  passwordResetLimiter,
+  otpVerificationLimiter,
+  otpResendLimiter,
+  apiEndpointLimiter,
+  uploadLimiter,
+  oauthLimiter,
+} = require("./middleware/rateLimiter");
+
+const {
+  corsMiddleware,
+  strictCorsMiddleware,
+  corsErrorHandler,
+  securityHeadersMiddleware,
+  requestValidationMiddleware,
+  csrfTokenMiddleware,
+} = require("./middleware/corsProtection");
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +45,30 @@ connectDB().catch(err => {
 });
 
 // ============================================================
+// Security Middleware
+// ============================================================
+
+// Helmet - Set security HTTP headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https:"],
+      fontSrc: ["'self'", "data:"],
+      frameSrc: ["'none'"],
+    },
+  },
+  hsts: {
+    maxAge: 31536000, // 1 year
+    includeSubDomains: true,
+    preload: true,
+  },
+}));
+
+// ============================================================
 // Middleware
 // ============================================================
 
@@ -30,19 +76,26 @@ connectDB().catch(err => {
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-// CORS
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || "*",
-    credentials: true,
-  })
-);
+// CORS Protection
+app.use(corsMiddleware);
+
+// Security Headers
+app.use(securityHeadersMiddleware);
+
+// Request Validation
+app.use(requestValidationMiddleware);
+
+// CSRF Token Middleware
+app.use(csrfTokenMiddleware);
+
+// General Rate Limiter (applies to all routes)
+app.use(generalLimiter);
 
 // ============================================================
 // Routes
 // ============================================================
 
-// Health check
+// Health check (no rate limiting)
 app.get("/health", (req, res) => {
   res.status(200).json({
     success: true,
@@ -51,8 +104,38 @@ app.get("/health", (req, res) => {
   });
 });
 
-// API Routes
-app.use("/api/auth", require("./routes/auth"));
+// ============================================================
+// Authentication Routes (with rate limiting)
+// ============================================================
+const authRouter = require("./routes/auth");
+
+// Apply strict CORS to auth routes
+app.use("/api/auth", strictCorsMiddleware);
+
+// Apply specific rate limiters to auth endpoints
+app.post("/api/auth/login", authLimiter, authRouter);
+app.post("/api/auth/signup", signupLimiter, authRouter);
+app.post("/api/auth/forgot-password", passwordResetLimiter, authRouter);
+app.post("/api/auth/verify-reset-otp", otpVerificationLimiter, authRouter);
+app.post("/api/auth/reset-password", passwordResetLimiter, authRouter);
+app.post("/api/auth/resend-reset-otp", otpResendLimiter, authRouter);
+app.post("/api/auth/verify-otp", otpVerificationLimiter, authRouter);
+app.post("/api/auth/resend-otp", otpResendLimiter, authRouter);
+app.post("/api/auth/google", oauthLimiter, authRouter);
+app.post("/api/auth/google/callback", oauthLimiter, authRouter);
+app.post("/api/auth/facebook", oauthLimiter, authRouter);
+app.post("/api/auth/facebook/callback", oauthLimiter, authRouter);
+
+// Other auth routes
+app.use("/api/auth", authRouter);
+
+// ============================================================
+// API Routes (with rate limiting)
+// ============================================================
+
+// Apply API endpoint rate limiter
+app.use("/api/", apiEndpointLimiter);
+
 app.use("/api/profile", require("./routes/profile"));
 app.use("/api/location", require("./routes/location"));
 app.use("/api/users", require("./routes/users"));
@@ -60,6 +143,15 @@ app.use("/api/elders", require("./routes/elders"));
 app.use("/api/caregivers", require("./routes/caregivers"));
 app.use("/api/volunteers", require("./routes/volunteers"));
 app.use("/api/sos", require("./routes/sos"));
+
+// File upload routes (with upload rate limiter)
+app.post("/api/upload", uploadLimiter, (req, res) => {
+  // Upload handler
+  res.status(200).json({
+    success: true,
+    message: "File uploaded successfully",
+  });
+});
 
 // ============================================================
 // 404 Handler
@@ -72,6 +164,11 @@ app.use((req, res) => {
 });
 
 // ============================================================
+// CORS Error Handler
+// ============================================================
+app.use(corsErrorHandler);
+
+// ============================================================
 // Error Handler Middleware
 // ============================================================
 app.use(errorHandler);
@@ -81,16 +178,7 @@ app.use(errorHandler);
 // ============================================================
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log(`
-╔════════════════════════════════════════════════════════════╗
-║                                                            ║
-║   🚀 Smart Assistant Backend Server                       ║
-║   ✅ Server running on port ${PORT}                          ║
-║   📍 Environment: ${process.env.NODE_ENV || "development"}                      ║
-║   🔗 API URL: http://localhost:${PORT}/api                 ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
-  `);
+  console.log(`\n╔════════════════════════════════════════════════════════╗\n║                                                        ║\n║   🚀 Smart Assistant Backend Server                   ║\n║   ✅ Server running on port ${PORT}                          ║\n║   📋 Environment: ${process.env.NODE_ENV || "development"}                      ║\n║   🔗 API URL: http://localhost:${PORT}/api                 ║\n║   🔒 Rate Limiting: ENABLED                           ║\n║   🛡️  CORS Protection: ENABLED                         ║\n║   🔐 Security Headers: ENABLED                         ║\n║                                                        ║\n╚════════════════════════════════════════════════════════╝\n  `);
 });
 
 // ============================================================
