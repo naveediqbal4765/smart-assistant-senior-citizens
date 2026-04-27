@@ -60,6 +60,114 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
   }, []);
 
   /**
+   * Handle Facebook Response
+   * Separate function to handle async operations
+   */
+  const handleFacebookResponse = async (response) => {
+    try {
+      if (response.authResponse) {
+        // User logged in successfully
+        const accessToken = response.authResponse.accessToken;
+
+        // Get CSRF token from meta tag or localStorage
+        let csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        if (!csrfToken) {
+          csrfToken = localStorage.getItem("csrfToken") || "";
+        }
+
+        // Send token to backend
+        const result = await fetch(
+          `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/auth/facebook`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken,
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              token: accessToken,
+              rememberMe,
+            }),
+          }
+        );
+
+        const data = await result.json();
+
+        if (!result.ok) {
+          throw new Error(data.message || "Facebook login failed");
+        }
+
+        // Login user
+        const { accessToken: jwtToken, refreshToken, rememberMeToken, user } = data.data;
+
+        console.log("[Facebook Login] User data:", user);
+        console.log("[Facebook Login] User role:", user?.role);
+        console.log("[Facebook Login] isNewUser:", data.data.isNewUser);
+
+        login(jwtToken, user, refreshToken, rememberMe);
+
+        // Store tokens
+        localStorage.setItem("accessToken", jwtToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        if (rememberMeToken) {
+          localStorage.setItem("rememberMeToken", rememberMeToken);
+        }
+
+        // Call success callback
+        if (onSuccess) {
+          onSuccess(user);
+        }
+
+        // Check if new user without role - redirect to role selection
+        if (data.data.isNewUser && !user.role) {
+          console.log("[Facebook Login] New user without role, redirecting to role selection");
+          navigate("/select-role", {
+            state: {
+              userId: user.userId,
+              email: user.email,
+              fullName: user.fullName,
+              profilePicture: user.profilePicture,
+              accessToken: jwtToken,
+            },
+          });
+        } else if (user.role) {
+          // Existing user with role - redirect to dashboard
+          console.log("[Facebook Login] Existing user with role:", user.role);
+          const dashboardPath = `/dashboard/${user.role}`;
+          console.log("[Facebook Login] Redirecting to:", dashboardPath);
+          navigate(dashboardPath);
+        } else {
+          // User exists but no role - redirect to role selection
+          console.log("[Facebook Login] User exists but no role, redirecting to role selection");
+          navigate("/select-role", {
+            state: {
+              userId: user.userId,
+              email: user.email,
+              fullName: user.fullName,
+              profilePicture: user.profilePicture,
+              accessToken: jwtToken,
+            },
+          });
+        }
+      } else {
+        // User cancelled login
+        toast.error("Facebook login cancelled");
+      }
+    } catch (error) {
+      console.error("[Facebook Login] Error:", error);
+      toast.error(error.message || "Facebook login failed");
+
+      // Call error callback
+      if (onError) {
+        onError(error);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
    * Handle Facebook Login
    */
   const handleFacebookLogin = async () => {
@@ -72,76 +180,9 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
 
       // Request login
       window.FB.login(
-        async (response) => {
-          try {
-            if (response.authResponse) {
-              // User logged in successfully
-              const accessToken = response.authResponse.accessToken;
-
-              // Get CSRF token from meta tag or localStorage
-              let csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-              if (!csrfToken) {
-                csrfToken = localStorage.getItem("csrfToken") || "";
-              }
-
-              // Send token to backend
-              const result = await fetch(
-                `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/auth/facebook`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-Token": csrfToken,
-                  },
-                  credentials: "include",
-                  body: JSON.stringify({
-                    token: accessToken,
-                    rememberMe,
-                  }),
-                }
-              );
-
-              const data = await result.json();
-
-              if (!result.ok) {
-                throw new Error(data.message || "Facebook login failed");
-              }
-
-              // Login user
-              const { accessToken: jwtToken, refreshToken, rememberMeToken, user } = data.data;
-
-              login(jwtToken, user, refreshToken, rememberMe);
-
-              // Store tokens
-              localStorage.setItem("accessToken", jwtToken);
-              localStorage.setItem("refreshToken", refreshToken);
-              if (rememberMeToken) {
-                localStorage.setItem("rememberMeToken", rememberMeToken);
-              }
-
-              // Call success callback
-              if (onSuccess) {
-                onSuccess(user);
-              }
-
-              // Redirect to dashboard
-              const dashboardPath = `/dashboard/${user.role}`;
-              navigate(dashboardPath);
-            } else {
-              // User cancelled login
-              toast.error("Facebook login cancelled");
-            }
-          } catch (error) {
-            console.error("[Facebook Login] Error:", error);
-            toast.error(error.message || "Facebook login failed");
-
-            // Call error callback
-            if (onError) {
-              onError(error);
-            }
-          } finally {
-            setIsLoading(false);
-          }
+        (response) => {
+          // Handle response in a separate function to avoid async callback
+          handleFacebookResponse(response);
         },
         { scope: "public_profile,email" }
       );
