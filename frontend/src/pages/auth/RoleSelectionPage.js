@@ -43,28 +43,18 @@ const RoleSelectionPage = () => {
     try {
       setIsLoading(true);
 
-      // Call set-role endpoint
-      const response = await authAPI.post("/auth/set-role", {
-        userId,
-        role,
+      // Redirect to signup page with pre-filled data
+      navigate("/signup", {
+        state: {
+          role,
+          email,
+          fullName,
+          profilePicture,
+          accessToken,
+          userId,
+          isOAuthSignup: true,
+        },
       });
-
-      if (response.data.success) {
-        toast.success(`Welcome! You selected ${role}`);
-
-        // Redirect to signup page with pre-filled data
-        navigate("/signup", {
-          state: {
-            role,
-            email,
-            fullName,
-            profilePicture,
-            accessToken,
-            userId,
-            isOAuthSignup: true,
-          },
-        });
-      }
     } catch (error) {
       console.error("Role selection error:", error);
       toast.error(error.response?.data?.message || "Failed to set role");
