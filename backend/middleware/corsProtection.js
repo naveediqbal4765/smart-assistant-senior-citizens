@@ -166,7 +166,10 @@ const csrfTokenMiddleware = (req, res, next) => {
     const csrfToken = req.headers['x-csrf-token'] || req.body._csrf;
 
     // Skip CSRF validation for OAuth and API token-based requests
-    if (req.headers.authorization || req.path.includes('/oauth')) {
+    const isOAuthRequest = req.path.includes('/google') || req.path.includes('/facebook') || req.path.includes('/oauth');
+    const hasAuthHeader = req.headers.authorization;
+
+    if (hasAuthHeader || isOAuthRequest) {
       return next();
     }
 
