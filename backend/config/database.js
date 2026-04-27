@@ -12,6 +12,9 @@ const connectDB = async () => {
       throw new Error('MONGODB_URI environment variable is not set');
     }
 
+    console.log('🔗 Connecting to MongoDB...');
+    console.log('📍 Connection String:', mongoUri.replace(/:[^:]*@/, ':****@')); // Hide password
+
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
@@ -19,8 +22,19 @@ const connectDB = async () => {
       w: 'majority',
     });
 
+    const dbName = conn.connection.name;
+    const expectedDb = 'smartassistant';
+
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    console.log(`📦 Database: ${conn.connection.name}`);
+    console.log(`📦 Database: ${dbName}`);
+
+    // Verify we're connected to the correct database
+    if (dbName !== expectedDb) {
+      console.warn(`⚠️  WARNING: Connected to '${dbName}' but expected '${expectedDb}'`);
+      console.warn('📝 Make sure your MONGODB_URI includes the database name: /smartassistant');
+    } else {
+      console.log(`✅ Connected to correct database: ${expectedDb}`);
+    }
 
     mongoose.connection.on("disconnected", () => {
       console.warn("⚠️  MongoDB disconnected. Attempting to reconnect...");
