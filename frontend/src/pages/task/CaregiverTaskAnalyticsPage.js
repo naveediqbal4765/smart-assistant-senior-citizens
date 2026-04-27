@@ -15,7 +15,9 @@ const COLORS = {
 
 const CaregiverTaskAnalyticsPage = () => {
   const navigate = useNavigate();
-  const [elderName] = useState("Fatima Ahmed"); // This would come from context/props
+
+  // Fixed elder name - this caregiver is assigned to this elder only
+  const elderName = "Fatima Ahmed";
 
   // Mock analytics data for the elder
   const analyticsData = {

@@ -20,50 +20,49 @@ const CaregiverNotificationsPage = () => {
   const [sosActive, setSosActive] = useState(false);
   const [sosNotification, setSosNotification] = useState(null);
 
-  // Mock notifications data
+  // Fixed elder name - this caregiver is assigned to this elder only
+  const elderName = "Fatima Ahmed";
+
+  // Mock notifications data - all for the assigned elder
   const mockNotifications = [
     {
       id: 1,
       type: "volunteer_accepted",
       title: "Volunteer Accepted Task",
-      message: "Ahmed Khan has accepted the task 'Buy Groceries' for Fatima Ahmed",
-      elderName: "Fatima Ahmed",
+      message: `Ahmed Khan has accepted the task 'Buy Groceries' for ${elderName}`,
       volunteerName: "Ahmed Khan",
       taskName: "Buy Groceries",
-      timestamp: new Date(Date.now() - 5 * 60000), // 5 minutes ago
+      timestamp: new Date(Date.now() - 5 * 60000),
       read: false,
     },
     {
       id: 2,
       type: "volunteer_applied",
       title: "Volunteer Applied",
-      message: "Hassan Ali has applied for 'House Cleaning' task for Aisha Hassan",
-      elderName: "Aisha Hassan",
+      message: `Hassan Ali has applied for 'House Cleaning' task for ${elderName}`,
       volunteerName: "Hassan Ali",
       taskName: "House Cleaning",
-      timestamp: new Date(Date.now() - 15 * 60000), // 15 minutes ago
+      timestamp: new Date(Date.now() - 15 * 60000),
       read: false,
     },
     {
       id: 3,
       type: "task_reminder",
       title: "Task Reminder",
-      message: "Fatima Ahmed's 'Medical Appointment' has been scheduled for tomorrow at 3:00 PM",
-      elderName: "Fatima Ahmed",
+      message: `${elderName}'s 'Medical Appointment' has been scheduled for tomorrow at 3:00 PM`,
       taskName: "Medical Appointment",
       scheduledTime: "3:00 PM",
-      timestamp: new Date(Date.now() - 30 * 60000), // 30 minutes ago
+      timestamp: new Date(Date.now() - 30 * 60000),
       read: true,
     },
     {
       id: 4,
       type: "volunteer_accepted",
       title: "Volunteer Accepted Task",
-      message: "Fatima Ali has accepted the task 'Companionship Visit' for Hassan Ahmed",
-      elderName: "Hassan Ahmed",
+      message: `Fatima Ali has accepted the task 'Companionship Visit' for ${elderName}`,
       volunteerName: "Fatima Ali",
       taskName: "Companionship Visit",
-      timestamp: new Date(Date.now() - 60 * 60000), // 1 hour ago
+      timestamp: new Date(Date.now() - 60 * 60000),
       read: true,
     },
   ];
@@ -76,7 +75,7 @@ const CaregiverNotificationsPage = () => {
   // Simulate SOS trigger
   useEffect(() => {
     const sosTimer = setTimeout(() => {
-      triggerSOS("Fatima Ahmed");
+      triggerSOS();
     }, 3000);
 
     return () => clearTimeout(sosTimer);
@@ -84,7 +83,6 @@ const CaregiverNotificationsPage = () => {
 
   // Play emergency sound
   const playEmergencySound = () => {
-    // Create audio context for emergency sound
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
@@ -92,7 +90,6 @@ const CaregiverNotificationsPage = () => {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    // Emergency siren pattern
     oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
     oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.1);
     oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
@@ -107,37 +104,30 @@ const CaregiverNotificationsPage = () => {
   // Trigger vibration
   const triggerVibration = () => {
     if (navigator.vibrate) {
-      // Vibration pattern: [vibrate, pause, vibrate, pause, vibrate]
       navigator.vibrate([200, 100, 200, 100, 200]);
     }
   };
 
   // Handle SOS notification
-  const triggerSOS = (elderName) => {
+  const triggerSOS = () => {
     setSosActive(true);
     setSosNotification({
       id: Date.now(),
       type: "sos",
       title: "🚨 EMERGENCY SOS ALERT 🚨",
       message: `${elderName} has triggered the SOS button!`,
-      elderName: elderName,
       timestamp: new Date(),
       read: false,
     });
 
-    // Play emergency sound
     playEmergencySound();
-
-    // Trigger vibration
     triggerVibration();
 
-    // Show toast notification
     toast.error(`EMERGENCY: ${elderName} triggered SOS!`, {
       duration: 10000,
       icon: "🚨",
     });
 
-    // Auto-dismiss after 10 seconds
     setTimeout(() => {
       setSosActive(false);
     }, 10000);
@@ -227,7 +217,7 @@ const CaregiverNotificationsPage = () => {
             Notifications
           </h1>
           <p style={{ fontSize: "14px", color: COLORS.veryLightGreen, margin: "0" }}>
-            Manage all notifications for your elder
+            All notifications for {elderName}
           </p>
         </div>
       </div>
