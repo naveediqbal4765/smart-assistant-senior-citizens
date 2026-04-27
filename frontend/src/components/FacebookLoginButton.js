@@ -181,6 +181,9 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
       // Request login
       window.FB.login(
         (response) => {
+          console.log("[Facebook Login] FB.login response:", response);
+          console.log("[Facebook Login] Auth response:", response.authResponse);
+          
           // Handle response in a separate function to avoid async callback
           handleFacebookResponse(response);
         },
