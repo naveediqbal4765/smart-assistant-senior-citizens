@@ -20,12 +20,12 @@ const { normalizeEmail } = require('../../services/emailValidationService');
  */
 const googleLogin = async (req, res) => {
   try {
-    const { token, accessToken, rememberMe } = req.body;
+    const { token, accessToken: googleAccessToken, rememberMe } = req.body;
 
     // ============================================================
     // Step 1: Validate input
     // ============================================================
-    if (!token && !accessToken) {
+    if (!token && !googleAccessToken) {
       return res.status(400).json({
         success: false,
         message: 'Please provide Google token or access token',
@@ -47,9 +47,9 @@ const googleLogin = async (req, res) => {
         });
       }
       googleUserData = verification.data;
-    } else if (accessToken) {
+    } else if (googleAccessToken) {
       // Verify access token (fallback method)
-      const verification = await verifyGoogleAccessToken(accessToken);
+      const verification = await verifyGoogleAccessToken(googleAccessToken);
       if (!verification.success) {
         return res.status(401).json({
           success: false,
@@ -158,8 +158,8 @@ const googleLogin = async (req, res) => {
     newUser.password = crypto.randomBytes(32).toString('hex');
 
     // Generate tokens
-    const accessToken = generateAccessToken(newUser._id);
-    const refreshToken = generateRefreshToken(newUser._id);
+    const newAccessToken = generateAccessToken(newUser._id);
+    const newRefreshToken = generateRefreshToken(newUser._id);
 
     // Handle Remember Me
     let rememberMeToken = null;
@@ -179,8 +179,8 @@ const googleLogin = async (req, res) => {
       success: true,
       message: 'Google signup successful. Please select your role.',
       data: {
-        accessToken,
-        refreshToken,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
         rememberMeToken: rememberMe ? rememberMeToken : null,
         expiresIn: '15m',
         user: {
@@ -335,8 +335,8 @@ const googleCallback = async (req, res) => {
     });
 
     // Generate tokens
-    const accessToken = generateAccessToken(newUser._id);
-    const refreshToken = generateRefreshToken(newUser._id);
+    const newAccessToken = generateAccessToken(newUser._id);
+    const newRefreshToken = generateRefreshToken(newUser._id);
 
     // Handle Remember Me
     let rememberMeToken = null;
@@ -352,8 +352,8 @@ const googleCallback = async (req, res) => {
       success: true,
       message: 'Google signup successful. Please select your role.',
       data: {
-        accessToken,
-        refreshToken,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
         rememberMeToken: rememberMe ? rememberMeToken : null,
         expiresIn: '15m',
         user: {
