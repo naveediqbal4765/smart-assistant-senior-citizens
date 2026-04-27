@@ -213,6 +213,57 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    // ---- Location Tracking ----
+    locationTrackingEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    locationTrackingEnabledAt: {
+      type: Date,
+    },
+    locationTrackingDisabledAt: {
+      type: Date,
+    },
+    currentLocation: {
+      latitude: {
+        type: Number,
+        min: -90,
+        max: 90,
+      },
+      longitude: {
+        type: Number,
+        min: -180,
+        max: 180,
+      },
+      accuracy: {
+        type: Number,
+      },
+      timestamp: {
+        type: Date,
+      },
+    },
+    locationHistory: [
+      {
+        latitude: {
+          type: Number,
+          min: -90,
+          max: 90,
+        },
+        longitude: {
+          type: Number,
+          min: -180,
+          max: 180,
+        },
+        accuracy: {
+          type: Number,
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
     // ---- Timestamps ----
     lastLogin: { type: Date },                                // Last successful login time
     passwordChangedAt: { type: Date },                        // When password was last changed
