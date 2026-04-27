@@ -181,7 +181,7 @@ const VolunteerTaskList = () => {
               fontFamily: "Montserrat, sans-serif",
             }}
           >
-            ← Back to Dashboard
+            Back
           </button>
           <h1 style={{ fontSize: "32px", fontWeight: 700, margin: "0 0 8px 0" }}>
             🤝 Available Tasks

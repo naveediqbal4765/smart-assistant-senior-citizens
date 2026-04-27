@@ -156,7 +156,7 @@ const TaskNotificationsPage = () => {
               fontFamily: "Montserrat, sans-serif",
             }}
           >
-            ← Back
+            Back
           </button>
           <h1 style={{ fontSize: "32px", fontWeight: 700, margin: "0 0 8px 0" }}>
             🔔 Notifications
