@@ -134,6 +134,10 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
       // Login user
       const { accessToken, refreshToken, rememberMeToken, user } = data.data;
 
+      console.log("[Google Login] User data:", user);
+      console.log("[Google Login] User role:", user?.role);
+      console.log("[Google Login] isNewUser:", data.data.isNewUser);
+
       login(accessToken, user, refreshToken, rememberMe);
 
       // Store tokens
@@ -150,6 +154,7 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
 
       // Check if new user without role - redirect to role selection
       if (data.data.isNewUser && !user.role) {
+        console.log("[Google Login] New user without role, redirecting to role selection");
         navigate("/select-role", {
           state: {
             userId: user.userId,
@@ -159,10 +164,24 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
             accessToken,
           },
         });
-      } else {
-        // Existing user - redirect to dashboard
+      } else if (user.role) {
+        // Existing user with role - redirect to dashboard
+        console.log("[Google Login] Existing user with role:", user.role);
         const dashboardPath = `/dashboard/${user.role}`;
+        console.log("[Google Login] Redirecting to:", dashboardPath);
         navigate(dashboardPath);
+      } else {
+        // User exists but no role - redirect to role selection
+        console.log("[Google Login] User exists but no role, redirecting to role selection");
+        navigate("/select-role", {
+          state: {
+            userId: user.userId,
+            email: user.email,
+            fullName: user.fullName,
+            profilePicture: user.profilePicture,
+            accessToken,
+          },
+        });
       }
     } catch (error) {
       console.error("[Google Login] Error:", error);
