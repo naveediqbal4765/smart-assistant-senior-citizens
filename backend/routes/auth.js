@@ -32,6 +32,9 @@ const {
   googleCallback,
 } = require("../controllers/auth/googleOAuthController");
 const {
+  setRole,
+} = require("../controllers/auth/roleController");
+const {
   facebookLogin,
   facebookCallback,
 } = require("../controllers/auth/facebookOAuthController");
@@ -701,6 +704,11 @@ router.post("/google", googleLogin);
 // POST /auth/google/callback - Google OAuth Callback
 // ============================================================
 router.post("/google/callback", googleCallback);
+
+// ============================================================
+// POST /auth/set-role - Set User Role After OAuth Signup
+// ============================================================
+router.post("/set-role", setRole);
 
 // ============================================================
 // POST /auth/facebook - Facebook OAuth Login

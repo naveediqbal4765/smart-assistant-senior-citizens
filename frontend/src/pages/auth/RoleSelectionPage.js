@@ -43,6 +43,29 @@ const RoleSelectionPage = () => {
     try {
       setIsLoading(true);
 
+      // Call backend to set role in database
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/auth/set-role`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            role,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to set role");
+      }
+
+      toast.success(`Role set to ${role}. Completing signup...`);
+
       // Redirect to signup page with pre-filled data
       navigate("/signup", {
         state: {
@@ -57,7 +80,7 @@ const RoleSelectionPage = () => {
       });
     } catch (error) {
       console.error("Role selection error:", error);
-      toast.error(error.response?.data?.message || "Failed to set role");
+      toast.error(error.message || "Failed to select role");
     } finally {
       setIsLoading(false);
     }
