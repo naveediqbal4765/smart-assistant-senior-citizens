@@ -351,6 +351,7 @@ const TaskRatingPage = () => {
 
                 {/* View Profile Button */}
                 <button
+                  onClick={() => navigate(`/volunteer-profile/${volunteer.id}`)}
                   style={{
                     width: "100%",
                     padding: "10px",

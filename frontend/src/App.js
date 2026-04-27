@@ -51,6 +51,7 @@ import TaskDetailPage from "./pages/task/TaskDetailPage";
 import TaskHistoryPage from "./pages/task/TaskHistoryPage";
 import TaskNotificationsPage from "./pages/task/TaskNotificationsPage";
 import TaskRatingPage from "./pages/task/TaskRatingPage";
+import VolunteerProfilePage from "./pages/task/VolunteerProfilePage";
 import TaskAnalyticsPage from "./pages/task/TaskAnalyticsPage";
 
 // Common Pages
@@ -160,6 +161,7 @@ function App() {
           <Route path="/task-history" element={<TaskHistoryPage />} />
           <Route path="/task-notifications" element={<TaskNotificationsPage />} />
           <Route path="/task-rating" element={<TaskRatingPage />} />
+          <Route path="/volunteer-profile/:volunteerId" element={<VolunteerProfilePage />} />
           <Route path="/task-analytics" element={<TaskAnalyticsPage />} />
 
           {/* ---- 404 Not Found ---- */}
