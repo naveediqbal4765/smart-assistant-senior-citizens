@@ -18,7 +18,7 @@ const ElderTaskRequestNotificationsPage = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
 
-  // Mock notifications data - only volunteer accepted task notifications
+  // Mock notifications data - only volunteer accepted and task completion notifications
   const mockNotifications = [
     {
       id: 1,
@@ -34,12 +34,12 @@ const ElderTaskRequestNotificationsPage = () => {
     },
     {
       id: 2,
-      type: "volunteer_accepted",
-      title: "Volunteer Accepted Task",
-      message: "Hassan Ali has accepted the task 'Medical Appointment' - Priority: High, Scheduled: Today at 3:00 PM, Distance: 1.8 km",
+      type: "task_completed",
+      title: "Task Completed",
+      message: "Hassan Ali has completed the task 'Medical Appointment' - Rating: 5 stars",
       volunteerName: "Hassan Ali",
       taskName: "Medical Appointment",
-      taskDetails: "Priority: High, Scheduled: Today at 3:00 PM, Distance: 1.8 km",
+      taskDetails: "Completed successfully with 5-star rating",
       volunteerRating: 4.9,
       timestamp: new Date(Date.now() - 15 * 60000),
       read: false,
@@ -48,22 +48,22 @@ const ElderTaskRequestNotificationsPage = () => {
       id: 3,
       type: "volunteer_accepted",
       title: "Volunteer Accepted Task",
-      message: "Fatima Ali has accepted the task 'House Cleaning' - Priority: Low, Scheduled: Next Week, Distance: 3.2 km",
+      message: "Fatima Ali has accepted the task 'Companionship Visit' - Priority: Medium, Scheduled: Saturday at 2:00 PM, Distance: 2.1 km",
       volunteerName: "Fatima Ali",
-      taskName: "House Cleaning",
-      taskDetails: "Priority: Low, Scheduled: Next Week, Distance: 3.2 km",
+      taskName: "Companionship Visit",
+      taskDetails: "Priority: Medium, Scheduled: Saturday at 2:00 PM, Distance: 2.1 km",
       volunteerRating: 4.7,
       timestamp: new Date(Date.now() - 30 * 60000),
       read: true,
     },
     {
       id: 4,
-      type: "volunteer_accepted",
-      title: "Volunteer Accepted Task",
-      message: "Ahmed Khan has accepted the task 'Companionship Visit' - Priority: Medium, Scheduled: Saturday at 2:00 PM, Distance: 2.1 km",
+      type: "task_completed",
+      title: "Task Completed",
+      message: "Ahmed Khan has completed the task 'Grocery Shopping' - Rating: 4 stars",
       volunteerName: "Ahmed Khan",
-      taskName: "Companionship Visit",
-      taskDetails: "Priority: Medium, Scheduled: Saturday at 2:00 PM, Distance: 2.1 km",
+      taskName: "Grocery Shopping",
+      taskDetails: "Completed successfully with 4-star rating",
       volunteerRating: 4.8,
       timestamp: new Date(Date.now() - 60 * 60000),
       read: true,
