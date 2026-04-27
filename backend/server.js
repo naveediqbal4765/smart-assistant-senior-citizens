@@ -85,11 +85,11 @@ app.use(securityHeadersMiddleware);
 // Request Validation
 app.use(requestValidationMiddleware);
 
-// CSRF Token Middleware
-app.use(csrfTokenMiddleware);
-
 // General Rate Limiter (applies to all routes)
 app.use(generalLimiter);
+
+// CSRF Token Middleware (applied after route-specific handlers)
+app.use(csrfTokenMiddleware);
 
 // ============================================================
 // Routes
