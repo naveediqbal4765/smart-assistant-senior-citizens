@@ -378,14 +378,15 @@ const LoginPage = () => {
             </div>
 
             {/* Quick Access Links for Testing - User Profiles */}
-            <div style={{ width: "100%", marginBottom: "20px", textAlign: "center", padding: "15px", backgroundColor: "#E2FFEB", borderRadius: "8px", border: "2px solid #52b788" }}>
-              <p style={{ fontSize: "13px", color: "#1C382A", margin: "0 0 12px 0", fontFamily: "Montserrat, sans-serif", fontWeight: 600 }}>
-                 🧪 TEST USER PROFILES (No Login Required):
+            <div style={{ width: "100%", marginBottom: "20px", textAlign: "center" }}>
+              <p style={{ fontSize: "12px", color: "#666", margin: "0 0 10px 0", fontFamily: "Montserrat, sans-serif" }}>
+                 Quick access to user profiles (testing):
               </p>
               <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
                 <button
                   type="button"
                   onClick={() => {
+                    // Set Elder role in context and localStorage
                     const mockUser = {
                       userId: "test-elder",
                       email: "elder@test.com",
@@ -400,7 +401,7 @@ const LoginPage = () => {
                     navigate("/profile");
                   }}
                   style={{
-                    padding: "10px 16px",
+                    padding: "8px 12px",
                     backgroundColor: "#52b788",
                     color: "#FFFFFF",
                     border: "none",
@@ -409,16 +410,14 @@ const LoginPage = () => {
                     fontWeight: 600,
                     cursor: "pointer",
                     fontFamily: "Montserrat, sans-serif",
-                    transition: "all 0.3s ease",
                   }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
                 >
-                   👴 Elder Profile
+                   Elder Profile
                 </button>
                 <button
                   type="button"
                   onClick={() => {
+                    // Set Caregiver role in context and localStorage
                     const mockUser = {
                       userId: "test-caregiver",
                       email: "caregiver@test.com",
@@ -433,7 +432,7 @@ const LoginPage = () => {
                     navigate("/profile");
                   }}
                   style={{
-                    padding: "10px 16px",
+                    padding: "8px 12px",
                     backgroundColor: "#2d6a4f",
                     color: "#FFFFFF",
                     border: "none",
@@ -442,16 +441,14 @@ const LoginPage = () => {
                     fontWeight: 600,
                     cursor: "pointer",
                     fontFamily: "Montserrat, sans-serif",
-                    transition: "all 0.3s ease",
                   }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#1b4332")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
                 >
-                  💚 Caregiver Profile
+                  Caregiver Profile
                 </button>
                 <button
                   type="button"
                   onClick={() => {
+                    // Set Volunteer role in context and localStorage
                     const mockUser = {
                       userId: "test-volunteer",
                       email: "volunteer@test.com",
@@ -466,7 +463,7 @@ const LoginPage = () => {
                     navigate("/profile");
                   }}
                   style={{
-                    padding: "10px 16px",
+                    padding: "8px 12px",
                     backgroundColor: "#1b4332",
                     color: "#FFFFFF",
                     border: "none",
@@ -475,12 +472,9 @@ const LoginPage = () => {
                     fontWeight: 600,
                     cursor: "pointer",
                     fontFamily: "Montserrat, sans-serif",
-                    transition: "all 0.3s ease",
                   }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f2818")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#1b4332")}
                 >
-                   🤝 Volunteer Profile
+                   Volunteer Profile
                 </button>
               </div>
             </div>
