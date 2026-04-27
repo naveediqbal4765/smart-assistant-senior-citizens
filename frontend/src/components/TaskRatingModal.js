@@ -255,7 +255,7 @@ const TaskRatingModal = ({ isOpen, task, volunteer, onSubmit, onClose }) => {
               boxSizing: "border-box",
               minHeight: "100px",
               resize: "vertical",
-              color: COLORS.darkGreen",
+              color: COLORS.darkGreen,
             }}
           />
           <p

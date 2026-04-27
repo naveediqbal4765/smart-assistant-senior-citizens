@@ -269,7 +269,7 @@ const TaskAssignmentModal = ({ isOpen, task, volunteers, onAssign, onClose }) =>
               boxSizing: "border-box",
               minHeight: "80px",
               resize: "vertical",
-              color: COLORS.darkGreen",
+              color: COLORS.darkGreen,
             }}
           />
         </div>

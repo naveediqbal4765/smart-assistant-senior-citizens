@@ -384,7 +384,7 @@ const TaskForm = ({ onSubmit, onCancel, initialData = null, isEditing = false })
               fontSize: "13px",
               fontFamily: "Montserrat, sans-serif",
               boxSizing: "border-box",
-              color: COLORS.darkGreen",
+              color: COLORS.darkGreen,
             }}
           />
         </div>
@@ -415,7 +415,7 @@ const TaskForm = ({ onSubmit, onCancel, initialData = null, isEditing = false })
               fontSize: "13px",
               fontFamily: "Montserrat, sans-serif",
               boxSizing: "border-box",
-              color: COLORS.darkGreen",
+              color: COLORS.darkGreen,
             }}
           />
         </div>
