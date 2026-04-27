@@ -19,6 +19,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import RoleSelectionPage from "./pages/auth/RoleSelectionPage";
 import VerifyOTPPage from "./pages/auth/VerifyOTPPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import VerifyResetOTPPage from "./pages/auth/VerifyResetOTPPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 // ---- Module 2: User Profile Management ----
@@ -103,6 +104,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/verify-otp" element={<VerifyOTPPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/verify-reset-otp" element={<VerifyResetOTPPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           {/* ---- Module 2: User Profile Management ---- */}

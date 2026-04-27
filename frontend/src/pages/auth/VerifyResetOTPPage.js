@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import { forgotPassword, resendResetOTP, handleAPIError } from "../../services/apiClient";
+import { verifyResetOTP, handleAPIError } from "../../services/apiClient";
 import Logo from "../../assets/images/Logo.png";
 
 const COLORS = {
@@ -16,39 +16,80 @@ const COLORS = {
   yellow: "#FFC107",
 };
 
-const ForgotPasswordPage = () => {
+const VerifyResetOTPPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state?.email || "");
+  const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
 
   // ============================================================
-  // Handle Forgot Password
+  // Timer for OTP expiry
+  // ============================================================
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // ============================================================
+  // Format time remaining
+  // ============================================================
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // ============================================================
+  // Handle OTP Verification
   // ============================================================
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validate email
+    // Validate inputs
     if (!email) {
       setError("Email is required");
+      return;
+    }
+
+    if (!otp) {
+      setError("OTP is required");
+      return;
+    }
+
+    if (otp.length !== 6) {
+      setError("OTP must be 6 digits");
+      return;
+    }
+
+    if (timeLeft <= 0) {
+      setError("OTP has expired. Please request a new one.");
       return;
     }
 
     setIsLoading(true);
     try {
       // Call backend API
-      const response = await forgotPassword(email);
+      const response = await verifyResetOTP(email, otp);
 
       if (response.data.success) {
-        setOtpSent(true);
-        toast.success("OTP sent to your email. Check your inbox.");
+        toast.success("OTP verified successfully!");
         
-        // Redirect to OTP verification page after 2 seconds
-        setTimeout(() => {
-          navigate("/verify-reset-otp", { state: { email } });
-        }, 2000);
+        // Redirect to reset password page with reset token
+        navigate("/reset-password", {
+          state: {
+            email,
+            resetToken: response.data.data.resetToken,
+          },
+        });
       }
     } catch (err) {
       const apiError = handleAPIError(err);
@@ -60,28 +101,12 @@ const ForgotPasswordPage = () => {
   };
 
   // ============================================================
-  // Handle Resend OTP
+  // Handle OTP Input Change
   // ============================================================
-  const handleResendOTP = async () => {
-    if (!email) {
-      setError("Email is required");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await resendResetOTP(email);
-
-      if (response.data.success) {
-        toast.success("OTP resent to your email");
-      }
-    } catch (err) {
-      const apiError = handleAPIError(err);
-      setError(apiError.message);
-      toast.error(apiError.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleOtpChange = (e) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setOtp(value);
+    setError("");
   };
 
   return (
@@ -140,11 +165,11 @@ const ForgotPasswordPage = () => {
           }}
         >
           {/* Title */}
-          <h1 style={{ fontSize: "24px", fontWeight: 700, color: COLORS.darkGreen, marginBottom: "8px", textAlign: "center", margin: "0 0 8px 0" }}>
-            Reset Password
+          <h1 style={{ fontSize: "24px", fontWeight: 700, color: COLORS.darkGreen, margin: "0 0 8px 0", textAlign: "center" }}>
+            Verify OTP
           </h1>
-          <p style={{ fontSize: "14px", color: COLORS.darkGray, textAlign: "center", marginBottom: "24px", margin: "0 0 24px 0" }}>
-            Enter your email to receive a password reset code
+          <p style={{ fontSize: "14px", color: COLORS.darkGray, textAlign: "center", margin: "0 0 24px 0" }}>
+            Enter the 6-digit code sent to your email
           </p>
 
           {/* Error Message */}
@@ -165,27 +190,26 @@ const ForgotPasswordPage = () => {
             </div>
           )}
 
-          {/* Success Message */}
-          {otpSent && (
-            <div
-              style={{
-                backgroundColor: "#d4edda",
-                border: `1.5px solid ${COLORS.mediumGreen}`,
-                borderRadius: "8px",
-                padding: "10px 14px",
-                marginBottom: "16px",
-                color: "#155724",
-                fontSize: "13px",
-                fontWeight: 600,
-              }}
-            >
-              ✅ OTP sent successfully! Redirecting...
-            </div>
-          )}
+          {/* Timer */}
+          <div
+            style={{
+              backgroundColor: timeLeft <= 60 ? "#fff3cd" : COLORS.lightGray,
+              border: `1.5px solid ${timeLeft <= 60 ? COLORS.yellow : COLORS.veryLightGreen}`,
+              borderRadius: "8px",
+              padding: "10px 14px",
+              marginBottom: "16px",
+              textAlign: "center",
+              fontSize: "13px",
+              fontWeight: 600,
+              color: timeLeft <= 60 ? "#856404" : COLORS.darkGray,
+            }}
+          >
+            ⏱️ OTP expires in: <span style={{ fontSize: "16px", fontWeight: 700 }}>{formatTime(timeLeft)}</span>
+          </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit}>
-            {/* Email Input */}
+            {/* OTP Input */}
             <div style={{ marginBottom: "20px" }}>
               <label
                 style={{
@@ -197,90 +221,73 @@ const ForgotPasswordPage = () => {
                   fontFamily: "Montserrat, sans-serif",
                 }}
               >
-                Email Address *
+                Enter OTP *
               </label>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setError("");
-                }}
-                placeholder="your@email.com"
+                type="text"
+                value={otp}
+                onChange={handleOtpChange}
+                placeholder="000000"
+                maxLength="6"
                 style={{
                   width: "100%",
                   padding: "12px",
                   border: `2px solid ${COLORS.veryLightGreen}`,
                   borderRadius: "8px",
-                  fontSize: "14px",
-                  fontFamily: "Montserrat, sans-serif",
+                  fontSize: "24px",
+                  fontFamily: "monospace",
                   boxSizing: "border-box",
                   color: COLORS.darkGreen,
+                  textAlign: "center",
+                  letterSpacing: "8px",
                   transition: "all 0.3s ease",
                 }}
                 onFocus={(e) => (e.target.style.borderColor = COLORS.mediumGreen)}
                 onBlur={(e) => (e.target.style.borderColor = COLORS.veryLightGreen)}
               />
+              <p style={{ fontSize: "12px", color: COLORS.darkGray, margin: "8px 0 0 0", textAlign: "center" }}>
+                {otp.length}/6 digits entered
+              </p>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || otp.length !== 6 || timeLeft <= 0}
               style={{
                 width: "100%",
                 padding: "12px",
-                backgroundColor: COLORS.mediumGreen,
+                backgroundColor: otp.length === 6 && timeLeft > 0 ? COLORS.mediumGreen : COLORS.darkGray,
                 color: COLORS.white,
                 border: "none",
                 borderRadius: "8px",
                 fontSize: "14px",
                 fontWeight: 600,
                 fontFamily: "Montserrat, sans-serif",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.7 : 1,
+                cursor: otp.length === 6 && timeLeft > 0 && !isLoading ? "pointer" : "not-allowed",
+                opacity: otp.length === 6 && timeLeft > 0 && !isLoading ? 1 : 0.7,
                 transition: "all 0.3s ease",
               }}
               onMouseEnter={(e) => {
-                if (!isLoading) e.target.style.backgroundColor = COLORS.darkMediumGreen;
+                if (otp.length === 6 && timeLeft > 0 && !isLoading) {
+                  e.target.style.backgroundColor = COLORS.darkMediumGreen;
+                }
               }}
               onMouseLeave={(e) => {
-                if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+                if (otp.length === 6 && timeLeft > 0 && !isLoading) {
+                  e.target.style.backgroundColor = COLORS.mediumGreen;
+                }
               }}
             >
-              {isLoading ? "Sending OTP..." : "Send Reset Code"}
+              {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
           </form>
 
-          {/* Resend OTP Link */}
-          <p style={{ textAlign: "center", fontSize: "12px", color: COLORS.darkGray, marginTop: "16px", margin: "16px 0 0 0" }}>
-            Didn't receive the code?{" "}
+          {/* Back Button */}
+          <p style={{ textAlign: "center", fontSize: "12px", color: COLORS.darkGray, marginTop: "16px" }}>
             <button
               type="button"
-              onClick={handleResendOTP}
-              disabled={isLoading}
-              style={{
-                background: "none",
-                border: "none",
-                color: COLORS.mediumGreen,
-                cursor: isLoading ? "not-allowed" : "pointer",
-                fontWeight: 600,
-                fontSize: "12px",
-                fontFamily: "Montserrat, sans-serif",
-                textDecoration: "underline",
-                opacity: isLoading ? 0.7 : 1,
-              }}
-            >
-              Resend OTP
-            </button>
-          </p>
-
-          {/* Back to Login */}
-          <p style={{ textAlign: "center", fontSize: "12px", color: COLORS.darkGray, marginTop: "16px", margin: "16px 0 0 0" }}>
-            Remember your password?{" "}
-            <button
-              type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/forgot-password")}
               style={{
                 background: "none",
                 border: "none",
@@ -292,7 +299,7 @@ const ForgotPasswordPage = () => {
                 textDecoration: "underline",
               }}
             >
-              Login
+              Back to Forgot Password
             </button>
           </p>
         </div>
@@ -301,4 +308,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default VerifyResetOTPPage;
