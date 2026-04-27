@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapPin, faCalendar, faClock, faUser, faPhone, faCheckCircle, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 // ============================================================
 // TaskDetailPage.js - Detailed Task View Page
