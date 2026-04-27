@@ -142,6 +142,12 @@ function App() {
             }
           />
 
+          {/* Catch-all dashboard route - redirect to role selection if no role */}
+          <Route
+            path="/dashboard"
+            element={<Navigate to="/select-role" replace />}
+          />
+
           {/* ---- TEST ROUTES (No authentication required - for testing) ---- */}
           <Route path="/test-dashboards" element={<TestDashboardsPage />} />
           <Route path="/test/elder-dashboard" element={<ElderDashboard />} />
