@@ -38,6 +38,8 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
           appId: process.env.REACT_APP_FACEBOOK_APP_ID,
           xfbml: true,
           version: "v18.0",
+          cookie: true,
+          status: true,
         });
 
         setFacebookSDKLoaded(true);
@@ -178,7 +180,7 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
         throw new Error("Facebook SDK not loaded");
       }
 
-      // Request login
+      // Request login with proper options
       window.FB.login(
         (response) => {
           console.log("[Facebook Login] FB.login response:", response);
@@ -187,7 +189,11 @@ const FacebookLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
           // Handle response in a separate function to avoid async callback
           handleFacebookResponse(response);
         },
-        { scope: "public_profile,email" }
+        { 
+          scope: "public_profile,email",
+          auth_type: "rerequest",
+          return_scopes: true,
+        }
       );
     } catch (error) {
       console.error("[Facebook Login] Error:", error);
