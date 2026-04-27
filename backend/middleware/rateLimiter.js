@@ -4,17 +4,19 @@
 // ============================================================
 
 const rateLimit = require('express-rate-limit');
-const RedisStore = require('rate-limit-redis');
-const redis = require('redis');
 
 // ============================================================
 // Redis Client (Optional - for distributed rate limiting)
 // ============================================================
 
 let redisClient = null;
+let RedisStore = null;
 
 // Try to connect to Redis if available
 try {
+  const redis = require('redis');
+  RedisStore = require('rate-limit-redis');
+
   redisClient = redis.createClient({
     host: process.env.REDIS_HOST || 'localhost',
     port: process.env.REDIS_PORT || 6379,
@@ -32,6 +34,7 @@ try {
 } catch (error) {
   console.warn('⚠️  Redis not available, using memory store for rate limiting');
   redisClient = null;
+  RedisStore = null;
 }
 
 // ============================================================
