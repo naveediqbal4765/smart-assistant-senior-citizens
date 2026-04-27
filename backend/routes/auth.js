@@ -17,6 +17,16 @@ const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../src/utils/jwtService");
+const {
+  validateSignup,
+  validateSignupWithLocation,
+  handleValidationErrors,
+} = require("../middleware/signupValidation");
+const {
+  signup,
+  signupWithLocation,
+  verifyLocationPermission,
+} = require("../controllers/auth/signupController");
 
 const router = express.Router();
 
@@ -1120,3 +1130,22 @@ router.post("/delete-account", protect, async (req, res) => {
     });
   }
 });
+
+// ============================================================
+// POST /auth/signup-with-location - Signup with Location
+// ============================================================
+router.post(
+  "/signup-with-location",
+  validateSignupWithLocation,
+  handleValidationErrors,
+  signupWithLocation
+);
+
+// ============================================================
+// POST /auth/verify-location-permission - Verify Location After Signup
+// ============================================================
+router.post(
+  "/verify-location-permission",
+  protect,
+  verifyLocationPermission
+);
