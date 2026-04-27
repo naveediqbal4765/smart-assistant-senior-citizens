@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Logo from "../assets/images/Logo.png";
+import RoleSwitcher from "./RoleSwitcher";
 
 // ---- COLOR SCHEME ----
 const COLORS = {
