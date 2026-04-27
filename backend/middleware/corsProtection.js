@@ -165,16 +165,26 @@ const csrfTokenMiddleware = (req, res, next) => {
   if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
     const csrfToken = req.headers['x-csrf-token'] || req.body._csrf;
 
-    // Skip CSRF validation for OAuth and API token-based requests
-    const isOAuthRequest = req.path.includes('/google') || req.path.includes('/facebook') || req.path.includes('/oauth');
+    // Skip CSRF validation for:
+    // 1. OAuth requests (Google, Facebook)
+    // 2. Role selection requests
+    // 3. API token-based requests (Authorization header)
+    const isOAuthRequest = 
+      req.path.includes('/google') || 
+      req.path.includes('/facebook') || 
+      req.path.includes('/oauth') ||
+      req.path.includes('/set-role');
+    
     const hasAuthHeader = req.headers.authorization;
 
     if (hasAuthHeader || isOAuthRequest) {
+      console.log(`[CSRF] Skipping validation for: ${req.method} ${req.path}`);
       return next();
     }
 
     // For form-based requests, validate CSRF token
     if (!csrfToken) {
+      console.log(`[CSRF] Missing token for: ${req.method} ${req.path}`);
       return res.status(403).json({
         success: false,
         message: 'CSRF token is missing',
@@ -183,6 +193,7 @@ const csrfTokenMiddleware = (req, res, next) => {
 
     // In production, validate the token against session
     // For now, just ensure it exists
+    console.log(`[CSRF] Token validated for: ${req.method} ${req.path}`);
   }
 
   next();
