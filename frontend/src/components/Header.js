@@ -3,7 +3,6 @@
 // ============================================================
 
 import React from "react";
-import RoleSwitcher from "./RoleSwitcher";
 
 // ---- SVG Logo: Green cross with red heart ----
 const AppLogo = ({ size = 40 }) => (
@@ -26,7 +25,6 @@ const Header = ({ showBorder = true }) => {
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
         gap: "12px",
         padding: "16px 24px",
         backgroundColor: "#FFFFFF",
@@ -34,38 +32,32 @@ const Header = ({ showBorder = true }) => {
         boxShadow: showBorder ? "0 2px 4px rgba(0,0,0,0.05)" : "none",
       }}
     >
-      {/* Left side: Logo and Title */}
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        <AppLogo size={40} />
-        <div>
-          <h1
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontSize: "20px",
-              fontWeight: 700,
-              color: "#1C382A",
-              margin: "0",
-              lineHeight: "1.2",
-            }}
-          >
-            Smart Assistant
-          </h1>
-          <p
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontSize: "12px",
-              fontWeight: 500,
-              color: "#52b788",
-              margin: "2px 0 0 0",
-            }}
-          >
-            Senior Care Platform
-          </p>
-        </div>
+      <AppLogo size={40} />
+      <div>
+        <h1
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+            fontSize: "20px",
+            fontWeight: 700,
+            color: "#1C382A",
+            margin: "0",
+            lineHeight: "1.2",
+          }}
+        >
+          Smart Assistant
+        </h1>
+        <p
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+            fontSize: "12px",
+            fontWeight: 500,
+            color: "#52b788",
+            margin: "2px 0 0 0",
+          }}
+        >
+          Senior Care Platform
+        </p>
       </div>
-
-      {/* Right side: Role Switcher */}
-      <RoleSwitcher />
     </div>
   );
 };
