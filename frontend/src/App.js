@@ -58,6 +58,7 @@ import CaregiverTaskAnalyticsPage from "./pages/task/CaregiverTaskAnalyticsPage"
 import VolunteerNotificationsPage from "./pages/task/VolunteerNotificationsPage";
 import VolunteerTaskAnalyticsPage from "./pages/task/VolunteerTaskAnalyticsPage";
 import VolunteerRatingsPage from "./pages/task/VolunteerRatingsPage";
+import ElderTaskRequestNotificationsPage from "./pages/task/ElderTaskRequestNotificationsPage";
 
 // Common Pages
 import TestDashboardsPage from "./pages/common/TestDashboardsPage";
@@ -173,6 +174,7 @@ function App() {
           <Route path="/volunteer-notifications" element={<VolunteerNotificationsPage />} />
           <Route path="/volunteer-task-analytics" element={<VolunteerTaskAnalyticsPage />} />
           <Route path="/volunteer-ratings" element={<VolunteerRatingsPage />} />
+          <Route path="/elder-task-request-notifications" element={<ElderTaskRequestNotificationsPage />} />
 
           {/* ---- 404 Not Found ---- */}
           <Route path="*" element={<NotFoundPage />} />
