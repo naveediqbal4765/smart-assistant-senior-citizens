@@ -40,9 +40,18 @@ import ElderSettings from "./pages/elder/ElderSettings";
 
 // Caregiver Pages
 import CaregiverDashboard from "./pages/caregiver/CaregiverDashboard";
+import CaregiverTaskManagement from "./pages/caregiver/CaregiverTaskManagement";
 
 // Volunteer Pages
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import VolunteerTaskList from "./pages/volunteer/VolunteerTaskList";
+
+// ---- Module 3: Task Request System Pages ----
+import TaskDetailPage from "./pages/task/TaskDetailPage";
+import TaskHistoryPage from "./pages/task/TaskHistoryPage";
+import TaskNotificationsPage from "./pages/task/TaskNotificationsPage";
+import TaskRatingPage from "./pages/task/TaskRatingPage";
+import TaskAnalyticsPage from "./pages/task/TaskAnalyticsPage";
 
 // Common Pages
 import TestDashboardsPage from "./pages/common/TestDashboardsPage";
@@ -142,7 +151,16 @@ function App() {
           <Route path="/elder-my-profile" element={<ElderMyProfile />} />
           <Route path="/elder-settings" element={<ElderSettings />} />
           <Route path="/caregiver-dashboard" element={<CaregiverDashboard />} />
+          <Route path="/caregiver-task-management" element={<CaregiverTaskManagement />} />
           <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
+          <Route path="/volunteer-task-list" element={<VolunteerTaskList />} />
+
+          {/* ---- Module 3: Task Request System Routes ---- */}
+          <Route path="/task-detail/:id" element={<TaskDetailPage />} />
+          <Route path="/task-history" element={<TaskHistoryPage />} />
+          <Route path="/task-notifications" element={<TaskNotificationsPage />} />
+          <Route path="/task-rating" element={<TaskRatingPage />} />
+          <Route path="/task-analytics" element={<TaskAnalyticsPage />} />
 
           {/* ---- 404 Not Found ---- */}
           <Route path="*" element={<NotFoundPage />} />
