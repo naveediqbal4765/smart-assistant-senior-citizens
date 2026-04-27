@@ -657,59 +657,7 @@ const LoginPage = () => {
 
               {/* OAuth Icon Buttons */}
               <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px" }}>
-                <button
-                  type="button"
-                  onClick={() => handleOAuth("Google")}
-                  title="Continue with Google"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <GoogleIcon />
-                </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleOAuth("Facebook")}
-                  title="Continue with Facebook"
-                  style={{
-                    padding: "12px",
-                    backgroundColor: "transparent",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    border: "none",
-                    minWidth: "44px",
-                    minHeight: "44px",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#1C382A15";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <FacebookIcon />
-                </button>
               </div>
             </form>
           </div>
