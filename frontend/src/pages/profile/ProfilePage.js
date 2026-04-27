@@ -324,13 +324,18 @@ const ProfilePage = () => {
     }
   };
 
-  if (!user) {
-    return (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const handleSwitchRole = (newRole) => {
+    const mockUser = {
+      userId: `test-${newRole}`,
+      email: `${newRole}@test.com`,
+      fullName: `Test ${newRole.charAt(0).toUpperCase() + newRole.slice(1)}`,
+      role: newRole,
+      profilePicture: null,
+    };
+    localStorage.setItem("user", JSON.stringify(mockUser));
+    sessionStorage.setItem("user", JSON.stringify(mockUser));
+    window.location.reload();
+  };
 
   const tabs = [
     { id: "basic", label: "Personal Information" },
@@ -1289,6 +1294,72 @@ const ProfilePage = () => {
           >
             Logout
           </button>
+        </div>
+
+        {/* Role Switcher - For Testing */}
+        <div style={{ marginTop: "30px", textAlign: "center", padding: "20px", backgroundColor: COLORS.veryLightGreen, borderRadius: "8px", border: `2px solid ${COLORS.mediumGreen}` }}>
+          <p style={{ fontSize: "12px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 12px 0" }}>
+            🧪 Test Different Roles:
+          </p>
+          <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
+            <button
+              onClick={() => handleSwitchRole("elder")}
+              style={{
+                padding: "10px 16px",
+                backgroundColor: user?.role === "elder" ? COLORS.mediumGreen : "#999",
+                color: COLORS.white,
+                border: "none",
+                borderRadius: "6px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+              onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            >
+              👴 Elder
+            </button>
+            <button
+              onClick={() => handleSwitchRole("caregiver")}
+              style={{
+                padding: "10px 16px",
+                backgroundColor: user?.role === "caregiver" ? COLORS.mediumGreen : "#999",
+                color: COLORS.white,
+                border: "none",
+                borderRadius: "6px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+              onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            >
+              💚 Caregiver
+            </button>
+            <button
+              onClick={() => handleSwitchRole("volunteer")}
+              style={{
+                padding: "10px 16px",
+                backgroundColor: user?.role === "volunteer" ? COLORS.mediumGreen : "#999",
+                color: COLORS.white,
+                border: "none",
+                borderRadius: "6px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.target.style.opacity = "0.8")}
+              onMouseLeave={(e) => (e.target.style.opacity = "1")}
+            >
+              🤝 Volunteer
+            </button>
+          </div>
         </div>
       </div>
     </div>
