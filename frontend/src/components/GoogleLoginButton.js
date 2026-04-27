@@ -135,9 +135,6 @@ const GoogleLoginButton = ({ onSuccess, onError, rememberMe = false }) => {
         localStorage.setItem("rememberMeToken", rememberMeToken);
       }
 
-      // Show success message
-      toast.success(`Welcome, ${user.fullName}!`);
-
       // Call success callback
       if (onSuccess) {
         onSuccess(user);

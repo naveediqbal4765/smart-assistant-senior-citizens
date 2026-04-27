@@ -159,8 +159,6 @@ export const AuthProvider = ({ children }) => {
 
       // Remove auth header
       delete api.defaults.headers.common["Authorization"];
-
-      toast.success("Logged out successfully");
     }
   }, [token]);
 

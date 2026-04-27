@@ -319,7 +319,6 @@ const ProfilePage = () => {
     try {
       logout();
       navigate("/login");
-      toast.success("Logged out successfully");
     } catch (error) {
       toast.error("Failed to logout");
     }
