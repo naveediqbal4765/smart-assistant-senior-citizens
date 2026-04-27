@@ -238,7 +238,7 @@ const VolunteerDashboard = () => {
               <button
                 onClick={() => {
                   setShowTaskRequestModal(false);
-                  navigate("/task-notifications");
+                  navigate("/volunteer-notifications");
                 }}
                 style={{
                   padding: "30px 20px",
@@ -274,7 +274,7 @@ const VolunteerDashboard = () => {
               <button
                 onClick={() => {
                   setShowTaskRequestModal(false);
-                  navigate("/task-rating");
+                  navigate("/volunteer-ratings");
                 }}
                 style={{
                   padding: "30px 20px",
@@ -310,7 +310,7 @@ const VolunteerDashboard = () => {
               <button
                 onClick={() => {
                   setShowTaskRequestModal(false);
-                  navigate("/task-analytics");
+                  navigate("/volunteer-task-analytics");
                 }}
                 style={{
                   padding: "30px 20px",
