@@ -6,7 +6,13 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+    
+    if (!mongoUri) {
+      throw new Error('MONGODB_URI environment variable is not set');
+    }
+
+    const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       retryWrites: true,
