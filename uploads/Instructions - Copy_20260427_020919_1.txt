@@ -1,0 +1,182 @@
+TECH STACK:
+
+13. Tools and Techniques
+-The chosen technology stack is dictated by the project’s core requirements for real-time interactivity using Node js, scalable artificial intelligence integration via LSTM and CNN models, and robust data management through MongoDB.  This approach prioritizes a modular architecture, ensuring that each component from the React based user interface to the machine learning pipelines operates with high performance and clear maintainability. The methodology is designed to guarantee system reliability through Socket.io for SOS broadcasting, seamless feature integration, and a foundation that supports future iterative enhancements like travel monitoring. By utilizing JWT for secure sessions and geospatial indexing for smart volunteer matching, the platform ensures a secure and optimized ecosystem for comprehensive elderly support.
+
+• Frontend Tools: The user interface will be developed using React.js, 
+-powerful JavaScript library for building dynamic and responsive web components. 
+-To ensure high accessibility for seniors, Tailwind CSS will be used for a clean, high-contrast
+UI 
+-WebSpeech API will handle voice-to-text task requests. 
+These tools should support a seamless experience across desktop and mobile browsers with rapid state
+updates and consistent visual styling.
+
+• Backend Tools: The backend will run on Node.js with Express.js, providing a
+fast and scalable environment for managing real-time data flows. 
+-Socket.io will be integrated to handle instant SOS broadcasting and live chat between seniors
+and volunteers. 
+-JWT (JSON Web Tokens) will secure all administrative and user sessions, 
+ensuring that sensitive medical data remains private and protected.
+
+• Database & Storage: MongoDB will serve as the primary database, utilizing its
+flexible NoSQL schema to store diverse data types such as IoT sensor logs, medical
+history documents, and interaction records. This choice allows for efficient scaling
+as the user base grows and provides high performance for location based volunteer
+matching queries through Geospatial Indexing.
+
+• AI Techniques: LSTM networks analyze multi-axial accelerometer data for highprecision fall detection. 
+-MediaPipe-based pose estimation tracks 33 skeletal keypoints to provide real-time corrective feedback during physiotherapy. 
+-Natural Language Processing (NLP) via WebSpeech API enables hands-free navigation and
+automated response generation. 
+-CNNs and OCR automate object recognition and prescription reading. 
+-A Sensor Fusion approach correlates facial analysis with IoT
+heart rate telemetry to detect acute distress. 
+-Random Forest and Collaborative Filtering algorithms automate personalized diet and nutrition planning. 
+-Geospatial Indexing and proximity-based algorithms optimize real-time volunteer matching. 
+This proactive, data-driven ecosystem ensures senior safety and autonomy while minimizing emergency response times.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USER INTERFACE INSTRUCTIONS:
+
+UI for LOGIN AND SIGN UP PAGE ARE ALREADY IN THE FOLDER AS (UserInterface1.png and UserInterface2.png)
+-Use that color combination and design to make other pages
+-The buttons and Fonts should be bold and a little bit big as compared to the normal buttons because elders are gonna use this platform.
+-There should not be any button or option hidden somewhere, everything should be on screen and in a descent way
+-Web-app should be responsive in every device
+-Logo of platform and in the home page (like company motto etc) could be changed after the code is done, so you can use dummy text there
+-All the buttons should be meaning full
+-DO NOT CHANGE THE UI FOR LOGIN PAGE (MAKE AS IT IS)
+-YOU CAN MODIFY UI FOR SIGNUP PAGE ACCORDING TO REQUIREMENTS
+-MAKE  DASHBOARDS FOR ELDER CARE-GIVER AND VOLUNTEER BY TAKING IDEA FROM BOTH (UserInterface1.png and UserInterface2.png)
+ADD NECESSARY BUTTONS AND REQUIRED THINGS (IF NEEDED TO SHOW), WE WILL FURTHER INSTRUCT YOU WHAT AND HOW TO DO IN THOSE DASHBOARDS.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CODE INSTRUCTIONS:
+
+-Don't use any other tech or tool other than tech stack given above
+-All the files and folders should be in manner and in proper MERN structure, so everyone could easily understand which file/folder is located where
+-You'll be given a git Api make a repo there and push the code as soon as it is done
+-Make step by step documentation in a separate md file called "DOCUMENTATION.md"
+-Use comments with each line to make code understandable
+-Don't jumble the code, avoid redundency
+-Make proper names of folders
+-Moudules and features of each module is mentioned in the "Explaination.pdf" file
+-This project should Strictly full fill the needs (features) of each module accurately
+-For database i already created DB in Mongo Atlas if you need secret key and url, here it is(smartAssistant
+EhecvOdyRjtMFgf9)
+-Some suggestions to test the code are also attached in a file called TEST.pdf, just check them if required
+-There should not be any kind of bug in the code, spceciallly in LOGIN, make it secure as possible
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+WORK INSTRUCTIONS:
+
+-You just have to make only one modules for now
+-Instructions for module 2 are as following, (keep in your mind we are gonna work on other modules once this module is done so be ready):
+
+TASK REQUEST MODULE
+• AI Task Prioritization
+• Smart Volunteer Matching
+• Voice-to-text request
+• Live Task Tracking
+• Proof of Completion
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REQUIREMENTS FOR TASK REQUEST PAGE:
+UI Components: Category Dropdown (Groceries, Housekeeping, Medical, Companionship), Description Box, Priority Toggle (Low, Medium, High), Date/Time Picker, Location Input (with "Use My Location" GPS button), Submit, and Cancel buttons.
+
+CASE 1 (CREATING A NEW REQUEST)
+IF the user wants to request help, they will fill in the TASK DESCRIPTION and select a PRIORITY LEVEL (Low, Medium, High).
+IF the user clicks SUBMIT, the system should validate that all mandatory fields are filled.
+A confirmation message should appear: ("Task request has been successfully posted").
+The request should then be visible to nearby volunteers based on the Proximity-Based Volunteer Matching logic mentioned in your project features
+
+CASE 2 (VOLUNTEER ACCEPTANCE)
+IF a volunteer views the task and clicks the ACCEPT button, the task status must change from "Pending" to "Assigned."
+A notification should be sent immediately to the Elder who created the request.
+The Communication module (assigned to Naveed Iqbal) should then be triggered to allow the Elder and Volunteer to coordinate.
+
+CASE 3 (EMERGENCY ESCALATION)
+IF the priority level is set to "HIGH" or an "Emergency" tag is used:
+The system triggers an immediate alert to the Emergency and Safety module.
+IF a Caregiver is registered, an emergency SMS/Push notification is sent to them immediately with the Elder's GPS coordinates.
+The task is pinned to the top of all nearby volunteers' feeds with a distinctive red highlight to ensure immediate visibility..
+
+CASE 4 (CANCELLATION LOGIC)
+IF the Elder clicks CANCEL:
+IF status is "PENDING", remove immediately.
+IF status is "ASSIGNED", prompt: ("A volunteer has already accepted. Cancel anyway?").
+Notify the volunteer if the cancellation is confirmed.
+
+CASE 5 (COMPLETION & INTEGRATION)
+IF the task is finished, the Elder should click a MARK AS COMPLETE button.
+Once clicked, the system should move the task to the history log.
+A small feedback box should open to rate the volunteer’s assistance (linking to the Volunteer Rewards module).
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JUST READ THE BELOW MODULES TO GET YOURSELF READY, WE ARE NOT GONNA IMPLEMENT THEM RIGHT NOW ; Thanks
+
+
+COMMUNICATION MODULE
+• Multi-Channel Calling
+• Integrated Messaging
+• Schedule call reminders
+• Group and Family Chats
+• Real-time SOS broadcasting
+
+HEALTH AND MEDICATION
+• Medication Reminders
+• Digital Health Repository
+• Appointment Management
+• IoT Health Telemetry
+• Drug Interaction Engine
+
+WELLNESS AND PHYSICAL REHAB
+• AI-Guided Physiotherapy
+• Meal and Nutrition Tracking
+• Interactive Audio Coaching
+• Real-Time Pose Correction
+• Fitness Goal tracking and Sleep timer
+
+EMERGENCY AND SAFTEY
+• AI fall detection
+• Multi-Modal Distress Analytics
+• Biometric Stress Trigger
+• Temporal Inactivity Gate
+• One-tap SOS button
+
+SOCIAL CIRCLE
+• Generate Auto-replies
+• Event discovery
+• Hobby groups and social forums
+• Community announcements
+• Virtual group activities
+
+VOLUNTEER REWARDS
+• Points and badges
+• Competitive Leaderboards
+• Credentialing System
+• Performance Analytics
+• Professional Skill Validation
+
+SMART TRAVEL ESCORT
+• Context-Aware Route Guidance
+• Companion Booking System
+• Geo-Fencing and Deviation Alerts
+• Mobility-Matched Transport
+• Ride-Hailing Integration
+
+ADAPTIVE ASSISTANCE
+• Voice commands navigation
+• Adaptive Accessibility UI
+• Computer Vision Object Identifier
+• IMU-Based Gesture Control
+• Multi-Modal Screen Reading
+
+EMERGENCY GUIDE
+• Tactical Emergency Checklist
+• Post incident reporting and feedback
+• Context-Aware Incident Handling
+• Proximity-Gated Responder Alerts
+• Incident-Specific Audio Guidance
