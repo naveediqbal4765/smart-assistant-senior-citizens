@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import * as MageIcons from "mage-icons-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartBar, faStar } from "@fortawesome/free-solid-svg-icons";
 
 // ============================================================
 // TaskAnalyticsPage.js - Task Analytics & Statistics Dashboard
