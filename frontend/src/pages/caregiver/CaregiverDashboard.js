@@ -117,6 +117,83 @@ const CaregiverDashboard = () => {
         <p style={{ textAlign: "center", marginTop: "40px", fontSize: "0.9rem", color: "#6b7280" }}>
            Caregiver Dashboard - Module 1 Skeleton
         </p>
+
+        {/* Module 3: Task Request System */}
+        <div style={{ marginTop: "40px" }}>
+          <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "20px" }}>
+            📋 Module 3: Task Management
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
+            {/* Task Management */}
+            <button
+              onClick={() => navigate("/caregiver-task-management")}
+              style={{
+                padding: "20px",
+                backgroundColor: "#52b788",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "14px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+            >
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>👨‍⚕️</div>
+              Manage Tasks
+            </button>
+
+            {/* Notifications */}
+            <button
+              onClick={() => navigate("/task-notifications")}
+              style={{
+                padding: "20px",
+                backgroundColor: "#52b788",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "14px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+            >
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>🔔</div>
+              Notifications
+            </button>
+
+            {/* Analytics */}
+            <button
+              onClick={() => navigate("/task-analytics")}
+              style={{
+                padding: "20px",
+                backgroundColor: "#52b788",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "14px",
+                fontFamily: "Montserrat, sans-serif",
+                transition: "all 0.3s ease",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+            >
+              <div style={{ fontSize: "24px", marginBottom: "8px" }}>📊</div>
+              Analytics
+            </button>
+          </div>
+        </div>
         </div>
       </div>
 

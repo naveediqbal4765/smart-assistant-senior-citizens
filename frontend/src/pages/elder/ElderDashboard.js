@@ -72,54 +72,126 @@ const ElderDashboard = () => {
             </h1>
           </div>
 
-          {/* Dashboard Skeleton - Placeholder Cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
-            {/* Card 1 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 1
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
-            </div>
+          {/* Module 3: Task Request System */}
+          <div style={{ marginBottom: "40px" }}>
+            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1b4332", marginBottom: "20px" }}>
+              📋 Module 3: Task Request System
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
+              {/* Task Request */}
+              <button
+                onClick={() => navigate("/elder-task-request")}
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#52b788",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📝</div>
+                Create Task Request
+              </button>
 
-            {/* Card 2 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 2
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
-            </div>
+              {/* Task History */}
+              <button
+                onClick={() => navigate("/task-history")}
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#52b788",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📜</div>
+                Task History
+              </button>
 
-            {/* Card 3 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 3
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
-            </div>
+              {/* Notifications */}
+              <button
+                onClick={() => navigate("/task-notifications")}
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#52b788",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>🔔</div>
+                Notifications
+              </button>
 
-            {/* Card 4 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 4
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
-            </div>
+              {/* Volunteer Ratings */}
+              <button
+                onClick={() => navigate("/task-rating")}
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#52b788",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>⭐</div>
+                Volunteer Ratings
+              </button>
 
-            {/* Card 5 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 5
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
-            </div>
-
-            {/* Card 6 */}
-            <div className="auth-card">
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#1b4332", marginBottom: "12px" }}>
-                Feature 6
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>Coming soon...</p>
+              {/* Analytics */}
+              <button
+                onClick={() => navigate("/task-analytics")}
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#52b788",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontFamily: "Montserrat, sans-serif",
+                  transition: "all 0.3s ease",
+                  textAlign: "center",
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#2d6a4f")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#52b788")}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📊</div>
+                Task Analytics
+              </button>
             </div>
           </div>
 
