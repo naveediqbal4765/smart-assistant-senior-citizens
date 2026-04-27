@@ -240,6 +240,8 @@ exports.uploadProfilePicture = async (req, res) => {
 // ============================================================
 // POST /api/profile/validate-address - Validate Address with Google Maps
 // ============================================================
+const googleMapsService = require("../../services/googleMapsService");
+
 exports.validateAddress = async (req, res) => {
   try {
     const { address } = req.body;
@@ -251,25 +253,43 @@ exports.validateAddress = async (req, res) => {
       });
     }
 
-    // TODO: Integrate with Google Maps Geocoding API
-    // For now, return mock response
-    const mockResponse = {
+    // Validate address using Google Maps Geocoding API
+    const validationResult = await googleMapsService.validateAddress(address);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: validationResult.message,
+      });
+    }
+
+    // Verify address is in Pakistan
+    const isInPakistan = googleMapsService.verifyAddressInPakistan(
+      validationResult.addressComponents
+    );
+
+    if (!isInPakistan) {
+      return res.status(400).json({
+        success: false,
+        message: "Address must be in Pakistan",
+      });
+    }
+
+    // Extract address components
+    const addressComponents = googleMapsService.extractAddressComponents(
+      validationResult.addressComponents
+    );
+
+    res.status(200).json({
       success: true,
       isValid: true,
-      formattedAddress: address,
-      latitude: 31.5204,
-      longitude: 74.3587,
-      placeId: "ChIJ...",
-      suggestions: [
-        {
-          placeId: "ChIJ1...",
-          description: address,
-          mainText: address.split(",")[0],
-        },
-      ],
-    };
-
-    res.status(200).json(mockResponse);
+      formattedAddress: validationResult.formattedAddress,
+      latitude: validationResult.latitude,
+      longitude: validationResult.longitude,
+      placeId: validationResult.placeId,
+      addressComponents: addressComponents,
+      geometry: validationResult.geometry,
+    });
   } catch (error) {
     console.error("Validate address error:", error);
     res.status(500).json({
