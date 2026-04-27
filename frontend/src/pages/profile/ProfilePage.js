@@ -576,7 +576,7 @@ const ProfilePage = () => {
 
                 <div style={{ marginBottom: "20px", position: "relative" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    Address (with Google Maps suggestions)
+                    Address
                   </label>
                   <input
                     type="text"
