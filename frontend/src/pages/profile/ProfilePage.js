@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
@@ -24,6 +24,8 @@ const ProfilePage = () => {
   const [currentPasswordInput, setCurrentPasswordInput] = useState("");
   const [deleteConfirmPassword, setDeleteConfirmPassword] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
 
   const [profileData, setProfileData] = useState({
     // Basic Info
@@ -40,7 +42,7 @@ const ProfilePage = () => {
     medicalConditions: [],
     locationPermission: false,
     emergencyContacts: [],
-    elderContactNumbers: [],
+    elderContactNumbers: ["", "", ""],
     
     // Caregiver specific
     relationshipToElder: "",
@@ -93,6 +95,78 @@ const ProfilePage = () => {
 
   const availabilityDaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+  // Load user profile data on mount
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        // TODO: Call API to fetch user profile data
+        // const response = await profileAPI.getProfile();
+        // setProfileData(response.data);
+        
+        // For now, set default values from user context
+        setProfileData((prev) => ({
+          ...prev,
+          fullName: user?.fullName || "",
+          email: user?.email || "",
+          profilePicture: user?.profilePicture || null,
+        }));
+      } catch (error) {
+        console.error("Error loading profile:", error);
+      }
+    };
+
+    if (user) {
+      loadProfileData();
+    }
+  }, [user]);
+
+  // Google Maps Autocomplete for address
+  const handleAddressChange = async (value) => {
+    setProfileData((prev) => ({
+      ...prev,
+      address: value,
+    }));
+    setHasChanges(true);
+
+    if (value.length > 2) {
+      try {
+        // Using Google Maps Geocoding API for suggestions
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+            value
+          )}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&components=country:pk`
+        );
+        const data = await response.json();
+        
+        if (data.predictions) {
+          setLocationSuggestions(
+            data.predictions.map((prediction) => ({
+              placeId: prediction.place_id,
+              description: prediction.description,
+              mainText: prediction.structured_formatting.main_text,
+            }))
+          );
+          setShowLocationSuggestions(true);
+        }
+      } catch (error) {
+        console.error("Error fetching location suggestions:", error);
+      }
+    } else {
+      setLocationSuggestions([]);
+      setShowLocationSuggestions(false);
+    }
+  };
+
+  const handleSelectLocation = (location) => {
+    setProfileData((prev) => ({
+      ...prev,
+      address: location.description,
+    }));
+    setShowLocationSuggestions(false);
+    setLocationSuggestions([]);
+    setHasChanges(true);
+  };
+
   const handleInputChange = (field, value) => {
     // Validate phone number - exactly 11 digits
     if (field === "phone") {
@@ -140,14 +214,6 @@ const ProfilePage = () => {
     setHasChanges(true);
   };
 
-  const handleAddContactNumber = () => {
-    setProfileData((prev) => ({
-      ...prev,
-      elderContactNumbers: [...(prev.elderContactNumbers || []), ""],
-    }));
-    setHasChanges(true);
-  };
-
   const handleContactNumberChange = (index, value) => {
     const phoneValue = value.replace(/\D/g, "");
     if (phoneValue.length > 11) return;
@@ -160,14 +226,6 @@ const ProfilePage = () => {
         elderContactNumbers: newNumbers,
       };
     });
-    setHasChanges(true);
-  };
-
-  const handleRemoveContactNumber = (index) => {
-    setProfileData((prev) => ({
-      ...prev,
-      elderContactNumbers: prev.elderContactNumbers.filter((_, i) => i !== index),
-    }));
     setHasChanges(true);
   };
 
@@ -215,11 +273,36 @@ const ProfilePage = () => {
     }
   };
 
+  const validateElderContactNumbers = () => {
+    const filledNumbers = profileData.elderContactNumbers.filter((num) => num.trim() !== "");
+    if (filledNumbers.length < 3) {
+      toast.error("Please enter at least 3 contact numbers");
+      return false;
+    }
+    
+    // Validate each number is exactly 11 digits
+    for (let number of filledNumbers) {
+      if (number.length !== 11) {
+        toast.error("Each contact number must be exactly 11 digits");
+        return false;
+      }
+    }
+    
+    return true;
+  };
+
   const handleSaveChanges = async () => {
     // Validate phone number
     if (profileData.phone && profileData.phone.length !== 11) {
       toast.error("Phone number must be exactly 11 digits");
       return;
+    }
+
+    // Validate Elder contact numbers if applicable
+    if (user?.role === "elder" && profileData.livesAlone === false) {
+      if (!validateElderContactNumbers()) {
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -258,6 +341,13 @@ const ProfilePage = () => {
     { id: "role", label: "Role Details" },
     { id: "privacy", label: "Privacy & Security" },
   ];
+
+  const canSaveRoleDetails = () => {
+    if (user?.role === "elder" && profileData.livesAlone === false) {
+      return validateElderContactNumbers();
+    }
+    return true;
+  };
 
   return (
     <div style={{ backgroundColor: COLORS.lightGray, minHeight: "100vh", paddingBottom: "40px" }}>
@@ -483,14 +573,15 @@ const ProfilePage = () => {
                   />
                 </div>
 
-                <div style={{ marginBottom: "20px" }}>
+                <div style={{ marginBottom: "20px", position: "relative" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    Address
+                    Address (with Google Maps suggestions)
                   </label>
-                  <textarea
+                  <input
+                    type="text"
                     value={profileData.address}
-                    onChange={(e) => handleInputChange("address", e.target.value)}
-                    placeholder="Enter your address"
+                    onChange={(e) => handleAddressChange(e.target.value)}
+                    placeholder="Start typing your address..."
                     style={{
                       width: "100%",
                       padding: "12px",
@@ -499,10 +590,49 @@ const ProfilePage = () => {
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
                       boxSizing: "border-box",
-                      minHeight: "80px",
-                      resize: "vertical",
                     }}
                   />
+                  
+                  {/* Location Suggestions Dropdown */}
+                  {showLocationSuggestions && locationSuggestions.length > 0 && (
+                    <div style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: "0",
+                      right: "0",
+                      backgroundColor: COLORS.white,
+                      border: `2px solid ${COLORS.mediumGreen}`,
+                      borderTop: "none",
+                      borderRadius: "0 0 8px 8px",
+                      maxHeight: "200px",
+                      overflowY: "auto",
+                      zIndex: 1000,
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    }}>
+                      {locationSuggestions.map((location, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleSelectLocation(location)}
+                          style={{
+                            padding: "12px",
+                            borderBottom: `1px solid ${COLORS.veryLightGreen}`,
+                            cursor: "pointer",
+                            transition: "all 0.2s ease",
+                            backgroundColor: "transparent",
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = COLORS.lightGray)}
+                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                        >
+                          <p style={{ fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, margin: "0 0 4px 0" }}>
+                            {location.mainText}
+                          </p>
+                          <p style={{ fontSize: "11px", color: COLORS.darkGray, margin: "0" }}>
+                            {location.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Save Button for Personal Info */}
@@ -577,59 +707,34 @@ const ProfilePage = () => {
                     {profileData.livesAlone === false && (
                       <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
                         <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "12px" }}>
-                          Contact Numbers
+                          Contact Numbers (Required: 3 numbers, 11 digits each)
                         </label>
                         {(profileData.elderContactNumbers || []).map((number, index) => (
-                          <div key={index} style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+                          <div key={index} style={{ marginBottom: "10px" }}>
                             <input
                               type="tel"
                               value={number}
                               onChange={(e) => handleContactNumberChange(index, e.target.value)}
-                              placeholder="11-digit phone number"
+                              placeholder={`Contact ${index + 1}: 11-digit phone number`}
                               maxLength="11"
                               style={{
-                                flex: 1,
+                                width: "100%",
                                 padding: "10px",
-                                border: `2px solid ${COLORS.veryLightGreen}`,
+                                border: `2px solid ${number && number.length !== 11 ? COLORS.red : COLORS.veryLightGreen}`,
                                 borderRadius: "6px",
                                 fontSize: "12px",
                                 fontFamily: "Montserrat, sans-serif",
                                 boxSizing: "border-box",
                               }}
                             />
-                            <button
-                              onClick={() => handleRemoveContactNumber(index)}
-                              style={{
-                                padding: "8px 12px",
-                                backgroundColor: COLORS.red,
-                                color: COLORS.white,
-                                border: "none",
-                                borderRadius: "6px",
-                                cursor: "pointer",
-                                fontWeight: 600,
-                                fontSize: "11px",
-                              }}
-                            >
-                              Remove
-                            </button>
+                            {number && number.length !== 11 && (
+                              <p style={{ fontSize: "10px", color: COLORS.red, marginTop: "3px" }}>Must be exactly 11 digits</p>
+                            )}
                           </div>
                         ))}
-                        <button
-                          onClick={handleAddContactNumber}
-                          style={{
-                            padding: "8px 16px",
-                            backgroundColor: COLORS.mediumGreen,
-                            color: COLORS.white,
-                            border: "none",
-                            borderRadius: "6px",
-                            cursor: "pointer",
-                            fontWeight: 600,
-                            fontSize: "11px",
-                            marginTop: "10px",
-                          }}
-                        >
-                          Add Contact Number
-                        </button>
+                        <p style={{ fontSize: "11px", color: COLORS.darkGray, marginTop: "10px", fontStyle: "italic" }}>
+                          ⚠️ You must enter all 3 contact numbers to save changes
+                        </p>
                       </div>
                     )}
 
@@ -855,25 +960,25 @@ const ProfilePage = () => {
                 {hasChanges && (
                   <button
                     onClick={handleSaveChanges}
-                    disabled={isLoading || (profileData.phone && profileData.phone.length !== 11)}
+                    disabled={isLoading || (profileData.phone && profileData.phone.length !== 11) || !canSaveRoleDetails()}
                     style={{
                       padding: "12px 24px",
                       backgroundColor: COLORS.mediumGreen,
                       color: COLORS.white,
                       border: "none",
                       borderRadius: "8px",
-                      cursor: isLoading || (profileData.phone && profileData.phone.length !== 11) ? "not-allowed" : "pointer",
+                      cursor: isLoading || (profileData.phone && profileData.phone.length !== 11) || !canSaveRoleDetails() ? "not-allowed" : "pointer",
                       fontWeight: 600,
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
-                      opacity: isLoading || (profileData.phone && profileData.phone.length !== 11) ? 0.7 : 1,
+                      opacity: isLoading || (profileData.phone && profileData.phone.length !== 11) || !canSaveRoleDetails() ? 0.7 : 1,
                       transition: "all 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = "#2d6a4f";
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11) && canSaveRoleDetails()) e.target.style.backgroundColor = "#2d6a4f";
                     }}
                     onMouseLeave={(e) => {
-                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = COLORS.mediumGreen;
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11) && canSaveRoleDetails()) e.target.style.backgroundColor = COLORS.mediumGreen;
                     }}
                   >
                     {isLoading ? "Saving..." : "Save Role Details"}
