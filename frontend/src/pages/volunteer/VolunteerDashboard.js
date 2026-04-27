@@ -71,9 +71,6 @@ const VolunteerDashboard = () => {
           <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "#1b4332" }}>
             Volunteer Dashboard
           </h1>
-          <button onClick={() => { logout(); navigate("/login"); }} className="btn-primary" style={{ width: "auto" }}>
-            Logout
-          </button>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
