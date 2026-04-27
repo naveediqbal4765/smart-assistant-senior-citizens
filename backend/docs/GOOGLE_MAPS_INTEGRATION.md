@@ -23,8 +23,9 @@ This document describes the Google Maps integration for address validation, sugg
 5. Add the API key to your `.env` file:
 ```
 GOOGLE_MAPS_API_KEY=your_api_key_here
-GOOGLE_MAPS_GEOCODING_API_KEY=your_api_key_here
 ```
+
+**Note:** One API key works for all three APIs (Geocoding, Places, and Maps JavaScript). You only need to set `GOOGLE_MAPS_API_KEY` once in your `.env` file.
 
 ### 2. Install Dependencies
 ```bash
