@@ -275,19 +275,17 @@ const ProfilePage = () => {
   const validateElderContactNumbers = () => {
     const filledNumbers = profileData.elderContactNumbers.filter((num) => num.trim() !== "");
     if (filledNumbers.length < 3) {
-      toast.error("Please enter at least 3 contact numbers");
-      return false;
+      return { valid: false, message: "Please enter at least 3 contact numbers" };
     }
     
     // Validate each number is exactly 11 digits
     for (let number of filledNumbers) {
       if (number.length !== 11) {
-        toast.error("Each contact number must be exactly 11 digits");
-        return false;
+        return { valid: false, message: "Each contact number must be exactly 11 digits" };
       }
     }
     
-    return true;
+    return { valid: true, message: "" };
   };
 
   const handleSaveChanges = async () => {
