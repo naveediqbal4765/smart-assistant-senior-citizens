@@ -74,6 +74,7 @@ function App() {
               style: { background: "#ef4444", color: "#fff" },
             },
           }}
+          limit={1}
         />
 
         <Routes>
