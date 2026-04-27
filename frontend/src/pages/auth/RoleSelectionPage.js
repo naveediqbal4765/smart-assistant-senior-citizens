@@ -43,6 +43,12 @@ const RoleSelectionPage = () => {
     try {
       setIsLoading(true);
 
+      // Get CSRF token from meta tag or localStorage
+      let csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      if (!csrfToken) {
+        csrfToken = localStorage.getItem("csrfToken") || "";
+      }
+
       // Call backend to set role in database
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/auth/set-role`,
@@ -50,7 +56,9 @@ const RoleSelectionPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
           },
+          credentials: "include",
           body: JSON.stringify({
             userId,
             role,
