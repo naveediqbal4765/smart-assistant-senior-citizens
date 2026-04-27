@@ -40,18 +40,20 @@ const ProfilePage = () => {
     medicalConditions: [],
     locationPermission: false,
     emergencyContacts: [],
+    elderContactNumbers: [],
     
     // Caregiver specific
     relationshipToElder: "",
     linkedElderEmail: "",
     notificationsEnabled: false,
+    caregiverLocationSharing: false,
     
     // Volunteer specific
     affiliation: "",
     skills: [],
     availabilityDays: [],
     serviceRadius: 5,
-    volunteerLocationPermission: false,
+    volunteerLocationSharing: false,
     
     // Password
     currentPassword: "",
@@ -60,9 +62,6 @@ const ProfilePage = () => {
     
     // Privacy
     privacySettings: {
-      profileVisibility: "private",
-      healthDataSharing: false,
-      locationSharing: false,
       emailNotifications: true,
       smsNotifications: true,
     },
@@ -95,10 +94,20 @@ const ProfilePage = () => {
   const availabilityDaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   const handleInputChange = (field, value) => {
-    setProfileData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    // Validate phone number - exactly 11 digits
+    if (field === "phone") {
+      const phoneValue = value.replace(/\D/g, "");
+      if (phoneValue.length > 11) return;
+      setProfileData((prev) => ({
+        ...prev,
+        [field]: phoneValue,
+      }));
+    } else {
+      setProfileData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
     setHasChanges(true);
   };
 
@@ -128,6 +137,37 @@ const ProfilePage = () => {
         };
       }
     });
+    setHasChanges(true);
+  };
+
+  const handleAddContactNumber = () => {
+    setProfileData((prev) => ({
+      ...prev,
+      elderContactNumbers: [...(prev.elderContactNumbers || []), ""],
+    }));
+    setHasChanges(true);
+  };
+
+  const handleContactNumberChange = (index, value) => {
+    const phoneValue = value.replace(/\D/g, "");
+    if (phoneValue.length > 11) return;
+    
+    setProfileData((prev) => {
+      const newNumbers = [...(prev.elderContactNumbers || [])];
+      newNumbers[index] = phoneValue;
+      return {
+        ...prev,
+        elderContactNumbers: newNumbers,
+      };
+    });
+    setHasChanges(true);
+  };
+
+  const handleRemoveContactNumber = (index) => {
+    setProfileData((prev) => ({
+      ...prev,
+      elderContactNumbers: prev.elderContactNumbers.filter((_, i) => i !== index),
+    }));
     setHasChanges(true);
   };
 
@@ -176,6 +216,12 @@ const ProfilePage = () => {
   };
 
   const handleSaveChanges = async () => {
+    // Validate phone number
+    if (profileData.phone && profileData.phone.length !== 11) {
+      toast.error("Phone number must be exactly 11 digits");
+      return;
+    }
+
     setIsLoading(true);
     try {
       // TODO: Call API to save profile changes
@@ -236,7 +282,7 @@ const ProfilePage = () => {
             My Profile
           </h1>
           <p style={{ fontSize: "14px", color: COLORS.veryLightGreen, margin: "0" }}>
-            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)} Profile
+            {user?.fullName}
           </p>
         </div>
       </div>
@@ -394,13 +440,14 @@ const ProfilePage = () => {
 
                 <div style={{ marginBottom: "20px" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                    Phone
+                    Phone (11 digits)
                   </label>
                   <input
                     type="tel"
                     value={profileData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    placeholder="Enter your phone number"
+                    placeholder="Enter your 11-digit phone number"
+                    maxLength="11"
                     style={{
                       width: "100%",
                       padding: "12px",
@@ -411,6 +458,9 @@ const ProfilePage = () => {
                       boxSizing: "border-box",
                     }}
                   />
+                  {profileData.phone && profileData.phone.length !== 11 && (
+                    <p style={{ fontSize: "11px", color: COLORS.red, marginTop: "5px" }}>Phone number must be exactly 11 digits</p>
+                  )}
                 </div>
 
                 <div style={{ marginBottom: "20px" }}>
@@ -459,25 +509,25 @@ const ProfilePage = () => {
                 {hasChanges && (
                   <button
                     onClick={handleSaveChanges}
-                    disabled={isLoading}
+                    disabled={isLoading || (profileData.phone && profileData.phone.length !== 11)}
                     style={{
                       padding: "12px 24px",
                       backgroundColor: COLORS.mediumGreen,
                       color: COLORS.white,
                       border: "none",
                       borderRadius: "8px",
-                      cursor: isLoading ? "not-allowed" : "pointer",
+                      cursor: isLoading || (profileData.phone && profileData.phone.length !== 11) ? "not-allowed" : "pointer",
                       fontWeight: 600,
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
-                      opacity: isLoading ? 0.7 : 1,
+                      opacity: isLoading || (profileData.phone && profileData.phone.length !== 11) ? 0.7 : 1,
                       transition: "all 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = "#2d6a4f";
                     }}
                     onMouseLeave={(e) => {
-                      if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = COLORS.mediumGreen;
                     }}
                   >
                     {isLoading ? "Saving..." : "Save Personal Info"}
@@ -523,6 +573,65 @@ const ProfilePage = () => {
                         </label>
                       </div>
                     </div>
+
+                    {profileData.livesAlone === false && (
+                      <div style={{ marginBottom: "20px", padding: "15px", backgroundColor: COLORS.lightGray, borderRadius: "8px" }}>
+                        <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "12px" }}>
+                          Contact Numbers
+                        </label>
+                        {(profileData.elderContactNumbers || []).map((number, index) => (
+                          <div key={index} style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+                            <input
+                              type="tel"
+                              value={number}
+                              onChange={(e) => handleContactNumberChange(index, e.target.value)}
+                              placeholder="11-digit phone number"
+                              maxLength="11"
+                              style={{
+                                flex: 1,
+                                padding: "10px",
+                                border: `2px solid ${COLORS.veryLightGreen}`,
+                                borderRadius: "6px",
+                                fontSize: "12px",
+                                fontFamily: "Montserrat, sans-serif",
+                                boxSizing: "border-box",
+                              }}
+                            />
+                            <button
+                              onClick={() => handleRemoveContactNumber(index)}
+                              style={{
+                                padding: "8px 12px",
+                                backgroundColor: COLORS.red,
+                                color: COLORS.white,
+                                border: "none",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                                fontWeight: 600,
+                                fontSize: "11px",
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          onClick={handleAddContactNumber}
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: COLORS.mediumGreen,
+                            color: COLORS.white,
+                            border: "none",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: 600,
+                            fontSize: "11px",
+                            marginTop: "10px",
+                          }}
+                        >
+                          Add Contact Number
+                        </button>
+                      </div>
+                    )}
 
                     <div style={{ marginBottom: "20px" }}>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
@@ -581,25 +690,6 @@ const ProfilePage = () => {
                           Allow location sharing for SOS calls
                         </span>
                       </label>
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: COLORS.darkGreen, marginBottom: "8px" }}>
-                        Emergency Contacts
-                      </label>
-                      <textarea
-                        placeholder="Add emergency contact names and phone numbers"
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          border: `2px solid ${COLORS.veryLightGreen}`,
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontFamily: "Montserrat, sans-serif",
-                          boxSizing: "border-box",
-                          minHeight: "80px",
-                        }}
-                      />
                     </div>
                   </>
                 )}
@@ -750,8 +840,8 @@ const ProfilePage = () => {
                       <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
                         <input
                           type="checkbox"
-                          checked={profileData.volunteerLocationPermission}
-                          onChange={(e) => handleInputChange("volunteerLocationPermission", e.target.checked)}
+                          checked={profileData.volunteerLocationSharing}
+                          onChange={(e) => handleInputChange("volunteerLocationSharing", e.target.checked)}
                         />
                         <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
                           Allow location sharing
@@ -765,25 +855,25 @@ const ProfilePage = () => {
                 {hasChanges && (
                   <button
                     onClick={handleSaveChanges}
-                    disabled={isLoading}
+                    disabled={isLoading || (profileData.phone && profileData.phone.length !== 11)}
                     style={{
                       padding: "12px 24px",
                       backgroundColor: COLORS.mediumGreen,
                       color: COLORS.white,
                       border: "none",
                       borderRadius: "8px",
-                      cursor: isLoading ? "not-allowed" : "pointer",
+                      cursor: isLoading || (profileData.phone && profileData.phone.length !== 11) ? "not-allowed" : "pointer",
                       fontWeight: 600,
                       fontSize: "13px",
                       fontFamily: "Montserrat, sans-serif",
-                      opacity: isLoading ? 0.7 : 1,
+                      opacity: isLoading || (profileData.phone && profileData.phone.length !== 11) ? 0.7 : 1,
                       transition: "all 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      if (!isLoading) e.target.style.backgroundColor = "#2d6a4f";
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = "#2d6a4f";
                     }}
                     onMouseLeave={(e) => {
-                      if (!isLoading) e.target.style.backgroundColor = COLORS.mediumGreen;
+                      if (!isLoading && (!profileData.phone || profileData.phone.length === 11)) e.target.style.backgroundColor = COLORS.mediumGreen;
                     }}
                   >
                     {isLoading ? "Saving..." : "Save Role Details"}
@@ -805,38 +895,24 @@ const ProfilePage = () => {
                     Privacy Settings
                   </h3>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
-                    <input
-                      type="checkbox"
-                      checked={profileData.privacySettings.profileVisibility === "public"}
-                      onChange={(e) => handleNestedChange("privacySettings", "profileVisibility", e.target.checked ? "public" : "private")}
-                    />
-                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
-                      Make my profile visible to other users
-                    </span>
-                  </label>
-
-                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
-                    <input
-                      type="checkbox"
-                      checked={profileData.privacySettings.healthDataSharing}
-                      onChange={(e) => handleNestedChange("privacySettings", "healthDataSharing", e.target.checked)}
-                    />
-                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
-                      Allow sharing of health data with caregivers
-                    </span>
-                  </label>
-
-                  <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
-                    <input
-                      type="checkbox"
-                      checked={profileData.privacySettings.locationSharing}
-                      onChange={(e) => handleNestedChange("privacySettings", "locationSharing", e.target.checked)}
-                    />
-                    <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
-                      Allow location sharing
-                    </span>
-                  </label>
+                  {user?.role !== "elder" && (
+                    <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
+                      <input
+                        type="checkbox"
+                        checked={user?.role === "caregiver" ? profileData.caregiverLocationSharing : profileData.volunteerLocationSharing}
+                        onChange={(e) => {
+                          if (user?.role === "caregiver") {
+                            handleInputChange("caregiverLocationSharing", e.target.checked);
+                          } else {
+                            handleInputChange("volunteerLocationSharing", e.target.checked);
+                          }
+                        }}
+                      />
+                      <span style={{ fontSize: "13px", color: COLORS.darkGreen, fontWeight: 500 }}>
+                        Allow location sharing
+                      </span>
+                    </label>
+                  )}
 
                   <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", marginBottom: "15px" }}>
                     <input
