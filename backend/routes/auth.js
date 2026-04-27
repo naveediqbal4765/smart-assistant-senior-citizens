@@ -27,6 +27,10 @@ const {
   signupWithLocation,
   verifyLocationPermission,
 } = require("../controllers/auth/signupController");
+const {
+  googleLogin,
+  googleCallback,
+} = require("../controllers/auth/googleOAuthController");
 
 const router = express.Router();
 
@@ -687,128 +691,12 @@ router.post("/logout", protect, async (req, res) => {
 // ============================================================
 // POST /auth/google - Google OAuth Login
 // ============================================================
-router.post("/google", async (req, res) => {
-  try {
-    const { token, rememberMe } = req.body;
+router.post("/google", googleLogin);
 
-    if (!token) {
-      return res.status(400).json({
-        success: false,
-        message: "Google token is required",
-      });
-    }
-
-    // Verify Google token
-    let googleUser;
-    try {
-      // The token from Google Sign-In is a JWT
-      // We'll decode it without verification for development
-      // In production, verify with Google's API
-      const parts = token.split('.');
-      
-      if (parts.length !== 3) {
-        throw new Error("Invalid token format");
-      }
-      
-      // Decode the payload (second part)
-      const payload = parts[1];
-      // Add padding if needed
-      const padded = payload + '='.repeat((4 - payload.length % 4) % 4);
-      const decoded = JSON.parse(Buffer.from(padded, 'base64').toString());
-      
-      console.log('Google token decoded:', decoded);
-      
-      googleUser = {
-        googleId: decoded.sub,
-        email: decoded.email,
-        fullName: decoded.name,
-        profilePicture: decoded.picture,
-      };
-    } catch (error) {
-      console.error("Token decode error:", error);
-      return res.status(401).json({
-        success: false,
-        message: "Invalid Google token: " + error.message,
-      });
-    }
-
-    // Find or create user
-    let user = await User.findOne({ 
-      $or: [
-        { email: googleUser.email },
-        { googleId: googleUser.googleId }
-      ]
-    });
-
-    let isNewUser = false;
-
-    if (!user) {
-      isNewUser = true;
-      // Create new user WITHOUT role-specific profile
-      // User will complete role selection in step 2
-      user = new User({
-        email: googleUser.email,
-        fullName: googleUser.fullName,
-        googleId: googleUser.googleId,
-        profilePicture: googleUser.profilePicture,
-        isVerified: true, // Google verified
-        password: null, // No password for OAuth users
-        // role will be set in step 2 after user selects
-      });
-
-      await user.save();
-    } else {
-      // Link Google account if not already linked
-      if (!user.googleId) {
-        user.googleId = googleUser.googleId;
-        await user.save();
-      }
-    }
-
-    // Generate tokens
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
-
-    // Handle remember me
-    let rememberMeToken = null;
-    if (rememberMe) {
-      rememberMeToken = generateRememberMeToken();
-      user.rememberMeToken = rememberMeToken;
-      user.rememberMeExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      await user.save();
-    }
-
-    // Update last login
-    user.lastLogin = new Date();
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Google login successful",
-      data: {
-        accessToken,
-        refreshToken,
-        rememberMeToken,
-        expiresIn: "15m",
-        user: {
-          userId: user._id,
-          email: user.email,
-          fullName: user.fullName,
-          role: "elder",
-          profilePicture: user.profilePicture,
-          isNewUser,
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Google login error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Google login failed: " + error.message,
-      error: error.message,
-    });
-  }
-});
+// ============================================================
+// POST /auth/google/callback - Google OAuth Callback
+// ============================================================
+router.post("/google/callback", googleCallback);
 
 // ============================================================
 // POST /auth/facebook - Facebook OAuth Login

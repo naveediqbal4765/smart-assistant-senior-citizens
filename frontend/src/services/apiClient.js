@@ -197,6 +197,19 @@ export const googleLogin = (token, rememberMe = false) => {
 };
 
 /**
+ * Google OAuth callback
+ * @param {string} code - Authorization code
+ * @param {boolean} rememberMe - Remember me flag
+ * @returns {Promise} - Response from backend
+ */
+export const googleCallback = (code, rememberMe = false) => {
+  return apiClient.post('/auth/google/callback', {
+    code,
+    rememberMe,
+  });
+};
+
+/**
  * Facebook OAuth login
  * @param {string} token - Facebook access token
  * @param {boolean} rememberMe - Remember me flag
