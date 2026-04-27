@@ -60,12 +60,12 @@ function App() {
         <Toaster
           position="top-right"
           toastOptions={{
-            duration: 4000,
+            duration: 2000,
             style: {
-              fontSize: "18px",    // Larger text for seniors
-              fontWeight: "600",
-              borderRadius: "12px",
-              padding: "16px 20px",
+              fontSize: "12px",
+              fontWeight: "500",
+              borderRadius: "6px",
+              padding: "8px 12px",
             },
             success: {
               style: { background: "#22c55e", color: "#fff" },

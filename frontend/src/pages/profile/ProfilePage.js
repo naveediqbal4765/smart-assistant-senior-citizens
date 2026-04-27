@@ -250,7 +250,6 @@ const ProfilePage = () => {
       return;
     }
     setPasswordVerified(true);
-    toast.success("Password verified");
   };
 
   const handleDeleteAccount = async () => {
