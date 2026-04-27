@@ -150,7 +150,7 @@ const VolunteerTaskList = () => {
   const handleApplyTask = (taskId) => {
     if (!appliedTasks.includes(taskId)) {
       setAppliedTasks([...appliedTasks, taskId]);
-      toast.success("Application submitted! Waiting for elder confirmation.");
+      toast.success("Task accepted! Waiting for elder confirmation.");
     }
   };
 
@@ -451,7 +451,7 @@ const VolunteerTaskList = () => {
                     }
                   }}
                 >
-                  {appliedTasks.includes(task.id) ? "✓ Applied" : "Apply Now"}
+                  {appliedTasks.includes(task.id) ? "✓ Accepted" : "Accept"}
                 </button>
               </div>
             ))}
