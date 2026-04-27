@@ -8,6 +8,7 @@ const Caregiver = require("../../models/Caregiver");
 const Volunteer = require("../../models/Volunteer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { sendWelcomeEmail } = require("../../services/emailService");
 
 // ============================================================
 // POST /api/auth/signup - User Registration
