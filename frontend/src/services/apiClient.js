@@ -211,13 +211,26 @@ export const googleCallback = (code, rememberMe = false) => {
 
 /**
  * Facebook OAuth login
- * @param {string} token - Facebook access token
+ * @param {string} accessToken - Facebook access token
  * @param {boolean} rememberMe - Remember me flag
  * @returns {Promise} - Response from backend
  */
-export const facebookLogin = (token, rememberMe = false) => {
+export const facebookLogin = (accessToken, rememberMe = false) => {
   return apiClient.post('/auth/facebook', {
-    token,
+    accessToken,
+    rememberMe,
+  });
+};
+
+/**
+ * Facebook OAuth callback
+ * @param {string} code - Authorization code
+ * @param {boolean} rememberMe - Remember me flag
+ * @returns {Promise} - Response from backend
+ */
+export const facebookCallback = (code, rememberMe = false) => {
+  return apiClient.post('/auth/facebook/callback', {
+    code,
     rememberMe,
   });
 };

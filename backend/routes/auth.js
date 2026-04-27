@@ -31,6 +31,10 @@ const {
   googleLogin,
   googleCallback,
 } = require("../controllers/auth/googleOAuthController");
+const {
+  facebookLogin,
+  facebookCallback,
+} = require("../controllers/auth/facebookOAuthController");
 
 const router = express.Router();
 
@@ -697,6 +701,16 @@ router.post("/google", googleLogin);
 // POST /auth/google/callback - Google OAuth Callback
 // ============================================================
 router.post("/google/callback", googleCallback);
+
+// ============================================================
+// POST /auth/facebook - Facebook OAuth Login
+// ============================================================
+router.post("/facebook", facebookLogin);
+
+// ============================================================
+// POST /auth/facebook/callback - Facebook OAuth Callback
+// ============================================================
+router.post("/facebook/callback", facebookCallback);
 
 // ============================================================
 // POST /auth/facebook - Facebook OAuth Login
