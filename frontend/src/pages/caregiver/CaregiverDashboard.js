@@ -238,7 +238,7 @@ const CaregiverDashboard = () => {
               <button
                 onClick={() => {
                   setShowTaskRequestModal(false);
-                  navigate("/task-notifications");
+                  navigate("/caregiver-notifications");
                 }}
                 style={{
                   padding: "30px 20px",
@@ -274,7 +274,7 @@ const CaregiverDashboard = () => {
               <button
                 onClick={() => {
                   setShowTaskRequestModal(false);
-                  navigate("/task-analytics");
+                  navigate("/caregiver-task-analytics");
                 }}
                 style={{
                   padding: "30px 20px",
